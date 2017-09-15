@@ -6,7 +6,7 @@
 % =======         HEADER FOR DOCUMENT        ============
 % =======================================================
     % *********   DOCUMENT ITSELF   **************
-    \documentclass[12pt, fleqn]{article}                             %Type of docuemtn and size of font and left eq
+    \documentclass[11pt, fleqn]{article}                             %Type of docuemtn and size of font and left eq
     \usepackage[margin=1.2in]{geometry}                             %Margins and Geometry pacakge
     \usepackage{ifthen}                                             %Allow simple programming
     \usepackage{hyperref}                                           %Create MetaData for a PDF and LINKS!
@@ -39,7 +39,7 @@
     \usepackage{tasks}                                              %Horizontal lists
     \usepackage{longtable}                                          %Lets make tables awesome
     \usepackage{booktabs}                                           %Lets make tables awesome
-    \usepackage{tabularx}                                           %Lets make tables awesome
+    \usepackage{tabularx, array}                                    %Lets make tables awesome
     \usepackage{multirow}                                           %Lets make tables awesome
     \usepackage{multicol}                                           %Create multicolumns
 
@@ -234,20 +234,20 @@
 
 
     Toda la información del sistema será almacenada en una base de datos creada con MySQL
-    y que se comunicará con nuestra aplicación usando las funciones de PHP con MySQL.
+    y que se comunicará con nuestra aplicación web usando las funciones de PHP con MySQL.
 
     \clearpage
 
     \begin{figure}[h!]
         \centering
         \includegraphics[width=0.80\textwidth]{Examples0.png}
-        \caption{Boceto de FrontEnd de la Aplicación}
+        \caption{Boceto de FrontEnd de la aplicación web}
     \end{figure}
 
     \begin{figure}[h!]
         \centering
         \includegraphics[width=0.80\textwidth]{Examples1.png}
-        \caption{Boceto de FrontEnd de la Aplicación}
+        \caption{Boceto de FrontEnd de la aplicación web}
     \end{figure}
 
 
@@ -258,20 +258,20 @@
     Buscamos crear un sitema que permita organizar toda la administración de un Cine y todas
     sus subdivisiones de manera consisa, confiable y segura.
 
-    Queremos que dicha aplicación pueda ser usando con gran facilidad, importando lo menos posible
-    el sistema operativo que usen nuestros clientes para usar la aplicación así como el
+    Queremos que dicha aplicación web pueda ser usando con gran facilidad, importando lo menos posible
+    el sistema operativo que usen nuestros clientes para usar la aplicación web así como el
     disposivito que utilicen, sea un tablet, un celular o una computadora (de cualquier gana)
 
     Buscamos que sea de fácil mejoramiento y que podamos actualizar y corregir de la manera más rápida
-    cualquier error que tuviera nuestra aplicación.
+    cualquier error que tuviera nuestra aplicación web.
 
-    Buscamos que la información que tenga nuestra aplicación en la base de datos sea de fácil acceso
+    Buscamos que la información que tenga nuestra aplicación web en la base de datos sea de fácil acceso
     para la creación posterior de nuevas interfaces y aplicaciones así como para su mantenimiento
     y escalabilidad.
 
     Buscamos la mayor seguridad en los datos, de tal manera que sean lo mas confiables posible.
 
-    Buscamos que nuestra aplicación permita diferentes perfiles de usuarios, para mejorar la confiabilidad
+    Buscamos que nuestra aplicación web permita diferentes perfiles de usuarios, para mejorar la confiabilidad
     y seguridad del sistema permitiendo a cierto tipo de usuarios solo hacer ciertas actividades y 
     tener la capacidad de leer / modificar ciertos datos dentro del sistema.
 
@@ -280,58 +280,14 @@
     \begin{figure}[h!]
         \centering
         \includegraphics[width=0.80\textwidth]{Examples2.png}
-        \caption{Boceto de FrontEnd de la Aplicación}
+        \caption{Boceto de FrontEnd de la aplicación web}
     \end{figure}
 
-\clearpage
 
-\section{Reglas de Negocio}
-
-    \begin{itemize}
-        \item Un gerente que lleva el control de los empleado(vendedores de duces boletos y los que limpian)
-
-        \item El gerente se encargar de determinar las salas para una pelicula y los horarios
-
-        \item El gerente se encarga de el pago a los proveedores
-
-        \item Se debe de poder seleccionar las salas disponibles por ese día
-
-        \item Se debe de poder seleccionar los dulces y bebidas disponibles por ese día
-
-        \item Se venden 5 tipos diferentes de combos, el cliente debe elegir cual de los
-            5 desea o puede no comprar ninguno.
-
-        \item Existen 6 salas, las cuales a su vez tienen 30 butacas, por lo que debe controlarse el numero
-            de personas que entran.
-
-            Al tratarse de un cine popular, solo se exhiben peliculas nuevas, y las tarifas de licencia
-            para exhibir películas, las cuales pueden ser muy altas, sobre todo para películas importantes
-            de estreno (puedes contratar a agentes de cine para ayudar con el proceso de conseguir las
-            películas y la aprobación para exhibirlas)
-
-    \end{itemize}
 
 
 
 \clearpage
-\section{Requerimientos Básicos}
-
-    \begin{itemize}
-        \item Todas las conexiones con la base de datos, así como la confiabilidad de los datos
-            tienen que ser altas, para una mayor seguridad.
-
-        \item La aplicación tiene que ser accesible desde cualquier sistema operativo
-
-        \item La aplicación tiene que ser usable desde cualquier tipo de sistema computacional
-
-        \item La estructura tanto de la aplicación como de la base de datos a nivel conceptual tiene
-            que permitir el mantenimiento y la escalabilidad el proyecto.
-
-        \item La aplicación permite la existencia de distintos tipos de usuarios, con cada tipo
-            las acciones disponibles cambian.
-    \end{itemize}
-
-
 
     \subsection{Objetivo General:}
 
@@ -357,6 +313,138 @@
                 lectura de los diferentes datos, según el puesto que tenga el usuario en el cine.
 
         \end{itemize}
+
+
+\section{Reglas de Negocio}
+
+    \begin{tabular}{r ||c |m{7em} | m{15em} |c |c }
+       &  ID & Nombre & Descripción & Prioridad & Origen \\ [0.5ex] 
+       \hline\hline
+      
+        & RN1   & Control de Empleados                  &
+        Un gerente que lleva el control de los empleado(vendedores de duces boletos y los que limpian)
+        & Alta  & Propuestos\\
+
+        & RN2   & Pagos                                 &
+        El gerente se encarga de el pago a los proveedores
+        & Media  & Propuestos\\
+
+        & RN3   & Control de Salas                      &
+        El gerente se encargar de determinar las salas para una pelicula y los horarios
+        & Media  & Propuestos\\
+
+
+        & RN4   & Control de Dulcería                   &
+        Se debe de poder seleccionar los dulces y bebidas disponibles por ese día, 
+        se venden 5 tipos diferentes de combos, el cliente debe elegir cual de los
+        5 desea o puede no comprar ninguno.
+        & Media  & Propuestos\\
+
+        & RN4   & Control de Capacidad                   &
+        Existen 6 salas, las cuales a su vez tienen 30 butacas, por lo que debe controlarse el numero
+        de personas que entran.
+
+        Al tratarse de un cine popular, solo se exhiben peliculas nuevas, y las tarifas de licencia
+        para exhibir películas, las cuales pueden ser muy altas, sobre todo para películas importantes
+        de estreno (puedes contratar a agentes de cine para ayudar con el proceso de conseguir las
+        películas y la aprobación para exhibirlas)
+        & Baja  & Propuestos\\
+
+    \end{tabular}
+
+
+\clearpage
+\section{Requerimientos Básicos}
+
+    \begin{tabular}{r ||c |m{7em} | m{15em} |c |c }
+       &  ID & Nombre & Descripción & Prioridad & Origen \\ [0.5ex] 
+       \hline\hline
+      
+        & RB1   & Seguridad                         &
+        Todas las conexiones con la base de datos, así como la confiabilidad de los datos
+        tienen que ser altas, para una mayor seguridad.
+        & Alta  & Propuestos\\
+
+        & RB2   & Compatibilidad de Navegadores     &
+        El sistema tiene que ser accesible desde los navegadores mas usados
+        & Baja  & Propuestos\\
+
+        & RB3   & Compatibilidad de Plataformas     &
+        El sistema puede ser usado desde diversas plataformas
+        & Baja  & Propuestos\\
+
+        & RB4   & Escalabilidad                     &
+        La estructura tanto de la aplicación web como de la base de datos a nivel conceptual tiene
+        que permitir el mantenimiento y la escalabilidad el proyecto.
+        & Media  & Propuestos\\
+
+        & RB4   & Roles                             &
+        La aplicación web permite la existencia de distintos tipos de usuarios, con cada tipo
+        las acciones disponibles cambian.
+        & Media  & Propuestos\\
+
+    \end{tabular}
+
+
+
+
+
+\section{Requerimientos Funcionales}
+\begin{tabular}{r ||c |c | m{15em} |c }
+   &  ID & Nombre & Descripción & Origen \\ [0.5ex] 
+   \hline\hline
+  
+    & RF1 & Gestionar Sala          &
+    El Sistema permitirá al usuario gerente establecer los horarios y peliculas para una sala
+    & RN2\\
+    & RF2 & Gestionar Empleados     & 
+    El sistema permitirá establecer que actividad llevará a cabo cada empleado impliendole
+    realizar otra que no sea la indicada
+    & RN1\\
+    & RF3 & Control de Suministros  &
+    El sistema podrá llevar stock de todos los productos utilizados en venta o en mantenimiento del cine
+    & RN3\\
+    & RF4 & Control de Entradas     &
+    El sistema deberá indica el estatus de una sala al realizar la venta de un boleto en ella
+    & RN6\\
+    & RF5 & Gestión de Dulcería     & 
+    El sistema permitira manejar las transacciones de venta en el departamento de dulceria
+    & RN5\\
+\end{tabular}
+
+
+
+\section{Requerimientos No Funcionales}
+    \begin{tabular}{r ||c |m{8em} | m{18em} |c }
+       &   & Nombre & Descripción & Origen \\ [0.5ex] 
+       \hline\hline
+        & RNF1 & FrameWork &
+        Sistema Desarrollado en: JQuery, MaterializeCSS
+        & RB3\\
+
+        & RNF2 & Entorno de Trabajo de Aplicaciones &
+        PHP, HTML, Javascript, CSS, XAMPP(Apache)  
+        & RB2\\
+
+        & RNF3 & Bases de Datos & MySQL Server
+        & RB1\\
+
+        & RNF4 & Seguridad & Confidencia e integridad de los datos
+        & RB1\\
+    \end{tabular}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 \end{document}
