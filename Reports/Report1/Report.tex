@@ -9,7 +9,7 @@
     \documentclass[11pt, fleqn]{article}                             %Type of docuemtn and size of font and left eq
     \usepackage[margin=1.2in]{geometry}                             %Margins and Geometry pacakge
     \usepackage{ifthen}                                             %Allow simple programming
-    \usepackage{hyperref}                                           %Create MetaData for a PDF and LINKS!
+    \usepackage{hyperref,pdfpages}                                           %Create MetaData for a PDF and LINKS!
     \hypersetup{pageanchor=false}                                   %Solve 'double page 1' warnings in build
     \setlength{\parindent}{0pt}                                     %Eliminate ugly indentation
     \author{Oscar Andrés Rosas}                                     %Who I am
@@ -433,6 +433,36 @@
 
 
 
+
+
+\section{Requerimientos No Funcionales}
+    \begin{tabular}{r ||c |m{8em} | m{18em} |c }
+       &   & Nombre & Descripción & Origen \\ [0.5ex] 
+       \hline\hline
+        & RNF1 & FrameWork &
+        Sistema Desarrollado en: JQuery, MaterializeCSS
+        & RB3\\
+
+        & RNF2 & Entorno de Trabajo de Aplicaciones &
+        PHP, HTML, Javascript, CSS, XAMPP(Apache)  
+        & RB2\\
+
+        & RNF3 & Bases de Datos & MySQL Server
+        & RB1\\
+
+        & RNF4 & Seguridad & Confidencia e integridad de los datos
+        & RB1\\
+    \end{tabular}
+
+
+\clearpage
+    \includepdf[scale=0.8,pages=1,pagecommand=\section{Diagrama de Contexto}]{Diagrama}
+
+
+
+\clearpage
+
+    \includepdf[scale=0.8,pages=-]{Riesgos}
 
 
 
