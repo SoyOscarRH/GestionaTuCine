@@ -1,92 +1,18 @@
-<!DOCTYPE html>
-<HTML>
+<?php
+    /*=====================================================================================================================================
+    ============================================         INDEX DE TODO EL SISTEMA           ===============================================
+    =======================================================================================================================================
+
+    Descripcion: Muestra la Pagina Principal */
+    include("/Applications/XAMPP/xamppfiles/htdocs/ManageYourCinema/Web/PHP/ForAllPages.php");          //Dame todas las ventajas que tiene incluir
+
+    // ================ VARIABLES =============================
+    $Title = $HTMLTitle ='Maneja tu Cine';                                                              //Titulo de cada Pagina
+    $UpdateDate = '23 de Julio del 2017';                                                               //Fecha de actualizacion de la pagina
 
 
-    <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <!--  +++++++++++++++++++++++++++++++++++++++       HEADINGS            ++++++++++++++++++++++++++++++++++++++ -->
-    <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <HEAD>
-
-        <!--  +++++++++++++++++++++++++++++++++++++++++++++++++ -->
-        <!--  +++++++++++++++   PAGE INFO   +++++++++++++++++++ -->
-        <!--  +++++++++++++++++++++++++++++++++++++++++++++++++ -->
-
-            <!-- Page Info -->
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />  
-            <!-- How we should see it -->
-            <meta name="viewport" content="width=device-width, initial-scale=1"/>
-            <!-- Color in Android Header -->
-            <meta name="theme-color" content="#2196F3">
-
-            <title>Cine</title>
-
-        <!--  +++++++++++++++++++++++++++++++++++++++++++++++++ -->
-        <!--  +++++++++++++++   PAGE STYLE  +++++++++++++++++++ -->
-        <!--  +++++++++++++++++++++++++++++++++++++++++++++++++ -->
-
-            <!-- Icon of the Page -->
-            <link href="MediaAndStyle/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
-
-            <!-- Google Material Fonts -->
-            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-            <!-- Materialize -->
-            <link href="Style/CSS/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-            <link href="Style/CSS/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-
-    </HEAD>
-
-
-        
-
-        
-
-
-<!--  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-<!--  +++++++++++++++++++++++++++++++++++++++       BODY                ++++++++++++++++++++++++++++++++++++++ -->
-<!--  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-<BODY>
-
-
-    <!--  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <!--  +++++++++++++++++    NAVITAGION BAR       +++++++++++++++++++++ -->
-    <!--  ++++++++++++++++++++++++*++++++++++++++++++++++++++++++++++++++ -->
-    <header>
-        <div class="navbar-fixed">
-        <nav class="teal lighten-3">
-        <div class="nav-wrapper container">
-            
-            <!-- Name of the Page -->
-            <a href="#!" class="brand-logo white-text"><i class="material-icons">movie</i>Logo</a>
-
-            <!-- Menu for Mobile -->
-            <a href="#" data-activates="mobile-demo" class="button-collapse white-text">
-                <i class="material-icons">menu</i>
-            </a>
-             
-            <!-- Links for Normal Web -->
-            <ul class="right hide-on-med-and-down">
-                <li> <a class="white-text" href="a.html">Opcion</a> </li>
-                <li> <a class="white-text" href="a.html">Opcion</a> </li>
-                <li> <a class="white-text" href="a.html">Opcion</a> </li>
-                <li> <a class="white-text" href="a.html">Opcion</a> </li>
-            </ul>
-
-        </div>
-        </nav>
-        </div>
-
-        <!-- Links for Mobile Web -->
-        <ul class="side-nav" id="mobile-demo">
-            <li> <a href="a.html">Opcion</a>    </li>
-            <li> <a href="a.html">Opcion</a>    </li>
-            <li> <a href="a.html">Opcion</a>    </li>
-            <li> <a href="a.html">Opcion</a>    </li>
-        </ul>
-
-    </header>
-
-
+    include($DocumentRoot."PHP/HTMLHeader.php");                                                        //Incluimos un Asombroso Encabezado
+?>
 
 
 
@@ -270,78 +196,6 @@
     </div>
 
 
-
     
-    <!--  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <!--  ++++++++++++++           FOOTER           +++++++++++++++++++++ -->
-    <!--  ++++++++++++++++++++++++*++++++++++++++++++++++++++++++++++++++ -->
-    <footer class="page-footer teal">
-        
-        <div class="row container">
-        
-            <!-- ========================= -->
-            <!-- =======   ABOUT US   ==== -->
-            <!-- ========================= -->
-            <div class="col l6 s12">
-                <!--  =========  Title   ======== -->
-                <h5 class="white-text">Sobre Nosotros</h5>
+    <?php include($DocumentRoot."PHP/HTMLFooter.php"); ?>
 
-                <!--  =========  Text   ======== -->
-                <p class="grey-text text-lighten-4">
-                    Somos pro :v
-                </p>
-            </div>
-
-
-            <!-- ========================= -->
-            <!-- ==   ADITIONAL LINKS   == -->
-            <!-- ========================= -->
-            <div class="col l3 s12">
-                <h5 class="white-text">Paginas Adicionales</h5>
-                <ul>
-                    <li><a class="white-text" href="#!">Link 1</a></li>
-                    <li><a class="white-text" href="#!">Link 2</a></li>
-                    <li><a class="white-text" href="#!">Link 3</a></li>
-                    <li><a class="white-text" href="#!">Link 4</a></li>
-                </ul>
-            </div>
-
-            
-            <!-- ========================= -->
-            <!-- ==    CONTACT LINKS    == -->
-            <!-- ========================= -->
-            <div class="col l3 s12">
-                <h5 class="white-text">Contacta con Nosotros</h5>
-                <ul>
-                    <li><a class="white-text" href="#!">Link 1</a></li>
-                    <li><a class="white-text" href="#!">Link 2</a></li>
-                    <li><a class="white-text" href="#!">Link 3</a></li>
-                    <li><a class="white-text" href="#!">Link 4</a></li>
-                </ul>
-            </div>
-
-        </div>
-
-
-        <!-- ========================= -->
-        <!-- ==      LAST LINE      == -->
-        <!-- ========================= -->
-        <div class="footer-copyright">
-            <div class="container">
-                <b>Creado por</b> 
-                <span class="text-lighten-3">CompilandoConocimiento</span>
-            </div>
-        </div>
-
-    </footer>
-
-
-    <!--  +++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <!--  +++++++++++++++   SCRIPTS     +++++++++++++++++++ -->
-    <!--  +++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js">  </script>
-    <script src="Javascript/Materialize/materialize.js">        </script>
-    <script src="Javascript/Materialize/init.js">               </script>
-
-</BODY>
-</HTML>

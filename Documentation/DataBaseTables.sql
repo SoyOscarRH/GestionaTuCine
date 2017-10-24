@@ -8,7 +8,7 @@ USE Proyect;
 
 
 CREATE TABLE Pelicula (
-    IDPelicula          INT NOT NULL PRIMARY KEY,
+    ID                  INT NOT NULL PRIMARY KEY,
     Clasificacion       VARCHAR(4),
     Nombre              VARCHAR(50),
     Duracion            INT,
@@ -23,21 +23,17 @@ CREATE TABLE Sala (
 
 
 CREATE TABLE Gerente (
-    IDGerente           INT NOT NULL PRIMARY KEY,
-    NumeroEmpleado      INT,
-    Sueldo              REAL,
-    Turno               VARCHAR(10), 
-    Genero              VARCHAR(10),
-    Nombre              VARCHAR(15),
-    ApellidoPaterno     VARCHAR(15),
-    ApellidoMaterno     VARCHAR(15),
-    Correo              VARCHAR(30),
-    Contraseña          VARCHAR(100)
+    ID                  INT
+
+    FOREIGN KEY (IDEmpleado)
+        REFERENCES Empleado(ID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 
 CREATE TABLE Empleado (
-    IDEmpleado          INT NOT NULL PRIMARY KEY,
+    ID                  INT NOT NULL PRIMARY KEY,
     Sueldo              REAL,
     Turno               VARCHAR(10),
     Genero              VARCHAR(10),
@@ -49,7 +45,7 @@ CREATE TABLE Empleado (
     IDGerente           INT,
 
     FOREIGN KEY (IDGerente)
-        REFERENCES Gerente(IDGerente)
+        REFERENCES Gerente(ID)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
@@ -60,7 +56,7 @@ CREATE TABLE EmpleadoSala (
     NumeroSala          INT,
 
     FOREIGN KEY (IDEmpleado)
-        REFERENCES Empleado(IDEmpleado)
+        REFERENCES Empleado(ID)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
 
@@ -74,7 +70,7 @@ CREATE TABLE EmpleadoSala (
 
 
 CREATE TABLE Proveedor (
-    IDEmpleado          INT NOT NULL PRIMARY KEY,
+    ID                  INT NOT NULL PRIMARY KEY,
     Nombre              VARCHAR(15),
     ApellidoPaterno     VARCHAR(15),
     ApellidoMaterno     VARCHAR(15),
@@ -95,7 +91,7 @@ CREATE TABLE Funcion (
         REFERENCES Sala(NumeroSala),
 
     FOREIGN KEY (IDPelicula)
-        REFERENCES Pelicula (IDPelicula)
+        REFERENCES Pelicula (ID)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
 
@@ -104,13 +100,13 @@ CREATE TABLE Funcion (
 
 
 CREATE TABLE Venta (
-    IDVenta             INT NOT NULL PRIMARY KEY,
+    ID                  INT NOT NULL PRIMARY KEY,
     Fecha               DATE, 
     Total               REAL,
     IDEmpleado          INT,
 
     FOREIGN KEY (IDEmpleado)
-        REFERENCES Empleado (IDEmpleado)
+        REFERENCES Empleado (ID)
             ON DELETE CASCADE
             ON UPDATE CASCADE
 );
@@ -125,7 +121,7 @@ CREATE TABLE TicketBoleto (
     IDVenta             INT,
 
     FOREIGN KEY (IDVenta)
-        REFERENCES Venta (IDVenta)
+        REFERENCES Venta (ID)
             ON DELETE CASCADE
             ON UPDATE CASCADE,  
     
@@ -139,14 +135,14 @@ CREATE TABLE TicketBoleto (
 
 
 CREATE TABLE  ProductoDulceria (
-    IDProducto          INT NOT NULL PRIMARY KEY, 
+    ID                  INT NOT NULL PRIMARY KEY,
     Stock               INT,
     Nombre              VARCHAR(50),
     Costo               REAL,
     IDProveedor         INT,
 
     FOREIGN KEY (IDProveedor) 
-        REFERENCES Proveedor (IDEmpleado)
+        REFERENCES Proveedor (ID)
             ON DELETE CASCADE
             ON UPDATE CASCADE
 );
@@ -159,12 +155,12 @@ CREATE TABLE TicketDulceria (
     IDProducto          INT,
 
     FOREIGN KEY (IDVenta)
-        REFERENCES Venta (IDVenta)
+        REFERENCES Venta (ID)
             ON DELETE CASCADE
             ON UPDATE CASCADE, 
 
     FOREIGN KEY(IDProducto)
-        REFERENCES ProductoDulceria (IDProducto)
+        REFERENCES ProductoDulceria (ID)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
 
@@ -180,12 +176,12 @@ CREATE TABLE TicketProveedor (
     IDProveedor         INT,
 
     FOREIGN KEY (IDProducto)
-        REFERENCES ProductoDulceria (IDProducto)
+        REFERENCES ProductoDulceria (ID)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
 
     FOREIGN KEY (IDProveedor)
-        REFERENCES Proveedor (IDEmpleado)
+        REFERENCES Proveedor (ID)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
 
