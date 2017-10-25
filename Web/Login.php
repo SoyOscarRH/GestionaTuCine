@@ -28,11 +28,6 @@
     // *****************************************************************************************
     // *************************     PROCESS TO START THE SYSTEM   *****************************
     // *****************************************************************************************
-
-
-
-
-
     if ( isset($_POST['CheckDataToEnterSystem']) ){
 
         // ================================================================================
@@ -70,14 +65,6 @@
 
 
 
-            
-
-
-
-
-
-
-
 
 
 
@@ -86,43 +73,7 @@
 ?>
 
 
-	
-	<?php 
 
-    	$mysqli = new mysqli("127.0.0.1", "root", "hola", "Proyect");
-
-
-    	if (mysqli_connect_errno()) {
-		    printf("Connect failed: %s\n", mysqli_connect_error());
-		    exit();
-		}
-				
-
-		$Consulta = "SELECT * FROM Empleado;";
-
-
-		if ($result = $mysqli->query($Consulta)) {
-
-		    /* fetch object array */
-		    while ($row = $result->fetch_row()) {
-		    	foreach ($row as $key => $value) {
-		    		echo $key." ".$value;	
-		    		echo "<br>";
-		    	};
-		    	echo "<br><br>";
-		    }
-
-		    /* free result set */
-		    $result->close();
-		}
-
-		/* close connection */
-		$mysqli->close();
-
-
-
-
-	?>
 
 	<?php include($PHPDocumentRoot."PHP/HTMLFooter.php"); ?>
 
