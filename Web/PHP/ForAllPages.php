@@ -1,10 +1,10 @@
 <?php
 
     /*=====================================================================================================================================
-    ============================================         CONSTANTES DEL SISTEMA           =================================================
+    ============================================                SYSTEM CONSTANT           =================================================
     =======================================================================================================================================
 
-    Descripcion:  AQUI SE VAN A COLOCAR TODAS LAS VARIABLES GLOBALES QUE SON UTILES CONTAR A LO LARGO DEL SISTEMA DE SCRIPTS*/
+    HERE WE HAVE A LOT OF CONSTANT FOR THE SYSTEM */
 
     // ********************************************************************
     // *******************   HEADERS PARA HTML   **************************
@@ -18,10 +18,12 @@
         ini_set("display_errors","On");                                                     //Obliga a recargar la pagina
         date_default_timezone_set ('America/Mexico_City');                                  //Da la zona horaria
         setlocale(LC_TIME, 'es_ES.UTF-8');                                                  //Pone un sistema local
+
+
     // ********************************************************************
     // *******************      LIBRERIAS EXTERNAS   **********************
     // ********************************************************************
-        //include_once("Functions.php");                                                    //Aqui se encuentran las fn en general
+        include_once("Functions.php");                                                      //Aqui se encuentran las fn en general
         //include_once("DataBases.php");                                                    //Aqui se encuentran las fn de conexion
     
 
@@ -35,13 +37,24 @@
     // *********************************             VARIABLES          ************************************
     // *****************************************************************************************************
 
-        // === VARIABLES PARA CADA PAGINA: NOMBRE, FECHA Y TAMAÑO-ESTILO  =====
+        // === GENERAL VARIABLES  =====
             $Title = 'Maneja tu Cine';
-            $HTMLTitle = $Title;                                                            //Titulo de cada Pagina
-            $UpdateDate = '23 de Julio del 2017';                                           //Fecha de actualizacion de la pagina
+            $HTMLTitle = $Title;                                                                //Titulo de cada Pagina
+            $UpdateDate = '23 de Julio del 2017';                                               //Fecha de actualizacion de la pagina
 
-            $DocumentRoot = "/Applications/XAMPP/xamppfiles/htdocs/ManageYourCinema/Web/";
+            $PHPDocumentRoot = "/Applications/XAMPP/xamppfiles/htdocs/ManageYourCinema/Web/";
+            $HTMLDocumentRoot = "/ManageYourCinema/Web/";
 
+            $WeShouldAddOriginalLinks = true;
+
+
+
+
+        // === DEFAULT LINKS ===== 
+            $LinksForPages = array(); 
+            $LinksForPages["Iniciar Sesión"] = "Login.php";   
+            $LinksForPages["Cerrar Sesión"]  = "adios";   
+            $LinksForPages["Opciones"]       = "Vacio";   
 
 
 ?>

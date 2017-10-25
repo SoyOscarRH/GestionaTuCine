@@ -22,15 +22,6 @@ CREATE TABLE Sala (
 );
 
 
-CREATE TABLE Gerente (
-    ID                  INT
-
-    FOREIGN KEY (IDEmpleado)
-        REFERENCES Empleado(ID)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
-
 
 CREATE TABLE Empleado (
     ID                  INT NOT NULL PRIMARY KEY,
@@ -42,13 +33,24 @@ CREATE TABLE Empleado (
     ApellidoMaterno     VARCHAR(15),
     Correo              VARCHAR(30),
     Contraseña          VARCHAR(100),
-    IDGerente           INT,
+    IDGerente           INT
+);
 
-    FOREIGN KEY (IDGerente)
-        REFERENCES Gerente(ID)
+CREATE TABLE Gerente (
+    ID                  INT,
+
+    FOREIGN KEY (ID)
+        REFERENCES Empleado(ID)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+
+ALTER TABLE Empleado 
+    ADD FOREIGN KEY (IDGerente)
+        REFERENCES Gerente(ID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE;
+
 
 
 CREATE TABLE EmpleadoSala (

@@ -1,17 +1,17 @@
 <?php
     /*=====================================================================================================================================
-    ============================================         INDEX DE TODO EL SISTEMA           ===============================================
+    ============================================         INDEX FOR THE COMPLETE SYSTEM         ============================================
     =======================================================================================================================================
 
-    Descripcion: Muestra la Pagina Principal */
-    include("/Applications/XAMPP/xamppfiles/htdocs/ManageYourCinema/Web/PHP/ForAllPages.php");          //Dame todas las ventajas que tiene incluir
+    This works like the index for the complete system */
+    include("/Applications/XAMPP/xamppfiles/htdocs/ManageYourCinema/Web/PHP/ForAllPages.php");  //Dame todas las ventajas que tiene incluir
 
     // ================ VARIABLES =============================
-    $Title = $HTMLTitle ='Maneja tu Cine';                                                              //Titulo de cada Pagina
-    $UpdateDate = '23 de Julio del 2017';                                                               //Fecha de actualizacion de la pagina
+    $Title = $HTMLTitle ='Maneja tu Cine';                                                      //Titulo de cada Pagina
+    $UpdateDate = '23 de Julio del 2017';                                                       //Fecha de actualizacion de la pagina
 
 
-    include($DocumentRoot."PHP/HTMLHeader.php");                                                        //Incluimos un Asombroso Encabezado
+    include($PHPDocumentRoot."PHP/HTMLHeader.php");                                             //Incluimos un Asombroso Encabezado
 ?>
 
 
@@ -27,16 +27,16 @@
         <!-- ===== CONTAINER ===== -->
         <div class="container center">
             
-            <h1 class="header teal-text text-lighten-2">Titulo Estupido</h1>
+            <h1 class="header teal-text text-lighten-4">Maneja tu Cine</h1>
 
-            <h5 class="header col s12 light">Mini Titulo Estupido</h5>
+            <h5 class="header col s12 teal-text text-lighten-3">Administrador de Cinemas</h5>
 
             <!-- ===== BUTTON ===== -->
             <center>
             <a  href  = "http://materializecss.com/getting-started.html"
                 id    = "download-button"
                 class = "btn-large waves-effect waves-light teal lighten-1">
-                Get Started
+                Iniciar Sesión
             </a>
             </center>
 
@@ -135,12 +135,6 @@
         <!-- ===== THE IMAGE ===== -->
         <div class="parallax"><img src="Media/Movies2.jpg"></div>
 
-        <h5 class="container center header col s12 light">
-            Un texto bonito :D
-        </h5>
-
-        </div>
-
     </div>
 
 
@@ -197,5 +191,5 @@
 
 
     
-    <?php include($DocumentRoot."PHP/HTMLFooter.php"); ?>
+    <?php include($PHPDocumentRoot."PHP/HTMLFooter.php"); ?>
 
