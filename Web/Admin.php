@@ -37,53 +37,59 @@
         </div>
 
         <?php 
-            if ($ShowEmployees) :                                                       //Si quieres ver empleados
-                
-                $DataBase = new mysqli("127.0.0.1", "root", "hola", "Proyect");         //Abrimos una conexión
-                if (mysqli_connect_errno()) exit();                                     //Si es que no hay problemas
-                
-                $Consulta = "SELECT * FROM Empleado;";                                  //Nuestra consulta
+        if ($ShowEmployees):                                                                    //Si quieres ver empleados
+            
+            $DataBase = new mysqli("127.0.0.1", "root", "hola", "Proyect");                     //Abrimos una conexión
+            if (mysqli_connect_errno()) exit();                                                 //Si es que no hay problemas
+            
+            $Consulta = "SELECT * FROM Empleado;";                                              //Nuestra consulta
+            ?>
+
+            <table class="centered hoverable striped responsive-table">
+                <thead>
+                    <tr>
+                          <th>ID</th>
+                          <th>Sueldo</th>
+                          <th>Turno</th>
+                          <th>Genero</th>
+                          <th>Nombre</th>
+                          <th>Apellido 1</th>
+                          <th>Apellido 2</th>
+                          <th>Correo</th>
+                          <th>Constraseña</th>
+                          <th>ID del Gerente</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                <?php
+                if ($result = $DataBase->query($Consulta)) {
+                    while ($Row = $result->fetch_row()) : ?>
+
+                    <tr>
+                    
+                    <?php foreach ($Row as $Number => $Value): ?>
+
+                        <td><?php echo $Value; ?></td>
+                        
+                    <?php endforeach; ?>
+
+                    </tr>
+
+                    <?php endwhile;
+
+                    $result->close();
+                }
+
+                /* close connection */
+                $DataBase->close(); 
                 ?>
 
-                <table class="centered hoverable striped responsive-table">
-                    <thead>
-                        <tr>
-                              <th>ID</th>
-                              <th>Sueldo</th>
-                              <th>Turno</th>
-                              <th>Genero</th>
-                              <th>Nombre</th>
-                              <th>Apellido 1</th>
-                              <th>Apellido 2</th>
-                              <th>Correo</th>
-                              <th>Constraseña</th>
-                              <th>ID del Gerente</th>
-                        </tr>
-                    </thead>
+                </tbody>
+            </table>
 
-                    <tbody>
-                
-                        <?php
-                        if ($result = $DataBase->query($Consulta)) {
-                            while ($Row = $result->fetch_row()) : ?>
-                                <tr>
-                                    <?php foreach ($Row as $Number => $Value): ?>
-                                        <td><?php echo $Value; ?></td>
-                                    <?php endforeach; ?>
-                                </tr>
-                            <?php endwhile;
-
-                            $result->close();
-                        }
-
-                        /* close connection */
-                        $DataBase->close(); 
-                        ?>
-
-                    </tbody>
-                </table>
-
-                <br>
+            <br>
     
             <?php endif;
         ?>
