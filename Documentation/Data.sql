@@ -43,3 +43,26 @@ VALUES (
     "Leilan@gmail.com",
     "adios"
 ); 
+
+INSERT INTO Empleado (
+    ID,
+    Sueldo,
+    Turno,
+    Genero,
+    Nombre,
+    ApellidoPaterno,
+    ApellidoMaterno,
+    Correo,
+    Contraseña
+)
+VALUES (
+    2, 
+    250.0,
+    "V",
+    "M",
+    "Tom",
+    "Scoot",
+    "Just this",
+    "Tom@gmail.com",
+    "Bye"
+); 

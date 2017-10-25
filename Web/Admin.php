@@ -11,118 +11,94 @@
     $UpdateDate = '23 de Julio del 2017';                                                       //Fecha de actualizacion de la pagina
 
 
-
+    $ShowEmployees = isset($_POST['ShowEmployees']);
 
     // *****************************************************************************************
     // *************************     PROCESS TO START THE SYSTEM   *****************************
     // *****************************************************************************************
     include($PHPDocumentRoot."PHP/HTMLHeader.php");                                             //Incluimos un Asombroso Encabezado
 ?>
-	
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
+
+    <br><br>
+
+    <div class="container">
 
 
-	<div class="container">
-        <div class="card-panel teal lighten-3">
+        <!-- ========  MATERIAL CARD  ================ -->
+        <div class="card-panel center-align teal lighten-3">
+               
+            <h5 class="white-text">Ver información de los Empleados</h5>
 
-        <center><h4 class="white-text">Ve información Empleados</h4>
-        <br>
-        <span class="white-text">
-          	Aqui ira un texto que tenga sentido
-        </span>
-        </center>
+            <span class="white-text">
+        	   Acceder a un registro con todos los empleados activos
+            </span>
+            
+            <br>
         </div>
+
+        <?php 
+            if ($ShowEmployees) :                                                       //Si quieres ver empleados
+                
+                $DataBase = new mysqli("127.0.0.1", "root", "hola", "Proyect");         //Abrimos una conexión
+                if (mysqli_connect_errno()) exit();                                     //Si es que no hay problemas
+                
+                $Consulta = "SELECT * FROM Empleado;";                                  //Nuestra consulta
+                ?>
+
+                <table class="centered hoverable striped responsive-table">
+                    <thead>
+                        <tr>
+                              <th>ID</th>
+                              <th>Sueldo</th>
+                              <th>Turno</th>
+                              <th>Genero</th>
+                              <th>Nombre</th>
+                              <th>Apellido 1</th>
+                              <th>Apellido 2</th>
+                              <th>Correo</th>
+                              <th>Constraseña</th>
+                              <th>ID del Gerente</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                
+                        <?php
+                        if ($result = $DataBase->query($Consulta)) {
+                            while ($Row = $result->fetch_row()) : ?>
+                                <tr>
+                                    <?php foreach ($Row as $Number => $Value): ?>
+                                        <td><?php echo $Value; ?></td>
+                                    <?php endforeach; ?>
+                                </tr>
+                            <?php endwhile;
+
+                            $result->close();
+                        }
+
+                        /* close connection */
+                        $DataBase->close(); 
+                        ?>
+
+                    </tbody>
+                </table>
+
+                <br>
+    
+            <?php endif;
+        ?>
+
+
+    	<form action="Admin.php" method="post"><center>
+    		<button class="btn waves-effect waves-light" type="submit" name="ShowEmployees">
+    			Ve los Empleados
+    		</button>
+        </center></form>
+
+        <br><br><br><br>
+        <br><br><br><br>
+
     </div>
-
-
-
-
-	<!-- ===== BUTTON ===== -->
-	<form action="Admin.php" method="post"><center>
-
-		<button class="btn waves-effect waves-light" type="submit" name="ShowEmployees">
-			Ve los Empleados
-		</button>
-        
-
-    </center></form>
-
-
-    <br>
-    <br>
-    <br>
-    <br>
-
-
-    <?php 
-	    if ( isset($_POST['ShowEmployees']) ) : ?>
-
-	<div class="container">
-		
-	    <table class="centered striped responsive-table">
-        <thead>
-          <tr>
-              <th>ID</th>
-              <th>Sueldo</th>
-              <th>Turno</th>
-              <th>Genero</th>
-              <th>Nombre</th>
-              <th>Apellido 1</th>
-              <th>Apellido 2</th>
-              <th>Correo</th>
-              <th>Constraseña</th>
-              <th>GerenteID</th>
-          </tr>
-        </thead>
-
-        <tbody>
-
-	        <?php
-		    	
-		    	$DataBase = new mysqli("127.0.0.1", "root", "hola", "Proyect");
-
-		    	if (mysqli_connect_errno()) exit();
-						
-				$Consulta = "SELECT * FROM Empleado;";
-
-				if ($result = $DataBase->query($Consulta)) {
-
-				    while ($Row = $result->fetch_row()) : ?>
-
-          				<tr>
-
-				    		<?php foreach ($Row as $Number => $Value): ?>
-						        <td><?php echo $Value; ?></td>
-
-				    		<?php endforeach; ?>
-				    	</tr>
-				    <?php endwhile;
-
-				    $result->close();
-				}
-
-				/* close connection */
-				$DataBase->close();
-
-		    endif; ?>
-
-	    </tbody>
-      	</table>
-
-      </div>
-
-
-
-
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
 
 
 	<?php include($PHPDocumentRoot."PHP/HTMLFooter.php"); ?>

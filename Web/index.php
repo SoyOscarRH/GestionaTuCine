@@ -10,10 +10,8 @@
     $Title = $HTMLTitle ='Maneja tu Cine';                                                      //Titulo de cada Pagina
     $UpdateDate = '23 de Julio del 2017';                                                       //Fecha de actualizacion de la pagina
 
-
     include($PHPDocumentRoot."PHP/HTMLHeader.php");                                             //Incluimos un Asombroso Encabezado
 ?>
-
 
 
     <!--  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->

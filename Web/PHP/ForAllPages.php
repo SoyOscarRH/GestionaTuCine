@@ -24,12 +24,8 @@
     // *******************      LIBRERIAS EXTERNAS   **********************
     // ********************************************************************
         include_once("Functions.php");                                                      //Aqui se encuentran las fn en general
-        //include_once("DataBases.php");                                                    //Aqui se encuentran las fn de conexion
+        include_once("DataBaseFunctions.php");                                              //Aqui se encuentran las fn de conexion
     
-
-
-
-
 
 
 
@@ -42,19 +38,14 @@
             $HTMLTitle = $Title;                                                                //Titulo de cada Pagina
             $UpdateDate = '23 de Julio del 2017';                                               //Fecha de actualizacion de la pagina
 
-            $PHPDocumentRoot = "/Applications/XAMPP/xamppfiles/htdocs/ManageYourCinema/Web/";
-            $HTMLDocumentRoot = "/ManageYourCinema/Web/";
+            $PHPDocumentRoot = "/Applications/XAMPP/xamppfiles/htdocs/ManageYourCinema/Web/";   //Ruta de los archivos de PHP
+            $HTMLDocumentRoot = "/ManageYourCinema/Web/";                                       //Ruta de los archivos de HTML
 
-            $WeShouldAddOriginalLinks = true;
-
-
+            $WeShouldAddOriginalLinks = true;                                                   //¿Dbemos cambiarlos?
 
 
         // === DEFAULT LINKS ===== 
-            $LinksForPages = array(); 
-            $LinksForPages["Iniciar Sesión"] = "Login.php";   
-            $LinksForPages["Cerrar Sesión"]  = "adios";   
-            $LinksForPages["Opciones"]       = "Vacio";   
-
-
+            $LinksForPages = array();                                                           //Guarda los links
+            $LinksForPages["Iniciar Sesión"] = "Login.php";                                     //Iniciar Sesion
+            $LinksForPages["Administrador"]  = "Admin.php";                                     //Herramientas de Administrador
 ?>
