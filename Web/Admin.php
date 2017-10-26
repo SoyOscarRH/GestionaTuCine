@@ -42,7 +42,7 @@
             $DataBase = new mysqli("127.0.0.1", "root", "hola", "Proyect");                     //Abrimos una conexión
             if (mysqli_connect_errno()) exit();                                                 //Si es que no hay problemas
             
-            $Consulta = "SELECT * FROM Empleado;";                                              //Nuestra consulta
+            $Query = "SELECT * FROM Empleado;";                                                 //Nuestra consulta
             ?>
 
             <table class="centered hoverable striped responsive-table">
@@ -64,8 +64,8 @@
                 <tbody>
 
                 <?php
-                if ($result = $DataBase->query($Consulta)) {
-                    while ($Row = $result->fetch_row()) : ?>
+                if ($QueryResult = $DataBase->query($Query)) {
+                    while ($Row = $QueryResult->fetch_row()) : ?>
 
                     <tr>
                     
@@ -79,7 +79,7 @@
 
                     <?php endwhile;
 
-                    $result->close();
+                    $QueryResult->close();
                 }
 
                 /* close connection */
