@@ -53,7 +53,7 @@
             $DataBase = new mysqli("127.0.0.1", "root", "hola", "Proyect");                     //Abrimos una conexión
             if (mysqli_connect_errno()) exit();                                                 //Si es que no hay problemas
 
-            $Query = 'SELECT ID, Correo, Contraseña, Nombre, ApellidoPaterno, ApellidoMaterno
+            $Query = 'SELECT ID, Correo, Contrasena, Nombre, ApellidoPaterno, ApellidoMaterno
                             FROM Empleado
                             WHERE Correo = "'.$UserName.'";'; 
 
