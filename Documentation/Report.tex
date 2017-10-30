@@ -229,7 +229,7 @@
 
     % ============ NAME OF THE DOCUMENT  ============
     \rule{\linewidth}{0.5mm} \\[1.0cm]
-        { \huge \bfseries Primer Avance del Proyecto Final}\\[1.0cm] 
+        { \huge \bfseries Manage Your Cinema}\\[1.0cm] 
     \rule{\linewidth}{0.5mm} \\[2.0cm]
      
     % ============  MY INFORMATION  =================
@@ -252,7 +252,8 @@
         \end{flushright}
     \end{minipage}\\[3,5cm]
 
-
+    % ====== SEMI TITLE ==========
+    {\LARGE Reporte de Bases de Datos}
     \vfill
 
 \end{titlepage}
@@ -752,11 +753,11 @@
         % =============================================
         % =====    DIAGRAMAS CON WORKBENCH      =======
         % =============================================
-        \subsection{Diagramas con WorkBench}
+        \subsection{Diagrama Relacional con MySQLWorkBench}
 
             \begin{figure}[h]
                 \centering
-                \includegraphics[width=0.95\textwidth]{DataBase/DiagramTables.png}
+                \includegraphics[width=0.95\textwidth]{DataBase/Relations2.png}
             \end{figure}
 
         % =============================================
@@ -765,19 +766,19 @@
         \clearpage
         \subsection{Codigo en SQL}
 
-            \lstinputlisting[language=SQL,linerange={1-46}]
+            \lstinputlisting[language=SQL,linerange={1-43}]
             {DataBase/DataBaseTables.sql}
             \clearpage
 
-            \lstinputlisting[language=SQL,linerange={48-81}]
+            \lstinputlisting[language=SQL,linerange={46-91}]
             {DataBase/DataBaseTables.sql}
             \clearpage
 
-            \lstinputlisting[language=SQL,linerange={84-136}]
+            \lstinputlisting[language=SQL,linerange={94-140}]
             {DataBase/DataBaseTables.sql}
             \clearpage
 
-            \lstinputlisting[language=SQL,linerange={139-191}]
+            \lstinputlisting[language=SQL,linerange={143-181}]
             {DataBase/DataBaseTables.sql}
 
 
@@ -789,17 +790,160 @@
     \section{Diccionario de Datos}
 
 
+        \subsection*{Relación: Función}
+
+            Aquella relación que almacena los datos que caracterizan a la presentación
+            de una película a una hora determinada, en una sala específica.
+
+            Una película puede presentarse en varias funciones y varias funciones pueden
+            presentarse en una sala.
+
+            \vspace{2em}
+
+            \small{
+            \begin{tabular}{| c | c | c |}
+                \hline
+                \textbf{Campo} & \textbf{Tipo de Datos (tamaño)} & \textbf{Constraint} \\[0.5ex] 
+                \hline\hline
+                
+                Hora        & TIME          & PK                        \\
+                Dia         & DATE          & PK                        \\
+                NumeroSala  & INT(11)       & PK , FK                   \\
+                Precio      & REAL          &                           \\
+                Tipo        & VARCHAR(20)   &                           \\
+                IDPelicula  & INT(11)       & FK                        \\
+                \hline
+            \end{tabular}
+            }
+
+
+        \subsection*{Relación: Película}
+
+            Relación que guarda los datos sobre una determinada película, como su
+            descripción, clasificación y duración, es necesario saber qué película
+            se presenta en cada función, recordando que una película puede presentarse
+            en varias funciones, pero una función solo puede presentar una película.
+
+            \vspace{2em}
+
+            \small{
+            \begin{tabular}{| c | c | c |}
+                \hline
+                \textbf{Campo} & \textbf{Tipo de Datos (tamaño)} & \textbf{Constraint} \\[0.5ex] 
+                \hline\hline
+                
+                ID              & INT (11)         & PK                        \\
+                Clasificacion   & VARCHAR(4)       &                           \\
+                Nombre          & VARCHAR(50)      &                           \\
+                Duracion        & INT(11)          &                           \\
+                Descripcion     & VARCHAR(400)     &                           \\
+                \hline
+            \end{tabular}
+            }
+
+
+
+        \clearpage
+        \subsection*{Relación: TicketBoleto}
+
+            Relación que permite llevar un control sobre los boletos que tiene
+            cada función, guardando también las características de la venta.
+
+            \vspace{2em}
+
+            \small{
+            \begin{tabular}{| c | c | c |}
+                \hline
+                \textbf{Campo} & \textbf{Tipo de Datos (tamaño)} & \textbf{Constraint} \\[0.5ex] 
+                \hline\hline
+                
+                NombreBoletos   & INT(11)    &                           \\
+                Costos          & REAL       &                           \\
+                Hora            & TIME       & PK , FK                   \\
+                Dia             & DATE       & PK , FK                   \\
+                NumeroSala      & INT(11)    & PK , FK                   \\
+                IDVenta         & INT(11)    & PK , FK                   \\
+                \hline
+            \end{tabular}
+            }
+
+
+        \subsection*{Relación: TicketDulceria}
+
+            Aquella relación que permite tener un control sobre la comida/dulces vendidos.
+
+            \vspace{2em}
+
+            \small{
+            \begin{tabular}{| c | c | c |}
+                \hline
+                \textbf{Campo} & \textbf{Tipo de Datos (tamaño)} & \textbf{Constraint} \\[0.5ex] 
+                \hline\hline
+                
+                Costos          & REAL       &                           \\
+                Cantidad        & INT(11)    &                           \\
+                IPProducto      & INT(11)    & PK , FK                   \\
+                IDVenta         & INT(11)    & PK , FK                   \\
+                \hline
+            \end{tabular}
+            }
+
+
+
+
+        \subsection*{Relación: ProductoDulceria}
+
+            Relación encargada de almacenar los productos de la dulcería, tales como dulces,
+            palomitas y refrescos. Se guardan también sus costos y el proveedor que los provee.
+
+            \vspace{2em}
+
+            \small{
+            \begin{tabular}{| c | c | c |}
+                \hline
+                \textbf{Campo} & \textbf{Tipo de Datos (tamaño)} & \textbf{Constraint} \\[0.5ex] 
+                \hline\hline
+                
+                IPProducto      & INT(11)       & PK                    \\
+                Stock           & INT(11)       &                       \\
+                Nombre          & VARCHAR(50)   &                       \\
+                Costo           & REAL          &                       \\
+                IDProveedor     & INT(11)       & FK                    \\
+                \hline
+            \end{tabular}
+            }
+
+        \subsection*{Relación: TicketProoveedor}
+
+            Relación destinada a relacionar los proveedores con los productos de dulcería, almacenando la cantidad, el total y la fecha en la que se proporcionaron los dulces, por parte del proveedor.
+
+            \vspace{2em}
+
+            \small{
+            \begin{tabular}{| c | c | c |}
+                \hline
+                \textbf{Campo} & \textbf{Tipo de Datos (tamaño)} & \textbf{Constraint} \\[0.5ex] 
+                \hline\hline
+                
+                IPProducto      & INT(11)       & PK                    \\
+                Stock           & INT(11)       &                       \\
+                Nombre          & VARCHAR(50)   &                       \\
+                Costo           & REAL          &                       \\
+                IDProveedor     & INT(11)       & FK                    \\
+                \hline
+            \end{tabular}
+            }
 
 
     % ===============================================================
     % =======================    CASOS DE USOS       ================
     % ===============================================================
     \clearpage
-    \section{Casos de Usos}
+    \section{Diagrama de Casos de Uso}
 
         \begin{figure}[h]
             \centering
-            \includegraphics[width=0.95\textwidth]{DiagramaSecuencial}
+            \includegraphics[width=0.95\textwidth]{DiagramasDeCasosDeUso}
         \end{figure}
 
     % ===============================================================
@@ -817,32 +961,32 @@
     \clearpage
     \section{Avance de la Interfaz}
 
-        \begin{figure}[h]
+        \begin{figure}[ht]
             \centering
             \includegraphics[width=0.65\textwidth]{EjemploInterfazSegundaParte1}
             \caption{Página Principal}
         \end{figure}
 
 
-        \begin{figure}[h]
+        \begin{figure}[ht]
             \centering
             \includegraphics[width=0.65\textwidth]{EjemploInterfazSegundaParte2}
             \caption{Menú de Inicio}
         \end{figure}
 
-        \begin{figure}[h]
+        \begin{figure}[ht]
             \centering
             \includegraphics[width=0.65\textwidth]{EjemploInterfazSegundaParte3}
             \caption{Tabla que muestra los Datos}
         \end{figure}
 
-        \begin{figure}[h]
+        \begin{figure}[ht]
             \centering
             \includegraphics[width=0.65\textwidth]{EjemploInterfazSegundaParte4}
             \caption{Empezamos a hacerlo Responsive para pantallas pequeñas (modificación del menú y creamos menú hamburguesa)}
         \end{figure}
 
-        \begin{figure}[h]
+        \begin{figure}[ht]
             \centering
             \includegraphics[width=0.65\textwidth]{EjemploInterfazSegundaParte5}
             \includegraphics[width=0.65\textwidth]{EjemploInterfazSegundaParte7}
@@ -850,7 +994,7 @@
         \end{figure}
 
 
-        \begin{figure}[h]
+        \begin{figure}[ht]
             \centering
             \includegraphics[width=0.65\textwidth]{EjemploInterfazSegundaParte6}
             \caption{Empezamos a hacerlo Responsive para pantallas medianas}

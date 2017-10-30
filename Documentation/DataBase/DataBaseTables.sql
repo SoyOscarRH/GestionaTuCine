@@ -33,24 +33,14 @@ CREATE TABLE Empleado (
     ApellidoMaterno     VARCHAR(15),
     Correo              VARCHAR(30),
     Contrasena          VARCHAR(100),
-    IDGerente           INT
-);
+    IDGerente           INT,
 
-CREATE TABLE Gerente (
-    ID                  INT,
-
-    FOREIGN KEY (ID)
+    FOREIGN KEY (IDGerente)
         REFERENCES Empleado(ID)
         ON DELETE CASCADE
         ON UPDATE CASCADE
+
 );
-
-ALTER TABLE Empleado 
-    ADD FOREIGN KEY (IDGerente)
-        REFERENCES Gerente(ID)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE;
-
 
 
 CREATE TABLE EmpleadoSala (

@@ -7,7 +7,7 @@ INSERT INTO Empleado (
     ApellidoPaterno,
     ApellidoMaterno,
     Correo,
-    Contraseña
+    Contrasena
 )
 VALUES (
     1, 
