@@ -913,9 +913,12 @@
             \end{tabular}
             }
 
+        \clearpage
         \subsection*{Relación: TicketProoveedor}
 
-            Relación destinada a relacionar los proveedores con los productos de dulcería, almacenando la cantidad, el total y la fecha en la que se proporcionaron los dulces, por parte del proveedor.
+            Relación destinada a relacionar los proveedores con los productos de dulcería,
+            almacenando la cantidad, el total y la fecha en la que se proporcionaron los dulces,
+            por parte del proveedor.
 
             \vspace{2em}
 
@@ -925,14 +928,119 @@
                 \textbf{Campo} & \textbf{Tipo de Datos (tamaño)} & \textbf{Constraint} \\[0.5ex] 
                 \hline\hline
                 
-                IPProducto      & INT(11)       & PK                    \\
-                Stock           & INT(11)       &                       \\
-                Nombre          & VARCHAR(50)   &                       \\
-                Costo           & REAL          &                       \\
-                IDProveedor     & INT(11)       & FK                    \\
+                Fecha       & DATE          &                       \\
+                Total       & REAL          &                       \\
+                Cantidad    & INT(11)       &                       \\
+                IDProducto  & INT(11)       & PK , FK               \\
+                IDProveedor & INT(11)       & PK , FK               \\
                 \hline
             \end{tabular}
             }
+
+        \subsection*{Relación: Proveedor}
+
+            Aquella relación destinada a almacenar la información del proveedor como
+            lo es su nombre y correo (el correo será único, y tendrá su contraseña).
+
+            \vspace{2em}
+
+            \small{
+            \begin{tabular}{| c | c | c |}
+                \hline
+                \textbf{Campo} & \textbf{Tipo de Datos (tamaño)} & \textbf{Constraint} \\[0.5ex] 
+                \hline\hline
+                
+                IDProveedor & INT(11)       & PK                    \\
+                Nombre      & VARCHAR(15)   &                       \\
+                Apellido1   & VARCHAR(15)   &                       \\
+                Apellido2   & VARCHAR(15)   &                       \\
+                Correo      & VARCHAR(30)   &                       \\
+                Contrasena  & VARCHAR(100)  &                       \\
+                \hline
+            \end{tabular}
+            }
+
+
+        \subsection*{Relación: EmpleadoSala}
+
+            Relación que asocia al empleado y sala. Viene dada de una cardinalidad
+            muchos a muchos, y sirve para almacenar los empleados que revisan una sala,
+            y las salas que son revisadas por un empleado.
+
+            \vspace{2em}
+
+            \small{
+            \begin{tabular}{| c | c | c |}
+                \hline
+                \textbf{Campo} & \textbf{Tipo de Datos (tamaño)} & \textbf{Constraint} \\[0.5ex] 
+                \hline\hline
+                
+                ID          & INT(11)       & PK , FK               \\
+                NumSala     & INT(11)       & PK, FK                \\
+                \hline
+            \end{tabular}
+            }
+
+
+        \clearpage
+        \subsection*{Relación: Empleado}
+
+            Relación que guarda la información del usuario o cliente, almacenando ambos
+            con una relación unitaria para saber que gerente dirige a los usuarios.
+            Los usuarios y gerentes de distinguen entre sí por el campo rol.
+            Un gerente puede dirigir a varios empleados, pero un empleado solo tiene un gerente.
+
+            \vspace{2em}
+
+            \small{
+            \begin{tabular}{| c | c | c |}
+                \hline
+                \textbf{Campo} & \textbf{Tipo de Datos (tamaño)} & \textbf{Constraint} \\[0.5ex] 
+                \hline\hline
+                
+                ID          & INT(11)       & PK                    \\
+                Nombre      & VARCHAR(15)   &                       \\
+                Apellido1   & VARCHAR(15)   &                       \\
+                Apellido2   & VARCHAR(15)   &                       \\
+                Correo      & VARCHAR(30)   &                       \\
+                Contrasena  & VARCHAR(100)  &                       \\
+                Sueldo      & REAL          &                       \\
+                Turno       & VARCHAR(10)   &                       \\
+                Rol         & VARCHAR(15)   &                       \\
+                Genero      & VARCHAR(10)   &                       \\
+                IDGerente   & INT(11)       & FK                    \\
+                NumEmpleados& INT(11)       &                       \\
+                ID\_Ger     & INT(11)       & FK (Llave recursiva)  \\
+                \hline
+            \end{tabular}
+            }
+
+        \subsection*{Relación: Sala}
+
+            Aquella relación que almacena las salas y el número de asientos disponible
+            en cada una.
+
+            \vspace{2em}
+
+            \small{
+            \begin{tabular}{| c | c | c |}
+                \hline
+                \textbf{Campo} & \textbf{Tipo de Datos (tamaño)} & \textbf{Constraint} \\[0.5ex] 
+                \hline\hline
+                
+                ID          & INT(11)       & PK                    \\
+                Asientos    & INT(11)       &                       \\
+                \hline
+            \end{tabular}
+            }
+
+
+
+
+
+
+
+
 
 
     % ===============================================================
@@ -952,7 +1060,85 @@
     \clearpage
     \section{Diagrama Secuencial}
 
+
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=0.85\textwidth]{DiagramaSecuencial1}
+            \caption{Consultar Actividad}
+        \end{figure}
+
+
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=0.65\textwidth]{DiagramaSecuencial2}
+            \caption{Consultar Existencias}
+        \end{figure}
+
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=0.85\textwidth]{DiagramaSecuencial3}
+            \caption{Consultar Horarios y Salas}
+        \end{figure}
+
+
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=0.65\textwidth]{DiagramaSecuencial4}
+            \caption{Consultar Salarios}
+        \end{figure}
+
+
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=0.65\textwidth]{DiagramaSecuencial5}
+            \caption{Iniciar Sesión}
+        \end{figure}
+
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=0.85\textwidth]{DiagramaSecuencial6}
+            \caption{Modificar Actividad Empleado}
+        \end{figure}
+
+
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=0.65\textwidth]{DiagramaSecuencial7}
+            \caption{Modificar Horarios Salas}
+        \end{figure}
         
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=0.85\textwidth]{DiagramaSecuencial8}
+            \caption{Modificar Perfil}
+        \end{figure}
+
+
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=0.65\textwidth]{DiagramaSecuencial9}
+            \caption{Modificar Precios Dulcería}
+        \end{figure}
+
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=0.85\textwidth]{DiagramaSecuencial10}
+            \caption{Modificar Salario}
+        \end{figure}
+
+
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=0.65\textwidth]{DiagramaSecuencial11}
+            \caption{Registrarse}
+        \end{figure}
+
+
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=0.65\textwidth]{DiagramaSecuencial12}
+            \caption{Venta Boletos}
+        \end{figure}
 
 
     % ===============================================================
