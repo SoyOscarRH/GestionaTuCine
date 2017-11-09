@@ -55,12 +55,5 @@
     </footer>
 
 
-    <!--  +++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <!--  +++++++++++++++   SCRIPTS     +++++++++++++++++++ -->
-    <!--  +++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js">  </script>
-    <script src="Javascript/Materialize/materialize.js">        </script>
-    <script src="Javascript/Materialize/init.js">               </script>
-
 </BODY>
 </HTML>

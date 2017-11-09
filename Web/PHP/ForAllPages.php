@@ -40,6 +40,7 @@
 
             $PHPDocumentRoot = "/Applications/XAMPP/xamppfiles/htdocs/ManageYourCinema/Web/";   //Ruta de los archivos de PHP
             $HTMLDocumentRoot = "/ManageYourCinema/Web/";                                       //Ruta de los archivos de HTML
+            $PageDirection = "localhost";                                                       //Ruta de los archivos de HTML
 
             $WeShouldAddOriginalLinks = true;                                                   //¿Dbemos cambiarlos?
 

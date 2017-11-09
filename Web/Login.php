@@ -18,55 +18,66 @@
 	$ErrorAccountMessage  = "";
 	$ErrorPasswordMessage = "";
 
-    $AccountNumber = "";
+    $UserName = "";
     $Password      = "";
-    $IDSesion      = "";
-    $CompleteName       = ""; 
-
-    $SayHello = false;   
-
-    $ErrorCode = 0;                                                                         
-
+    $CompleteName  = ""; 
 
     // *****************************************************************************************
     // *************************     PROCESS TO START THE SYSTEM   *****************************
     // *****************************************************************************************
-    if ( isset($_POST['CheckDataToEnterSystem']) ){
+    session_start();
 
+    if (!empty($_SESSION)) {
+        header("Location: MenuEmployeeOrManager.php");                                          //Envia a link
+        exit();
+    }
+
+
+    if ( isset($_POST['CheckDataToEnterSystem']) ){
 
         // ================================================================================
         // ======================  TRY TO GET ACCOUNT NUMBER   ============================
         // ================================================================================
-        $AreAllDataValid = true;                                                                //Mundo feliz donde todo salio bien
+        if (isset($_POST['UserName']) == true and isset($_POST['Password']) == true) {
+            $UserName = ClearSQLInyection(htmlspecialchars(trim($_POST['UserName'])));          //Limpia numero de cuenta
+            $Password = ClearSQLInyection(htmlspecialchars(trim($_POST['Password'])));          //Limpia numero de cuenta
 
-        if (isset($_POST['UserName']) == false) $AreAllDataValid = false;                       //...De verdad salio todo bien
-        if (isset($_POST['Password']) == false) $AreAllDataValid = false;                       //...De verdad salio todo bien
+            $DataBase = @new mysqli("127.0.0.1", "root", "hola", "Proyect");                    //Abrir una conexión
+            if ((mysqli_connect_errno() != 0) or !$DataBase) {                                  //Si hubo problemas
+                $TitleErrorPage      = "Error con la BD";                                       //Error variables
+                $MessageErrorPage    = "No podemos acceder a la base de datos";                 //Error variables
+                $ButtonLinkErrorPage = $HTMLDocumentRoot."\Login.php";                          //Error variables
+                $ButtonTextErrorPage = "Intenta otra vez";                                      //Error variables
 
-        $UserName = ClearSQLInyection(htmlspecialchars(trim($_POST['UserName'])));              //Recoge el numero de cuenta y le quita lo feo
-        $Password = ClearSQLInyection(htmlspecialchars(trim($_POST['Password'])));              //Recoge el numero de cuenta y le quita lo feo
+                include($PHPDocumentRoot."Error.php");                                          //Llama a la pagina de error
+                exit();                                                                         //Adios vaquero
+            }
 
-        if ($UserName == "") $AreAllDataValid = false;                                          //...De verdad salio todo bien
-        if ($Password == "") $AreAllDataValid = false;                                          //...De verdad salio todo bien
+            $QueryResult = $DataBase->query('
+                SELECT ID, Correo, Contrasena, Nombre, ApellidoPaterno, ApellidoMaterno, IDGerente
+                    FROM Empleado
+                    WHERE Correo = "'.$UserName.'";');                                          //Haz la consulta
 
-        if ($AreAllDataValid) {                                                                 //Si todo si salio bien
-
-            $DataBase = new mysqli("127.0.0.1", "root", "hola", "Proyect");                     //Abrimos una conexión
-            if (mysqli_connect_errno()) exit();                                                 //Si es que no hay problemas
-
-            $Query = 'SELECT ID, Correo, Contrasena, Nombre, ApellidoPaterno, ApellidoMaterno
-                            FROM Empleado
-                            WHERE Correo = "'.$UserName.'";'; 
-
-            if ($QueryResult = $DataBase->query($Query)) {                                      //Si es que de verdad el men existe
+            if ($QueryResult->num_rows > 0) {                                                   //Si es de verdad el men existe
                 $Row = $QueryResult->fetch_row();                                               //Entonces dame el resultado
 
-                $CompleteName = "{$Row[3]} {$Row[4]} {$Row[5]}";                                //Dame su nombre
-                $SayHello = true;                                                               //Dile hola :D
+                if (sha1($Password."ManageYourCinemaSalt") == $Row[2]) {                        //Si es que contraseña correcta
+                    
+                    session_start();
+                    $_SESSION["CompleteUserName"] = "{$Row[3]} {$Row[4]} {$Row[5]}";            //Dame su info
+                    $_SESSION["Email"]            = $Row[1];                                    //Dame su info
+                    $_SESSION["Name"]             = $Row[3];                                    //Dame su info
+                    $_SESSION["Surname1"]         = $Row[4];                                    //Dame su info
+                    $_SESSION["Surname2"]         = $Row[5];                                    //Dame su info
+
+                    header("Location: MenuEmployeeOrManager.php");                              //Envia a link
+                    exit();
+                }
+                else $ErrorPasswordMessage = "Contraseña Incorrecta";                           //Contraseña incorrecta
             }
+            else $ErrorAccountMessage = "NO existe el Usuario en la Base de Datos";             //No existe usuario
     	}
-   	}
-
-
+    }
 
     include($PHPDocumentRoot."PHP/HTMLHeader.php");                                             //Incluimos un Asombroso Encabezado
 ?>
@@ -80,8 +91,6 @@
 //=============================    SESION LOGIN       ==============================
 //==================================================================================
 ?>
-<?php if ($SayHello == false): ?>
-    
     <div class="container center-align row">
 
         <div class="card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
@@ -124,65 +133,24 @@
                 <br />
 
             </form>
-
-
         </div>
-
-
     </div>
 
 
-
-<?php endif; ?>
-
-
-<?php 
-//==================================================================================
-//=============================    SESION START       ==============================
-//==================================================================================
-?>
-<?php if ($SayHello == true): ?>
-    
-    <br><br>
-
-    <div class="container center-align row">
-
-        <div class="card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
-
-            <form action="Login.php" method="post">
+    <script>
+        $(document).ready(function() {
+            <?php 
+                $ErrorSymbol = '<span class = "yellow-text"><b>Error: &nbsp; </b></span>';
                 
-                <h4 class="grey-text text-darken-2"><br>Bienvenida de Nuevo :D</h4>
+                if ($ErrorAccountMessage != "") 
+                    echo "Materialize.toast('{$ErrorSymbol} {$ErrorAccountMessage}', 9000);";
 
-                <span class="grey-text">
-                    Bienvenida al Sistema <?php echo $CompleteName; ?>
-                    <br><br>
-                </span>
-
-                <br />
-
-            </form>
-
-
-        </div>
-
-
-        <br><br><br><br><br>
-        <br><br><br><br><br>
-        <br><br><br><br><br>
-        <br><br><br><br><br>
-        <br><br><br><br><br>
-
-    </div>
-
-<?php endif; ?>
-
-
-
-
-
-
-
-
+                if ($ErrorPasswordMessage != "")
+                    echo "Materialize.toast('{$ErrorSymbol} {$ErrorPasswordMessage}', 9000);";
+            ?>
+        });
+    </script>
 
 <?php include($PHPDocumentRoot."PHP/HTMLFooter.php"); ?>
+
 
