@@ -17,7 +17,7 @@
             $Bad = array('INSERT ','DELETE ','SELECT ','UPDATE ','"','=',"'",'-',';',' AND ',' OR ');   //Valores a cambiar
             $Good = array('','','','','','','','','','','');                                          	//Valores nuevos
             $SomeString = str_ireplace($Bad, $Good, $SomeString);                               		//Cambia los valore
-            return $SomeString;
+            return $SomeString;                                                                         //Regresa ahora si el bueno
         }
 
 

@@ -7,11 +7,9 @@
 
 HEADER OF ALL HTML */
 
-
-
-
+if (!isset($ColorOfNavbar)) $ColorOfNavbar = "teal lighten-3";                  //Color of NavBar
+if (!isset($ColorOfNavbarMobile)) $ColorOfNavbarMobile = "teal lighten-2";      //Color of NavBar on Mobile
 ?>
-
 
 <!DOCTYPE html>
 <HTML>
@@ -34,6 +32,9 @@ HEADER OF ALL HTML */
 
             <!-- Color in Android Header -->
             <meta name="theme-color" content="#2196F3">
+
+            <!-- Please UFT IS LOVE -->
+            <meta charset="UTF-8">
 
             <title><?php echo $HTMLTitle;?></title>
 
@@ -75,21 +76,27 @@ HEADER OF ALL HTML */
     <header>
         <div class="navbar-fixed">
 
-            <nav class="teal lighten-3">
+            <nav class="<?php echo $ColorOfNavbar;?>">
             <div class="nav-wrapper container">
                 
                 <!-- Name of the Page -->
                 <div class="brand-logo white-text" style="font-size: 1.35rem;">
-                    <?php if (!WeAreAtMobile()) 
-                        echo '<a href="'.$HTMLDocumentRoot.'"><i class="material-icons">home</i></a>';
-                        echo $HTMLTitle."\n";
-                    ?>
+                    <?php if (!WeAreAtMobile()) : ?>
+
+                        <a href="<?php echo $HTMLDocumentRoot; ?>"><i class="material-icons">home</i></a>
+
+                    <?php endif;?>
+                    <?php echo $HTMLTitle; ?>
                 </div>
 
-                <?php if (WeAreAtMobile()) 
-                    echo '<a href="'.$HTMLDocumentRoot.'" class="brand-logo white-text right"><i class="material-icons">home</i></a>';
-                ?>
-                
+                <?php if (WeAreAtMobile()): ?> 
+
+                    <a href="<?php echo $HTMLDocumentRoot; ?>" class="brand-logo white-text right">
+                        <i class="material-icons">home</i>
+                    </a>
+
+                <?php endif;?>
+
                 <!-- Menu for Mobile -->
                 <a href="#" data-activates="mobile-demo" class="button-collapse white-text">
                     <i class="material-icons">menu</i>
@@ -97,14 +104,15 @@ HEADER OF ALL HTML */
                  
                 <!-- Links for Normal Web -->
                 <ul class="right hide-on-med-and-down">
-                    <?php
-                        echo "\n\t\t\t\t\t";
-                        foreach($LinksForPages as $NameOfLink => $Link){
-                            echo '<li> <a class="white-text" href="'.$Link.'">'.$NameOfLink.'</a></li>';
-                            echo "\n\t\t\t\t\t";
-                        }
-                        echo "\n";
-                    ?>
+                    <?php foreach($LinksForPages as $NameOfLink => $Link): ?>
+
+                        <li>
+                            <a class="white-text" href="<?php echo $Link ?>">
+                                <?php echo $NameOfLink ?>
+                            </a>
+                        </li>
+
+                    <?php endforeach;?>
                 </ul>
 
             </div>
@@ -113,15 +121,19 @@ HEADER OF ALL HTML */
         </div>
 
         <!-- Links for Mobile Web -->
-        <ul class="side-nav" id="mobile-demo">
-            <?php
-                echo "\n\t\t\t";
-                foreach($LinksForPages as $NameOfLink => $Link){
-                    echo '<li> <a href="'.$Link.'">'.$NameOfLink.'</a></li>';
-                    echo "\n\t\t\t";
-                }
-                echo "\n";
-            ?>
+        <ul class="side-nav <?php echo $ColorOfNavbarMobile;?>" id="mobile-demo">
+
+            <br><br>
+            <h4 class="center-align white-text" style="font-weight: 300;"><b>Menú</b> de Páginas</h4>
+            <br><br>
+
+            <?php foreach($LinksForPages as $NameOfLink => $Link): ?>
+                <li>
+                    <a href="<?php echo$Link;?>">
+                        <span class="white-text flow-text"><?php echo $NameOfLink; ?></span>
+                    </a>
+                </li>
+            <?php endforeach; ?>
         </ul>
 
     </header>

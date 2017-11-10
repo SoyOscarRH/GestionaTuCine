@@ -9,22 +9,21 @@
     // ********************************************************************
     // *******************   HEADERS PARA HTML   **************************
     // ********************************************************************
-        header('Content-type: text/html; charset=UTF-8');                                   //Obliga a recargar la pagina con UFT8
-        header("Content-Type: text/html;charset=utf_8");                                    //Obliga a recargar la pagina con UFT8
-        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");                                   //Obliga a recargar la pagina
-        header("Last-Modified: ".gmdate("D, d M Y H:i:s")."GMT");                           //Obliga a recargar la pagina
-        header("Cache-control: no-cache, must-revalidate");                                 //Obliga a recargar la pagina
-        header("Pragma: no-cache");                                                         //Obliga a recargar la pagina
-        ini_set("display_errors","On");                                                     //Obliga a recargar la pagina
-        date_default_timezone_set ('America/Mexico_City');                                  //Da la zona horaria
-        setlocale(LC_TIME, 'es_ES.UTF-8');                                                  //Pone un sistema local
+        header('Content-type: text/html; charset=UTF-8');                                       //Obliga a recargar la pagina con UFT8
+        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");                                       //Obliga a recargar la pagina
+        header("Last-Modified: ".gmdate("D, d M Y H:i:s")."GMT");                               //Obliga a recargar la pagina
+        header("Cache-control: no-cache, must-revalidate");                                     //Obliga a recargar la pagina
+        header("Pragma: no-cache");                                                             //Obliga a recargar la pagina
+        ini_set("display_errors","On");                                                         //Obliga a recargar la pagina
+        date_default_timezone_set ('America/Mexico_City');                                      //Da la zona horaria
+        setlocale(LC_TIME, 'es_ES.UTF-8');                                                      //Pone un sistema local
 
 
     // ********************************************************************
-    // *******************      LIBRERIAS EXTERNAS   **********************
+    // *******************    LIBRARIES              **********************
     // ********************************************************************
-        include_once("Functions.php");                                                      //Aqui se encuentran las fn en general
-        include_once("DataBaseFunctions.php");                                              //Aqui se encuentran las fn de conexion
+        include_once("Functions.php");                                                          //Aqui se encuentran las fn en general
+        include_once("DataBaseFunctions.php");                                                  //Aqui se encuentran las fn de conexion
     
 
 
@@ -49,4 +48,29 @@
             $LinksForPages = array();                                                           //Guarda los links
             $LinksForPages["Iniciar Sesión"] = "Login.php";                                     //Iniciar Sesion
             $LinksForPages["Administrador"]  = "Admin.php";                                     //Herramientas de Administrador
+
+
+
+    // *****************************************************************************************************
+    // *********************************             IMPORTANT STUFF          ******************************
+    // *****************************************************************************************************
+
+        // === DEFAULT LINKS ===== 
+            if(!isset($_SESSION)) session_start();                                              //Si es que ya iniciamos sesion
+
+            if (!empty($_SESSION)) {                                                            //Asi que ya iniciaste sesion
+                unset($LinksForPages["Iniciar Sesión"]);                                        //Bye link :(
+                $LinksForPages = array("Menú de Opciones"=>"Login.php") + $LinksForPages;       //Menu de Sesion
+                $LinksForPages["Cerrar Sesion"] = "MenuEmployeeOrManager.php?CloseSession";     //Añadimos el Sesion
+            }
+
+
+
+
+
+
+
+
+
+
 ?>

@@ -7,7 +7,7 @@
     include("/Applications/XAMPP/xamppfiles/htdocs/ManageYourCinema/Web/PHP/ForAllPages.php");  //Dame todas las ventajas que tiene incluir
 
     // ================ VARIABLES =============================
-    $Title = $HTMLTitle ='Maneja tu Cine';                                                      //Titulo de cada Pagina
+    $HTMLTitle ='Maneja tu Cine';                                                               //Titulo de cada Pagina
     $UpdateDate = '23 de Julio del 2017';                                                       //Fecha de actualizacion de la pagina
 
     include($PHPDocumentRoot."PHP/HTMLHeader.php");                                             //Incluimos un Asombroso Encabezado

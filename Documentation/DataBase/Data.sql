@@ -7,7 +7,9 @@ INSERT INTO Empleado (
     ApellidoPaterno,
     ApellidoMaterno,
     Correo,
-    Contrasena
+    Contrasena,
+    RolActual,
+    IDGerente
 )
 VALUES (
     1, 
@@ -18,7 +20,9 @@ VALUES (
     "Rosas",
     "Hernandez",
     "SoyOscarRH@gmail.com",
-    "hola"
+    "7deb4542371cf407dc3cd4e09e47c509c1567492",
+    "Dulceria",
+    1
 ); 
 
 INSERT INTO Empleado (
@@ -30,7 +34,9 @@ INSERT INTO Empleado (
     ApellidoPaterno,
     ApellidoMaterno,
     Correo,
-    Contrasena
+    Contrasena,
+    RolActual,
+    IDGerente
 )
 VALUES (
     2, 
@@ -41,28 +47,8 @@ VALUES (
     "Marmolejo",
     "Robles",
     "Leilan@gmail.com",
-    "adios"
+    "28d0c255283b99dec90cb1777bafe2a7681820c8",
+    "Gerente",
+    1
 ); 
 
-INSERT INTO Empleado (
-    ID,
-    Sueldo,
-    Turno,
-    Genero,
-    Nombre,
-    ApellidoPaterno,
-    ApellidoMaterno,
-    Correo,
-    Contrasena
-)
-VALUES (
-    2, 
-    250.0,
-    "V",
-    "M",
-    "Tom",
-    "Scoot",
-    "Just this",
-    "Tom@gmail.com",
-    "Bye"
-); 

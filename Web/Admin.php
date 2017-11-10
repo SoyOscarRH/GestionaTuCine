@@ -10,6 +10,15 @@
     $HTMLTitle  = $Title = 'Administrador';                                                  	//Titulo de cada Pagina
     $UpdateDate = '23 de Julio del 2017';                                                       //Fecha de actualizacion de la pagina
 
+    if (empty($_SESSION)) {
+        $TitleErrorPage      = "Error Permisos";                                                //Error variables
+        $MessageErrorPage    = "No iniciaste sesión en el Sistema";                             //Error variables
+        $ButtonLinkErrorPage = $HTMLDocumentRoot."Login.php";                                   //Error variables
+        $ButtonTextErrorPage = "Accede al Sistema";                                             //Error variables
+
+        include($PHPDocumentRoot."Error.php");                                                  //Llama a la pagina de error
+        exit();                                                                                 //Adios vaquero
+    }
 
     $ShowEmployees = isset($_POST['ShowEmployees']);
 

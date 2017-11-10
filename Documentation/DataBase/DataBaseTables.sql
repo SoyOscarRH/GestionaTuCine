@@ -33,6 +33,7 @@ CREATE TABLE Empleado (
     ApellidoMaterno     VARCHAR(15),
     Correo              VARCHAR(30),
     Contrasena          VARCHAR(100),
+    RolActual           ENUM('Dulceria', 'Taquilla', 'Gerente'),
     IDGerente           INT,
 
     FOREIGN KEY (IDGerente)

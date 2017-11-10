@@ -7,7 +7,6 @@
     include("/Applications/XAMPP/xamppfiles/htdocs/ManageYourCinema/Web/PHP/ForAllPages.php");  //Dame todas las ventajas que tiene incluir
 
     // ================ VARIABLES =============================
-    $Title      = 'Página de Error :(';                                                      	//Titulo de cada Pagina
     $HTMLTitle  = 'Error Horrible';                                                             //Titulo de cada Pagina
     $UpdateDate = '23 de Julio del 2017';                                                       //Fecha de actualizacion de la pagina
 
@@ -34,9 +33,9 @@
             
                 <h4 class="grey-text text-darken-2"><br> <?php echo $TitleErrorPage; ?></h4>
 
-                <span class="grey-text">
+                <span class="flow-text grey-text">
                     <?php echo $MessageErrorPage; ?>
-                    <br><br>
+                    <br>
                 </span>
 
                 <br><br>
