@@ -4,7 +4,7 @@
     =========================================================================================================================
 
     THIS IS THE GENERAL PAGE */
-    include("/Applications/XAMPP/xamppfiles/htdocs/ManageYourCinema/Web/PHP/ForAllPages.php");  //Dame todas las ventajas que tiene incluir
+    include("PHP/ForAllPages.php");                                                             //Dame todas las ventajas que tiene incluir
 
     // ================ VARIABLES =============================
     $HTMLTitle  = 'Error Horrible';                                                             //Titulo de cada Pagina
@@ -19,7 +19,7 @@
     if (isset($NewHTMLTitle)) $HTMLTitle = $NewHTMLTitle;                                       //Error variables
 
 
-    include($PHPDocumentRoot."PHP/HTMLHeader.php");                                             //Incluimos un Asombroso Encabezado
+    include("PHP/HTMLHeader.php");                                                              //Incluimos un Asombroso Encabezado
 ?>
 
 <br>
@@ -63,5 +63,5 @@
 
     </div>
 
-<?php include($PHPDocumentRoot."PHP/HTMLFooter.php"); ?>
+<?php include("PHP/HTMLFooter.php"); ?>
 

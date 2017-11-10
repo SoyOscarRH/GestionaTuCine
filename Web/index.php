@@ -4,13 +4,13 @@
     =======================================================================================================================================
 
     This works like the index for the complete system */
-    include("/Applications/XAMPP/xamppfiles/htdocs/ManageYourCinema/Web/PHP/ForAllPages.php");  //Dame todas las ventajas que tiene incluir
+    include("./PHP/ForAllPages.php");                                                           //Dame todas las ventajas que tiene incluir
 
     // ================ VARIABLES =============================
     $HTMLTitle ='Maneja tu Cine';                                                               //Titulo de cada Pagina
     $UpdateDate = '23 de Julio del 2017';                                                       //Fecha de actualizacion de la pagina
 
-    include($PHPDocumentRoot."PHP/HTMLHeader.php");                                             //Incluimos un Asombroso Encabezado
+    include("./PHP/HTMLHeader.php");                                                            //Incluimos un Asombroso Encabezado
 ?>
 
 
@@ -189,5 +189,5 @@
 
 
     
-    <?php include($PHPDocumentRoot."PHP/HTMLFooter.php"); ?>
+    <?php include("./PHP/HTMLFooter.php"); ?>
 

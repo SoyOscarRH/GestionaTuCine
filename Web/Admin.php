@@ -4,7 +4,7 @@
     =========================================================================================================================
 
     THIS IS THE GENERAL PAGE FOR THE ADMINISTRADOR TO SEE THINGS */
-    include("/Applications/XAMPP/xamppfiles/htdocs/ManageYourCinema/Web/PHP/ForAllPages.php");  //Dame todas las ventajas que tiene incluir
+    include("PHP/ForAllPages.php");                                                             //Dame todas las ventajas que tiene incluir
 
     // ================ VARIABLES =============================
     $HTMLTitle  = $Title = 'Administrador';                                                  	//Titulo de cada Pagina
@@ -16,7 +16,7 @@
         $ButtonLinkErrorPage = $HTMLDocumentRoot."Login.php";                                   //Error variables
         $ButtonTextErrorPage = "Accede al Sistema";                                             //Error variables
 
-        include($PHPDocumentRoot."Error.php");                                                  //Llama a la pagina de error
+        include("Error.php");                                                                   //Llama a la pagina de error
         exit();                                                                                 //Adios vaquero
     }
 
@@ -25,7 +25,7 @@
     // *****************************************************************************************
     // *************************     PROCESS TO START THE SYSTEM   *****************************
     // *****************************************************************************************
-    include($PHPDocumentRoot."PHP/HTMLHeader.php");                                             //Incluimos un Asombroso Encabezado
+    include("PHP/HTMLHeader.php");                                                              //Incluimos un Asombroso Encabezado
 ?>
 
     <br><br>
@@ -116,4 +116,4 @@
     </div>
 
 
-	<?php include($PHPDocumentRoot."PHP/HTMLFooter.php"); ?>
+	<?php include("PHP/HTMLFooter.php"); ?>

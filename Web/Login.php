@@ -4,7 +4,7 @@
     =========================================================================================================================
 
     THIS IS THE GENERAL PAGE */
-    include("/Applications/XAMPP/xamppfiles/htdocs/ManageYourCinema/Web/PHP/ForAllPages.php");  //Dame todas las ventajas que tiene incluir
+    include("PHP/ForAllPages.php");                                                             //Dame todas las ventajas que tiene incluir
 
     // ================ VARIABLES =============================
     $HTMLTitle  = 'Inicia Sesión';                                                      		//Titulo de cada Pagina
@@ -42,7 +42,7 @@
                 $ButtonLinkErrorPage = $HTMLDocumentRoot."\Login.php";                          //Error variables
                 $ButtonTextErrorPage = "Intenta otra vez";                                      //Error variables
 
-                include($PHPDocumentRoot."Error.php");                                          //Llama a la pagina de error
+                include("Error.php");                                          //Llama a la pagina de error
                 exit();                                                                         //Adios vaquero
             }
 
@@ -74,7 +74,7 @@
     	}
     }
 
-    include($PHPDocumentRoot."PHP/HTMLHeader.php");                                             //Incluimos un Asombroso Encabezado
+    include("PHP/HTMLHeader.php");                                             //Incluimos un Asombroso Encabezado
 ?>
 
 <br>
@@ -148,6 +148,6 @@
         });
     </script>
 
-<?php include($PHPDocumentRoot."PHP/HTMLFooter.php"); ?>
+<?php include("PHP/HTMLFooter.php"); ?>
 
 
