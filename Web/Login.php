@@ -35,7 +35,7 @@
             $UserName = ClearSQLInyection(htmlspecialchars(trim($_POST['UserName'])));          //Limpia numero de cuenta
             $Password = ClearSQLInyection(htmlspecialchars(trim($_POST['Password'])));          //Limpia numero de cuenta
 
-            $DataBase = @new mysqli("127.0.0.1", "root", "hola", "Proyect");                    //Abrir una conexión
+            $DataBase = @new mysqli("127.0.0.1", "root", "root", "Proyect");                    //Abrir una conexión
             if ((mysqli_connect_errno() != 0) or !$DataBase) {                                  //Si hubo problemas
                 $TitleErrorPage      = "Error con la BD";                                       //Error variables
                 $MessageErrorPage    = "No podemos acceder a la base de datos";                 //Error variables
@@ -55,7 +55,7 @@
                 $Row = $QueryResult->fetch_row();                                               //Entonces dame el resultado
 
                 if (sha1($Password."ManageYourCinemaSalt") == $Row[2]) {                        //Si es que contraseña correcta
-                    
+                  
                     session_start();                                                            //Inicia la Sesion :0
                     $_SESSION["CompleteUserName"] = "{$Row[3]} {$Row[4]} {$Row[5]}";            //Dame su info
                     $_SESSION["DataBaseID"]       = $Row[0];                                    //Dame su info

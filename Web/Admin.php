@@ -48,7 +48,7 @@
         <?php 
         if ($ShowEmployees):                                                                    //Si quieres ver empleados
             
-            $DataBase = new mysqli("127.0.0.1", "root", "hola", "Proyect");                     //Abrimos una conexión
+            $DataBase = new mysqli("127.0.0.1", "root", "root", "Proyect");                     //Abrimos una conexión
             if (mysqli_connect_errno()) exit();                                                 //Si es que no hay problemas
             
             $Query = "SELECT * FROM Empleado;";                                                 //Nuestra consulta

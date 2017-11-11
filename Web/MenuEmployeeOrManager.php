@@ -96,7 +96,7 @@
                 <br>
                 <?php endif;?>
 
-                <form action="MenuEmployeeOrManager.php" method="post">
+                <form action="VerHorarios.php" method="post">
                     <button 
                         type='submit'
                         name='MoviesSchedules'
