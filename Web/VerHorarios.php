@@ -21,6 +21,7 @@
 }                
     include("PHP/HTMLHeader.php");     
       $ShowCartelera = isset($_POST['ShowCartelera']);
+      $ShowPelicula = isset($_POST['ShowPelicula']);
 ?>
 
 <br><br>
@@ -97,6 +98,63 @@
     
             <?php endif;
         ?>
+            
+            <?php 
+        if ($ShowPelicula):                                                                    
+            $pelicula = $_POST['pelicula'];  
+            $DataBase = new mysqli("127.0.0.1", "root", "root", "Proyect");                     
+            if (mysqli_connect_errno()) exit();                                                 
+            
+            $Query = 'SELECT f.* , p.Clasificacion  , p.Duracion, p.Descripcion FROM funcion f , pelicula p , sala s where p.ID=f.IDPelicula and f.NumeroSala=s.NumeroSala and p.Nombre = "'.$pelicula.'" ;';                                                 
+            ?>
+
+            <table class="centered hoverable striped responsive-table">
+                <thead>
+                    <tr>
+                          <th>Hora</th>
+                          <th>Fecha</th>
+                          <th>Sala</th>
+                          <th>Precio</th>
+                          <th>Tipo</th>
+                          <th>IdPelicula</th>
+                          <th>Clasificacion</th>
+                          <th>Duracion (horas)</th>
+                          <th>Descripcion </th>
+                          
+              
+                    </tr>
+                </thead>
+<tbody>
+ Registros de la pelicula :
+                <?php
+                echo $pelicula ;
+                if ($QueryResult = $DataBase->query($Query)) {
+                    while ($Row = $QueryResult->fetch_row()) : ?>
+
+                    <tr>
+                    
+                    <?php foreach ($Row as $Number => $Value): ?>
+
+                        <td><?php echo $Value; ?></td>
+                        
+                    <?php endforeach; ?>
+
+                    </tr>
+
+                    <?php endwhile;
+                    $QueryResult->close();
+                }
+                /* close connection */
+                $DataBase->close(); 
+                ?>
+
+                </tbody>
+            </table>
+
+            <br>
+    
+            <?php endif;
+        ?>
 
 
             <form action="VerHorarios.php" method="post"><center>
@@ -106,6 +164,15 @@
     			Mostrar la cartelera
     		</button>
         </center></form>
+            <form action="VerHorarios.php" method="post"><center> 
+                
+                Pelicula 
+                <input class='validate' type='text' name='pelicula' id='pelicula' />
+                        <label for='pelicula'> Horarios de pelicula </label>
+    		<button class="btn waves-effect waves-light" type="submit" name="ShowPelicula">
+    			Mostrar los horarios de la pelicula 
+    		</button>
+                </center> </form>
 
         <br><br><br><br>
         <br><br><br><br>
