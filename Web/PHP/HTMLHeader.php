@@ -52,7 +52,7 @@ if (!isset($ColorOfNavbarMobile)) $ColorOfNavbarMobile = "teal lighten-2";      
             <link href="Style/CSS/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
             <link href="Style/CSS/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 
-            <script src="https://code.jquery.com/jquery-2.1.1.min.js">  </script>
+            <script src="https://code.jquery.com/jquery-3.2.1.min.js">  </script>
             <script src="Javascript/Materialize/materialize.js">        </script>
             <script src="Javascript/Materialize/init.js">               </script>
     

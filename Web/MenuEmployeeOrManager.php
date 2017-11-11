@@ -96,7 +96,7 @@
                 <br>
                 <?php endif;?>
 
-                <form action="VerHorarios.php" method="post">
+                <form action="Schedules.php" method="post">
                     <button 
                         type='submit'
                         name='MoviesSchedules'
@@ -171,7 +171,8 @@
         </div>
     </div>
 
-        <br><br><br>
+    <br><br><br>
+    <br><br><br>
 
 
 <?php include("PHP/HTMLFooter.php"); ?>

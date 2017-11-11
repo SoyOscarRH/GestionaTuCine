@@ -13,11 +13,11 @@
 
 
 	// ========== SPECIFIC FOR THIS SCRIPT ==========
-	$ErrorAccountMessage  = "";                                                                //Mensajes para el usuario final 
-	$ErrorPasswordMessage = "";                                                                //Mensajes para el usuario final
+	$ErrorAccountMessage  = "";                                                                 //Mensajes para el usuario final 
+	$ErrorPasswordMessage = "";                                                                 //Mensajes para el usuario final
 
-    $UserName = "";                                                                            //Email
-    $Password      = "";                                                                       //Contraseña            
+    $UserName = "";                                                                             //Email
+    $Password      = "";                                                                        //Contraseña            
 
 
     // ========== WAIT ... WE HAVE ALREADY STAR SESSION? ==========
@@ -39,10 +39,10 @@
             if ((mysqli_connect_errno() != 0) or !$DataBase) {                                  //Si hubo problemas
                 $TitleErrorPage      = "Error con la BD";                                       //Error variables
                 $MessageErrorPage    = "No podemos acceder a la base de datos";                 //Error variables
-                $ButtonLinkErrorPage = $HTMLDocumentRoot."\Login.php";                          //Error variables
+                $ButtonLinkErrorPage = $HTMLDocumentRoot."Login.php";                           //Error variables
                 $ButtonTextErrorPage = "Intenta otra vez";                                      //Error variables
 
-                include("Error.php");                                          //Llama a la pagina de error
+                include("Error.php");                                                           //Llama a la pagina de error
                 exit();                                                                         //Adios vaquero
             }
 
@@ -74,7 +74,7 @@
     	}
     }
 
-    include("PHP/HTMLHeader.php");                                             //Incluimos un Asombroso Encabezado
+    include("PHP/HTMLHeader.php");                                                              //Incluimos un Asombroso Encabezado
 ?>
 
 <br>

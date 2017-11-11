@@ -2,19 +2,20 @@
     /*=======================================================================================================================
     ============================================         ADMINISTRATOR POWERS          ======================================
     =========================================================================================================================
-
-    THIS IS THE GENERAL PAGE FOR THE ADMINISTRADOR TO SEE THINGS */
+    
+    THIS IS THE GENERAL PAGE FOR THE EMPLOYEE TO SEE MOVIES */
     include("PHP/ForAllPages.php");                                                             //Dame todas las ventajas
 
     // ================ VARIABLES =============================
-    $HTMLTitle  = $Title = 'Administrador';                                                  	//Titulo de cada Pagina
-    $UpdateDate = '23 de Julio del 2017';                                                       //Fecha de actualizacion de pagina
+    $HTMLTitle  = $Title = 'Cartelera';                                                         //Titulo de cada Pagina
+    $UpdateDate = '10 de Noviembre del 2017';                                                   //Fecha de actualizacion de pagina
 
     $AlertMessages = array();                                                                   //Mensajes que mostramos 
 
-    // ============ VER SOLO SI INCIA SESION  =================
-    if (empty($_SESSION)) {                                                                     //Si ya iniciaste sesión
-        $TitleErrorPage      = "Error Permisos";                                                //Error variables
+    // ================ CHECK FOR BAD PEOPLE =================
+    if (empty($_SESSION)) {                                                                     //Titulo de la pagina
+        $NewHTMLTitle        = "Error con Permisos";                                            //Error variables
+        $TitleErrorPage      = "Error con Permisos";                                            //Error variables
         $MessageErrorPage    = "No iniciaste sesión en el Sistema";                             //Error variables
         $ButtonLinkErrorPage = $HTMLDocumentRoot."Login.php";                                   //Error variables
         $ButtonTextErrorPage = "Accede al Sistema";                                             //Error variables
@@ -22,6 +23,12 @@
         include("Error.php");                                                                   //Llama a la pagina de error
         exit();                                                                                 //Adios vaquero
     }
+
+    // ================ CHECK FOR MANAGERS  =================
+    $CompleteName = $_SESSION["CompleteUserName"];                                              //Dame informacion                                
+    $IAmAManager = false;                                                                       //Dime si eres Gerente
+    if ($_SESSION["IDGerente"] == $_SESSION["DataBaseID"]) $IAmAManager = true;                 //Eres Gerente ¿verdad?
+
 
     // ============ ABRAMOS LA BASE DE DATOS =================
     $DataBase = @new mysqli("127.0.0.1", "root", "root", "Proyect");                            //Abrir una conexión
@@ -35,10 +42,20 @@
         exit();                                                                                 //Adios vaquero
     }
 
-    $QueryInfoEmployees = $DataBase->query('SELECT * FROM Empleado;');                          //Haz la consulta
+    $QuerySchedules = $DataBase->query('
+        SELECT F.*, P.Clasificacion, P.Nombre, P.Duracion, P.Descripcion 
+            FROM Funcion F, Pelicula P, Sala S 
+            WHERE 
+                P.ID = F.IDPelicula AND F.NumeroSala = S.NumeroSala;');                         //Haz la consulta
 
-    if ($QueryInfoEmployees->num_rows == 0)                                                     //Si es que no hay tuplas
-        array_push($AlertMessages, "No se puede acceder a Info de los Empleados");              //Envia mensajes
+    if ($QuerySchedules->num_rows == 0)                                                         //Si es que no hay tuplas
+        array_push($AlertMessages, "No se puede acceder a Info de los Horarios");               //Envia mensajes
+
+
+
+
+    
+
 
 
 
@@ -52,49 +69,48 @@
 
     <div class="container center-align">
 
+
         <!-- ========  MATERIAL CARD  ================ -->
         <div class="card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
 
             <h4 class="grey-text text-darken-2">
-                <br><b>Información </b> de Empleados
+                <br><b>Información </b> de Horarios
             </h4>
 
             <span class="grey-text" style="font-size: 1.25rem;">
-                Acceder a un registro con todos los empleados activos
+                Acceder a un registro con todas las peliculas
                 <br><br>
             </span>
 
             <!-- ========  MATERIAL TABLE CARD  ================ -->
             <table
-                id="EmployeesTables" 
+                id="SchedulesTable" 
                 style="display: none;"
                 class="centered hoverable striped responsive-table">
 
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Sueldo</th>
-                        <th>Turno</th>
-                        <th>Genero</th>
-                        <th>Nombre</th>
-                        <th>Apellido 1</th>
-                        <th>Apellido 2</th>
-                        <th>Correo</th>
-                        <th>Rol Actual</th>
-                        <th>ID del Gerente</th>
+                          <th>Hora</th>
+                          <th>Fecha</th>
+                          <th>Sala</th>
+                          <th>Precio</th>
+                          <th>Tipo</th>
+                          <th>IdPelicula</th>
+                          <th>Clasificacion</th>
+                          <th>Nombre</th>
+                          <th>Duracion (horas)</th>
+                          <th>Descripcion </th>
+              
                     </tr>
                 </thead>
-
+                
                 <tbody>
 
-                <?php
-                    while ($Row = $QueryInfoEmployees->fetch_row()) : ?>
-
+                <?php while ($Row = $QuerySchedules->fetch_row()) : ?>
 
                     <tr>
                     
-                    <?php foreach ($Row as $Number => $Value): 
-                        if ($Number == 8) continue;?>
+                    <?php foreach ($Row as $Number => $Value): ?>
 
                         <td><?php echo $Value; ?></td>
                         
@@ -104,31 +120,32 @@
 
                     <?php endwhile;
 
-                    $QueryInfoEmployees->close();
+                    $QuerySchedules->close();
 
-                $DataBase->close(); 
-                ?>
+                $DataBase->close(); ?>
 
                 </tbody>
             </table>
 
             <br>
-
-    		<button 
-                id="EmployeesTablesButton"
+        
+            <button 
+                id="SchedulesTableButton"
                 class="btn waves-effect waves-light"
                 name="ShowEmployees">
-    			Ve los Empleados
-    		</button>
+                Ve los Horarios
+            </button>
             <script>
-                $("#EmployeesTablesButton").click( function() {$("#EmployeesTables").toggle();});
+                $("#SchedulesTableButton").click( function() {$("#SchedulesTable").toggle();});
             </script>
+
 
         </div>
 
-        <br><br><br><br>
-        <br><br><br><br>
 
+
+        <br><br><br><br>
+        <br><br><br><br>
 
     </div>
 

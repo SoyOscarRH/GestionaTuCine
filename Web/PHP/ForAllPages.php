@@ -37,7 +37,6 @@
             $HTMLTitle = $Title;                                                                //Titulo de cada Pagina
             $UpdateDate = '23 de Julio del 2017';                                               //Fecha de actualizacion de la pagina
 
-            $PHPDocumentRoot = "/Applications/XAMPP/xamppfiles/htdocs/ManageYourCinema/Web/";   //Ruta de los archivos de PHP
             $HTMLDocumentRoot = "/ManageYourCinema/Web/";                                       //Ruta de los archivos de HTML
             $PageDirection = "localhost";                                                       //Ruta de los archivos de HTML
 
