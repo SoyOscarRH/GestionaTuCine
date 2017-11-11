@@ -42,11 +42,11 @@
 
  <?php 
         if ($ShowCartelera):                                                                    
-            
+            $fecha = $_POST['fecha'];  
             $DataBase = new mysqli("127.0.0.1", "root", "root", "Proyect");                     
             if (mysqli_connect_errno()) exit();                                                 
             
-            $Query = "SELECT f.* , p.Clasificacion , p.Nombre , p.Duracion, p.Descripcion FROM funcion f , pelicula p , sala s where p.ID=f.IDPelicula and f.NumeroSala=s.NumeroSala;";                                                 
+            $Query = 'SELECT f.* , p.Clasificacion , p.Nombre , p.Duracion, p.Descripcion FROM funcion f , pelicula p , sala s where p.ID=f.IDPelicula and f.NumeroSala=s.NumeroSala and f.Dia = "'.$fecha.'" ;';                                                 
             ?>
 
             <table class="centered hoverable striped responsive-table">
@@ -62,12 +62,14 @@
                           <th>Nombre</th>
                           <th>Duracion (horas)</th>
                           <th>Descripcion </th>
+                          
               
                     </tr>
                 </thead>
 <tbody>
-
+ Registros de la fecha :
                 <?php
+                echo $fecha ;
                 if ($QueryResult = $DataBase->query($Query)) {
                     while ($Row = $QueryResult->fetch_row()) : ?>
 
@@ -98,6 +100,8 @@
 
 
             <form action="VerHorarios.php" method="post"><center>
+                    Fecha de la cartelera <input class='validate' type='text' name='fecha' id='fecha' />
+                        <label for='fecha'>Fecha de la cartelera </label>
     		<button class="btn waves-effect waves-light" type="submit" name="ShowCartelera">
     			Mostrar la cartelera
     		</button>
