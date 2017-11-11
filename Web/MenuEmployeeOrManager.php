@@ -96,7 +96,7 @@
                 <br>
                 <?php endif;?>
 
-                <form action="Schedules.php" method="post">
+                <form action="VerHorarios.php" method="post">
                     <button 
                         type='submit'
                         name='MoviesSchedules'
