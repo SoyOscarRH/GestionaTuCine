@@ -109,7 +109,7 @@
 
 
                 <?php if ($IAmAManager):?>
-                <form action="MenuEmployeeOrManager.php" method="post">
+                <form action="CambiarHorario.php" method="post">
                     <button 
                         type='submit'
                         name='MoviesSchedules'

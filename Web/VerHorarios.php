@@ -35,7 +35,7 @@
             <h5 class="white-text">Ver información de los Horarios</h5>
 
             <span class="white-text">
-        	   Acceder a un registro con todos los empleados activos
+        	  Informacion de las funciones
             </span>
             
             <br>
