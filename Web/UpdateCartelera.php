@@ -20,7 +20,7 @@ include("PHP/ForAllPages.php");
     $IAmAManager = true;
 }                
     include("PHP/HTMLHeader.php");    
-     $array = array("Hora",  "Sala", "Precio", "Tipo",  "Clasificacion", "Nombre" , "Duracion" , "Descripcion" );
+     
 $Hora = $_POST['Hora']; 
 $Sala= $_POST['Sala'];
 $Precio=$_POST['Precio'];
@@ -29,5 +29,6 @@ $Clasificacion=$_POST['Clasificacion'];
 $Nombre=$_POST['Nombre'];
 $Duracion= $_POST['Duracion'];
 $Descripcion=$_POST['Descripcion']; 
+
 
 ?>

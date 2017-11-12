@@ -109,7 +109,7 @@
 
 
                 <?php if ($IAmAManager):?>
-                <form action="CambiarHorario.php" method="post">
+                <form action="MenuEmployeeOrManager.php" method="post">
                     <button 
                         type='submit'
                         name='MoviesSchedules'
@@ -129,6 +129,18 @@
                     </button> 
                 </form>
                 <br><br><br>
+                
+                  <?php if ($IAmAManager):?>
+                <form action="AltaPelicula" method="post">
+                    <button 
+                        type='submit'
+                        name='MoviesSchedules'
+                        class="indigo lighten-2 waves-effect btn-large col s10 m8 l8 offset-s1 offset-m2 offset-l2 hoverable">
+                        Registrar Pelicula
+                    </button> 
+                </form>
+                <br><br><br>
+                <?php endif;?>
 
                 <br>
 
@@ -141,6 +153,8 @@
                     </button> 
                 </form>
                 <br><br><br>
+                
+              
 
 
                 <?php if ($IAmAManager):?>
