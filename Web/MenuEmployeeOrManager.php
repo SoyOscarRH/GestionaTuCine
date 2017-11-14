@@ -131,7 +131,7 @@
                 <br><br><br>
                 
                   <?php if ($IAmAManager):?>
-                <form action="AltaPelicula" method="post">
+                <form action="AltaPelicula.php" method="post">
                     <button 
                         type='submit'
                         name='MoviesSchedules'

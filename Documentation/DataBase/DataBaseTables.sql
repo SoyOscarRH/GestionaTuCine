@@ -9,16 +9,20 @@ USE Proyect;
 
 CREATE TABLE Pelicula (
     ID                  INT NOT NULL PRIMARY KEY,
-    Clasificacion       VARCHAR(4),
     Nombre              VARCHAR(50),
+    Clasificacion       ENUM('AA', 'A', 'B', 'B15', 'C', 'D'),
     Duracion            INT,
+    Genero              SET(
+                            'AccionYAventura', 'Familiar', 'Comedia', 'Documental',
+                            'Drama', 'Terror', 'Fantasia', 'Romantica', 'CienciaFiccion',
+                            'Deportes', 'Suspenso'),
     Descripcion         VARCHAR(400)
 ); 
 
 
 CREATE TABLE Sala (
     NumeroSala          INT NOT NULL PRIMARY KEY,
-    Asientos            INT
+    NumeroAsientos      INT
 );
 
 
@@ -26,8 +30,8 @@ CREATE TABLE Sala (
 CREATE TABLE Empleado (
     ID                  INT NOT NULL PRIMARY KEY,
     Sueldo              REAL,
-    Turno               VARCHAR(10),
-    Genero              VARCHAR(10),
+    Turno               ENUM('Matutino', 'Vespetirno'),
+    Genero              ENUM('Masculino', 'Femenino'),
     Nombre              VARCHAR(15),
     ApellidoPaterno     VARCHAR(15),
     ApellidoMaterno     VARCHAR(15),
@@ -77,7 +81,7 @@ CREATE TABLE Funcion (
     Dia                 DATE,
     NumeroSala          INT,
     Precio              REAL,
-    Tipo                VARCHAR(20),
+    Tipo                ENUM('Normal', '3D', '4D'),
     IDPelicula          INT, 
 
     FOREIGN KEY (NumeroSala)
