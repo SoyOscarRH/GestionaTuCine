@@ -14,11 +14,14 @@
         // ====================        CLEAR FOR HORRIBLE QUERYS        =============================
         // ==========================================================================================
         function ClearSQLInyection($SomeString){                                              			//=== LIMPIAMOS UN STRING ===
-            $Bad = array('INSERT ','DELETE ','SELECT ','UPDATE ','"','=',"'",'-',';',' AND ',' OR ');   //Valores a cambiar
+            $Bad = array('INSERT ','DELETE ','SELECT ','UPDATE ','"','=',"'",'<',';',' AND ',' OR ');   //Valores a cambiar
             $Good = array('','','','','','','','','','','');                                          	//Valores nuevos
             $SomeString = str_ireplace($Bad, $Good, $SomeString);                               		//Cambia los valore
             return $SomeString;                                                                         //Regresa ahora si el bueno
         }
+
+
+
 
 
 ?>

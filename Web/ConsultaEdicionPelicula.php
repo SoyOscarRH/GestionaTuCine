@@ -44,8 +44,8 @@
   if ($Cambios): 
       $ClasificacionNew=$_POST['Clasificacion'];
      $NombreNew=$_POST['Nombre'];
-      $DuracionNew=$_POST['Nombre'];
-       $DescripcionNew=$_POST['Nombre'];
+      $DuracionNew=$_POST['Duracion'];
+       $DescripcionNew=$_POST['Descripcion'];
         $idPeli=$_POST['indice'];
               
             $DataBase = new mysqli("127.0.0.1", "root", "root", "Proyect");                     
@@ -54,6 +54,9 @@
             
             $Query = 'UPDATE pelicula   set   Clasificacion="'.$ClasificacionNew.'", Nombre="'.$NombreNew.'", Duracion="'.$DuracionNew.'" ,Descripcion="'.$DescripcionNew.'" WHERE ID='.$idPeli.' ;';  
              mysqli_query($DataBase, $Query);
+
+
+             echo $Query;
       
             ?>
       

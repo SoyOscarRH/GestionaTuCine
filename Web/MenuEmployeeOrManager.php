@@ -83,7 +83,7 @@
             <div class="row">
 
                 <?php if ($IAmAManager):?>
-                <form action="Admin.php" method="post">
+                <form action="AdminAccounts.php" method="post">
                     <button 
                         type='submit'
                         name='MoviesSchedules'
@@ -143,7 +143,7 @@
                 <?php endif;?>
                 
                 <?php if ($IAmAManager):?>
-                <form action="ConsultaEdicionPelicula" method="post">
+                <form action="ConsultaEdicionPelicula.php" method="post">
                     <button 
                         type='submit'
                         name='MoviesSchedules'

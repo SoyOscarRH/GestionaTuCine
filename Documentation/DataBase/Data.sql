@@ -19,7 +19,11 @@ INSERT INTO Pelicula VALUES
     (18, 'Thor 1', 'A', 120, 'AccionYAventura', 'El heroe del martillo llegara a la tierra, donde tendra algunos problemas que resolver'), 
     (19, 'Cuando las luces se apagan', 'C', 150, 'Terror', 'Una chica que solo aparece en la oscuridad tortura a unos chicos y a su madre'), 
     (20, 'El Grinch', 'A', 150, 'Comedia,Fantasia', 'El ser que mas odia la navidad esta decidido a arruinar esta festividad para siempre'), 
-    (21, 'Shutter', 'C', 120, 'Terror,Suspenso', 'Un fotografo y su novia se enfrentaran a un fantasma que no quiere dejarlos');
+    (21, 'Shutter', 'C', 120, 'Terror,Suspenso', 'Un fotografo y su novia se enfrentaran a un fantasma que no quiere dejarlos'),
+    (22, 'Spiderman', 'A', 90, 'AccionYAventura','Spiderman vuelve a empezar una increible avantura'), 
+    (23, 'COCO', 'A', 140, 'Familiar','En el pequeño pueblo de Santa Cecilia vive Miguel, un niño de 12 años que sueña con ser un músico como su famoso ídolo'), 
+    (24, 'El Aro', 'C', 120, 'Terror','revive una de los clasicos del terror'), 
+    (25, 'La Era del Hielo 2', 'A', 90, 'Familiar,Comedia', 'Una nueva aventura');
 
 
 INSERT INTO Sala VALUES 
@@ -41,7 +45,7 @@ INSERT INTO Sala VALUES
 
 INSERT INTO Empleado VALUES 
     (1, 50, 'Matutino', 'Masculino', 'Oscar', 'Rosas', 'Hernandez', 'SoyOscarRH@gmail.com', '7deb4542371cf407dc3cd4e09e47c509c1567492', 'Dulceria', 1), 
-    (2, 150, 'Vespetirno', 'Femenino', 'Leilan', 'Marmolejo', 'Robles', 'Leilan@gmail.com', '28d0c255283b99dec90cb1777bafe2a7681820c8', 'Gerente', 1), 
+    (2, 150, 'Vespetirno', 'Femenino', 'Leilan', 'Marmolejo', 'Robles', 'Leilan@gmail.com', '28d0c255283b99dec90cb1777bafe2a7681820c8', 'Taquilla', 1), 
     (3, 5000, 'Matutino', 'Masculino', 'Rafael', 'Hernandez', 'Ruiz', 'rafassassinscreed@gmail.com', 'bb33de03b34c77999d65acf4e8ea6ab177c3be3a', 'Gerente', 3), 
     (4, 3500, 'Matutino', 'Femenino', 'Lizeth', 'Noyola', 'Bustos', 'liz_10_11_2014@gmail.com', '6b91e318c7415beaafd28de643e74bc352a0ac1f', 'Dulceria', 3), 
     (5, 4500, 'Matutino', 'Masculino', 'Sergio', 'Huerta', 'Gil', 'Serch_10_11_2015@gmail.com', '46a57e99cce94c6e3c790ebc1e5e8691fb3b8cc8', 'Taquilla', 3), 
@@ -57,16 +61,29 @@ INSERT INTO Empleado VALUES
     (15, 2500, 'Vespetirno', 'Femenino', 'Miriam', 'Osorno', 'Trejo', 'miriamostrejo@gmail.com', 'a119461f5cf12c5742e93decc4f574e490c2ba92', 'Dulceria', 3),
     (16, 2500, 'Vespetirno', 'Masculino', 'Jose', 'Dominguez', 'Trujillo', 'pepe_dom_truj@hotmail.com', 'dddeddae0a4b18ca12942b180b1031786f59c88c', 'Taquilla', 3),
     (17, 6000, 'Vespetirno', 'Masculino', 'Emmanuel', 'Maya', 'Rocha', 'emm.maya.rocha@gmail.com', '59e4acd1eccfe246d5362af3fa891c6db1938a3a', 'Gerente', 17),
-    (18, 2500, 'Vespetirno', 'Femenino', 'Karla', 'Rojas', 'Mendoza', 'Rojas.men@yahoo.com', '85dadbfc130d6c84211ff60c0570608193b1491c', 'Taquilla', 17),
+    (18, 2500, 'Vespetirno', 'Femenino', 'Karla', 'Rojas', 'Mendoza', 'Rojas.men@yahoo.com', '85dadbfc130d6c84211ff60c0570608193b1491c', 'Taquilla', 1),
     (19, 3000, 'Matutino', 'Femenino', 'Diana', 'Huerta', 'Arellano', 'Arellano.Diana@yahoo.com', '74859f5c7fdfa1877298e459fd3e83e8d4f53cca', 'Dulceria', 3),
     (20, 3500, 'Matutino', 'Masculino', 'Alvaro', 'Silva', 'Ramirez', 'mendozaaRam@gmail.com', '0870e3b93dee3df23852b61eae4031bd6f2491f2', 'Taquilla', 3),
-    (21, 3000, 'Vespetirno', 'Masculino', 'Aldo', 'Fernandez', 'Padilla', 'aldoFerPad@yahoo.com', '12dfbc560f4ef12e885504007d6f2fe6b9a8d4b8', 'Taquilla', 17),
-    (22, 2000, 'Vespetirno', 'Masculino', 'Rafael', 'Sanchez', 'Salinas', 'rafitasan_sal@hotmail.com', 'de1896f02064e4b595067f77e22b3aa0003a6eda', 'Dulceria', 17),
-    (23, 2500, 'Vespetirno', 'Femenino', 'Irma', 'Solis', 'Ferro', 'irmita_solis@gmail.com', 'b520c9079444cfee32f8f53d03b5cb6591688194', 'Dulceria', 17),
+    (21, 3000, 'Vespetirno', 'Masculino', 'Aldo', 'Fernandez', 'Padilla', 'aldoFerPad@yahoo.com', '12dfbc560f4ef12e885504007d6f2fe6b9a8d4b8', 'Taquilla', 1),
+    (22, 2000, 'Vespetirno', 'Masculino', 'Rafael', 'Sanchez', 'Salinas', 'rafitasan_sal@hotmail.com', 'de1896f02064e4b595067f77e22b3aa0003a6eda', 'Dulceria', 1),
+    (23, 2500, 'Vespetirno', 'Femenino', 'Irma', 'Solis', 'Ferro', 'irmita_solis@gmail.com', 'b520c9079444cfee32f8f53d03b5cb6591688194', 'Dulceria', 1),
     (24, 6000, 'Matutino', 'Femenino', 'Diana', 'Alavez', 'Sanchez', 'diana.alavez.sanchez@gmail.com', 'ff0416f4067f506fe6da82a1b6b35caabc77bc4c', 'Gerente', 24),
     (25, 4000, 'Vespetirno', 'Femenino', 'Gabriela', 'Lopez', 'Contreras', 'contlo.Gaby@hotmail.com', '85a241b885da8e6d74ffe09b7546706e6fde5186', 'Taquilla', 17),
-    (26, 2500, 'Vespetirno', 'Masculino', 'Yair', 'Barranco', 'Olvera', 'YairBarrO@gmail.com', '4351b46dbf8cf1ccc4fe8b0c82f21e2a2529b931', 'Taquilla', 17),
-    (27, 1500, 'Matutino', 'Masculino', 'Marion', 'De Yta', 'Sanchez', 'deyta_marion@gmail.com', '2a3a7b6127a2a680ab92a0daf112f23cf752f836', 'Taquilla', 24);
+    (26, 2500, 'Vespetirno', 'Masculino', 'Yair', 'Barranco', 'Olvera', 'YairBarrO@gmail.com', '4351b46dbf8cf1ccc4fe8b0c82f21e2a2529b931', 'Taquilla', 1),
+    (27, 1500, 'Matutino', 'Masculino', 'Marion', 'De Yta', 'Sanchez', 'deyta_marion@gmail.com', '2a3a7b6127a2a680ab92a0daf112f23cf752f836', 'Taquilla', 24),
+    (28, 10000, 'Matutino', 'Masculino', 'Humberto', 'Dominguez', 'Lopez', 'humbertodl2709@gmail.com', '3d1f9486821b19efe19e3e7d12913ff09b721f35', 'Gerente', 28), 
+    (29, 5000, 'Vespetirno', 'Femenino', 'Diana', 'Perez', 'Ruiz', 'DianPer1164@gmail.com', 'f8d1c8d4c07b18ab337698e2ba13ce3e546392ca', 'Dulceria', 28), 
+    (30, 3500, 'Matutino', 'Masculino', 'Luis', 'Garcia', 'Maldonado', 'Maldon_Luis1236@gmail.com', '71b81011e783c24d985dfa7f082dc66bdb3fa3fa', 'Taquilla', 28), 
+    (31, 4000, 'Vespetirno', 'Masculino', 'Ricardo', 'Gomez', 'Ramos', 'Rick123_Gomez@outlook.com', 'afe54ee8c7d947802a01e1b0c6c18aedad6dd5ac', 'Taquilla', 28), 
+    (32, 3500, 'Matutino', 'Femenino', 'Veronica', 'Ruiz', 'Lopez', 'VER123_Lop@gmail.com', '095b8a1ddcd1aa1d131eb461a21721abf39cd458', 'Taquilla', 3), 
+    (33, 5600, 'Vespetirno', 'Masculino', 'Daniel', 'Lopez', 'Alcantara', 'Alcantara_1123@hotmail.com', '17ee6b431689dd76a01ca06bd5e6e5a68bd23f56', 'Dulceria', 28), 
+    (34, 5000, 'Vespetirno', 'Masculino', 'Oscar', 'Samarripa', 'Pacheco', 'Osc12Samarripa@gmail.com', '8f250f802dd27887ef64fa7542f6f34bdca4aec9', 'Dulceria', 3), 
+    (35, 4000, 'Matutino', 'Femenino', 'Karla', 'Limon', 'Alcantara', 'kar_limon_1236@gmail.com', 'a1fdf06f2b85289fe676a289d2e7bde28e6b160b', 'Dulceria', 28), 
+    (36, 5300, 'Matutino', 'Masculino', 'Mauricio', 'Lopez', 'Pacheco', 'mau-li-1256@gmail.com', '56250995ca836de9aa1ea98fd8c07c20261a5f14', 'Taquilla', 1), 
+    (37, 2500, 'Vespetirno', 'Masculino', 'Moises', 'Colin', 'Varela', 'colin-1265@gmail.com', '9ce1802d324feaf6f244e41f8ac7b4c5e022bee9', 'Dulceria', 28), 
+    (38, 3500, 'Vespetirno', 'Femenino', 'Norma', 'Pacheco', 'Ponce', 'norma-pach7895@gmail.com', '3c9060889af28333726db5c892c149e4883adab5', 'Taquilla', 28), 
+    (39, 2500, 'Vespetirno', 'Masculino', 'Miguel', 'Rodriguez', 'Hernandez', 'Ro_hernan5685@gmail.com', '136f303971bcc3250650e709edc5ed128ea47299', 'Dulceria', 3), 
+    (40, 1800, 'Matutino', 'Masculino', 'Rodrigo', 'Rivas', 'Ruiz', 'Rodro_1256@gmail.com', 'dd5e4b14b3c590916c7cce23228f379b35c6053c', 'Dulceria', 28);
 
 
 
@@ -104,9 +121,11 @@ INSERT INTO Proveedor VALUES
     (14, 'Eufemio', 'Sanchez', 'Lopez', 'lopezEufemio@hotmail.com', '123456789'), 
     (15, 'Gabriel', 'Rocha', 'Gutierrez', 'gabrielito_flow@hotmail.com', 'teAmoJulia'), 
     (16, 'Julia', 'Alvarez', 'Rojas', 'julia_aguacate@hotmail.com', 'ponchito'), 
-    (17, 'Emmanuel', 'Rocher', 'Salinas', 'emm.rocher.sal@gmail.com', '7654321!');
-
-
+    (17, 'Emmanuel', 'Rocher', 'Salinas', 'emm.rocher.sal@gmail.com', '7654321!'),
+    (18, 'Gerardo', 'Padilla', 'Lopez', 'gerr_15368@gmail.com', '152acf3bdd2c416bf2ae68fb7219db58badf1a92'),  
+    (19, 'Leticia', 'Padilla', 'Solis', 'Let_sol4858@gmail.com', '9c3837e9d57bef4441d4ec944e53a6cba7c54e4a'),  
+    (20, 'Alejandro', 'De la Cruz', 'Pineda', 'ale_12854@gmail.com', '85109ea6267e674bbf5524f6ab380a93ad99ed23'),  
+    (21, 'Francisco', 'Maya', 'Robles', 'Frnc1254@gmail.com', 'c1a5819375899b80afe890e3310ac38b1423768c');
 
 INSERT INTO Funcion VALUES 
     ('11:00:00', '2017-11-01', 1, 49, 'Normal', 4), 
@@ -180,7 +199,22 @@ INSERT INTO Venta VALUES
     (32, '2017-11-17', 1142, 5), 
     (33, '2017-11-18', 672.5, 10), 
     (34, '2017-11-18', 375, 13), 
-    (35, '2017-11-18', 298.5, 17);
+    (35, '2017-11-18', 298.5, 17),
+    (36, '2017-11-18', 250.5, 28),  
+    (37, '2017-11-18', 49, 18),  
+    (38, '2017-11-18', 298.5, 33),  
+    (39, '2017-11-21', 99.5, 11),  
+    (40, '2017-11-21', 527, 22),  
+    (41, '2017-11-21', 699, 33),  
+    (42, '2017-11-15', 1142, 7),  
+    (43, '2017-11-22', 140, 20),  
+    (44, '2017-11-12', 98, 30),  
+    (45, '2017-11-10', 210, 18),  
+    (46, '2017-11-12', 238, 29),  
+    (47, '2017-11-15', 163, 40),  
+    (48, '2017-11-18', 385, 26),  
+    (49, '2017-11-17', 140, 12),  
+    (50, '2017-11-12', 295, 8);
 
 
 INSERT INTO TicketBoleto VALUES
@@ -205,13 +239,8 @@ INSERT INTO TicketBoleto VALUES
     (3, 49, '18:30:00', '2017-11-16', 12, 17), 
     (3, 57, '22:00:00', '2017-11-17', 9, 17), 
     (1, 70, '12:30:00', '2017-11-16', 1, 18), 
-    (4, 70, '20:10:00', '2017-11-16', 11, 19), 
-    (5, 49, '20:25:00', '2017-11-18', 14, 19), 
-    (4, 57, '21:00:00', '2017-11-18', 10, 20), 
     (1, 49, '17:50:00', '2017-11-17', 3, 21), 
-    (6, 70, '20:00:00', '2017-11-18', 7, 21), 
-    (6, 57, '19:20:00', '2017-11-18', 2, 21), 
-    (4, 57, '20:15:00', '2017-11-17', 12, 23);
+    (6, 70, '20:00:00', '2017-11-18', 7, 21);
 
 
 INSERT INTO ProductoDulceria VALUES 

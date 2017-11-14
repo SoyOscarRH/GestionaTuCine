@@ -10,25 +10,22 @@
     $HTMLTitle  = 'Inicia Sesión';                                                      		//Titulo de cada Pagina
     $UpdateDate = '23 de Julio del 2017';                                                       //Fecha de actualizacion de la pagina
 
-
-
 	// ========== SPECIFIC FOR THIS SCRIPT ==========
 	$ErrorAccountMessage  = "";                                                                 //Mensajes para el usuario final 
 	$ErrorPasswordMessage = "";                                                                 //Mensajes para el usuario final
 
     $UserName = "";                                                                             //Email
-    $Password      = "";                                                                        //Contraseña            
+    $Password = "";                                                                             //Contraseña            
 
 
     // ========== WAIT ... WE HAVE ALREADY STAR SESSION? ==========
     if (!empty($_SESSION)) {header("Location: MenuEmployeeOrManager.php");exit();}              //Envia a la pagina correcta
 
 
-
     // ================================================================================
     // ======================  VERIFIQUEMOS EL USUARIO     ============================
     // ================================================================================
-    if ( isset($_POST['CheckDataToEnterSystem']) ){
+    if ( isset($_POST['CheckDataToEnterSystem']) ){                                             //Si quieres acceder a la info
 
         // ======================  TRY TO GET ACCOUNT NUMBER   ============================
         if (isset($_POST['UserName']) == true and isset($_POST['Password']) == true) {          //Hay informacion?

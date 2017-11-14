@@ -1,5 +1,8 @@
 <?php
-include("PHP/ForAllPages.php");                                                           
+include("PHP/ForAllPages.php");   
+
+
+
     
     $HTMLTitle  = 'Editar Cartelera';                                                           
     $UpdateDate = '11 de Noviembre del 2017'; 
@@ -12,13 +15,24 @@ include("PHP/ForAllPages.php");
         include("Error.php");                                                                   
         exit();                                                                                 
     }
+
+
+
+    if ($_SESSION["IDGerente"] != $_SESSION["DataBaseID"]) {                                    //Si ya iniciaste sesión
+        $TitleErrorPage      = "Error Permisos";                                                //Error variables
+        $MessageErrorPage    = "No eres gerente, no puedes acceder a esto";                     //Error variables
+        $ButtonLinkErrorPage = $HTMLDocumentRoot."MenuEmployeeOrManager.php";                   //Error variables
+        $ButtonTextErrorPage = "Ve tus opciones";                                               //Error variables
+
+        include("Error.php");                                                                   //Llama a la pagina de error
+        exit();                                                                                 //Adios vaquero
+    }
+
+    
     
      $CompleteName = $_SESSION["CompleteUserName"];                                              
     $IAmAManager = false;                                                                       
     
-    if ($_SESSION["IDGerente"] == $_SESSION["DataBaseID"]) {
-    $IAmAManager = true;
-}                
     include("PHP/HTMLHeader.php");     
     $CambiarCartelera = isset($_POST['CambiarCartelera']);
     $n=0;

@@ -46,7 +46,7 @@
         // === DEFAULT LINKS ===== 
             $LinksForPages = array();                                                           //Guarda los links
             $LinksForPages["Iniciar Sesión"] = "Login.php";                                     //Iniciar Sesion
-            $LinksForPages["Administrador"]  = "Admin.php";                                     //Herramientas de Administrador
+            $LinksForPages["Administrador"]  = "AdminAccounts.php";                             //Herramientas de Administrador
 
 
 
