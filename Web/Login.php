@@ -44,7 +44,7 @@
             }
 
             $QueryResult = $DataBase->query('
-                SELECT ID, Correo, Contrasena, Nombre, ApellidoPaterno, ApellidoMaterno, IDGerente
+                SELECT ID, Correo,  Contrasena, Nombre, ApellidoPaterno, ApellidoMaterno, IDGerente,  Turno , Genero, Sueldo
                     FROM Empleado
                     WHERE Correo = "'.$UserName.'";');                                          //Haz la consulta
 
@@ -61,6 +61,10 @@
                     $_SESSION["Surname1"]         = $Row[4];                                    //Dame su info
                     $_SESSION["Surname2"]         = $Row[5];                                    //Dame su info
                     $_SESSION["IDGerente"]        = $Row[6];                                    //Dame su info
+                    $_SESSION["Turno"]            = $Row[7];
+                    $_SESSION["Genero"]           = $Row[8];
+                    $_SESSION["Sueldo"]           = $Row[9];  
+                    $_SESSION["Password"]         = $Password;
 
                     header("Location: MenuEmployeeOrManager.php");                              //Envia a link
                     exit();                                                                     //Y ahora sal!

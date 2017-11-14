@@ -61,7 +61,7 @@
             </h4>
 
             <span class="grey-text flow-text">
-                Bienvenida al Sistema <?php echo $CompleteName; ?>
+                Bienvenid@ al Sistema <?php echo $CompleteName; ?>
                 <br><br><br>
             </span>
 
@@ -192,6 +192,21 @@
                     </button> 
                 </form>
 
+                  <br>
+                  <br>
+                
+                <form action="MiPerfil.php" method="post">
+                    <button 
+                        type='submit'
+                        name='MiPerfil'
+                        class="red lighten-2 waves-effect btn-large col s10 m8 l8 offset-s1 offset-m2 offset-l2 hoverable">
+                        Mi Perfil
+                    </button> 
+                </form>
+
+                
+                
+                
                 </div>
 
         </div>
