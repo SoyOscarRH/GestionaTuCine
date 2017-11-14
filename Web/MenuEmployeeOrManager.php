@@ -141,6 +141,18 @@
                 </form>
                 <br><br><br>
                 <?php endif;?>
+                
+                <?php if ($IAmAManager):?>
+                <form action="ConsultaEdicionPelicula" method="post">
+                    <button 
+                        type='submit'
+                        name='MoviesSchedules'
+                        class="indigo lighten-2 waves-effect btn-large col s10 m8 l8 offset-s1 offset-m2 offset-l2 hoverable">
+                        Administar Peliculas
+                    </button> 
+                </form>
+                <br><br><br>
+                <?php endif;?>
 
                 <br>
 
