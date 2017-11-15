@@ -49,6 +49,51 @@
     ============         GET THE DATABASE      ==========================
     ===================================================================*/
 
+    //=============  IF YOU WANT TO MODIFY THE DATA  =============
+    if ($IAmAManager and isset($_POST['CheckDataToChangeValues'])) {                            //Si es que quieres actualizar datos
+
+        do {                                                                                    //while para usar el break XD
+
+            //=============  GET THE DATA =============
+            $ToChangeID = ClearSQLInyection(htmlspecialchars(trim($_POST['ID'])));              //Dame la info
+            if (!is_numeric($ToChangeID)) {array_push($AlertMessages, "ID Invalido"); break;}   //Envia mensajes
+
+            $Salary = ClearSQLInyection(htmlspecialchars(trim($_POST['Salary'])));              //Dame la info
+            if (!is_numeric($Salary)) {array_push($AlertMessages, "Salario Invalido"); break;}  //Envia mensajes
+
+            $Turn = ClearSQLInyection(htmlspecialchars(trim($_POST['Turn'])));                  //Dame el turno
+            if ($Turn != "Matutino" and $Turn != "Vespetirno") {                                //Eres valido
+                array_push($AlertMessages, "Turno Invalido"); break;}                           //O no?
+
+            $Rol = ClearSQLInyection(htmlspecialchars(trim($_POST['Rol'])));                    //Dame el turno
+            if ($Rol != "Taquilla" and $Rol != "Dulceria") {                                    //Eres valido
+                array_push($AlertMessages, "Rol Invalido"); break;}                             //O no?
+
+            //=============  VERIFY THE ID =============
+            $QueryID = $DataBase->query(" SELECT ID FROM Empleado WHERE 
+                                            IDGerente = {$_SESSION['DataBaseID']} AND
+                                            ID != {$_SESSION['DataBaseID']}");                  //Haz la consulta
+
+            if ($QueryID->num_rows == 0)                                                        //Si es que no hay tuplas
+                array_push($AlertMessages, "No se puede acceder a Info de tus Empleados");      //Envia mensajes
+
+            $ValidID = false;                                                                   //No puedes usar ese ID
+            while (($PossibleID = $QueryID->fetch_assoc()) and !$ValidID)                       //Para cada uno
+                if ($PossibleID['ID'] == $ToChangeID) $ValidID = true;                          //Mira, si que podias XD
+
+            if (!$ValidID) {array_push($AlertMessages, "ID Invalido"); break;}                  //Envia mensajes
+
+            //=============  CHANGE THE DATA =============
+            $ValidQuery = $DataBase->query("
+                UPDATE Empleado
+                SET Turno = '{$Turn}', Sueldo = {$Salary}, RolActual = '{$Rol}'
+                WHERE ID = {$ToChangeID};");                                                    //AHORA SI PUEDES HACER ESTO
+
+            if (!$ValidQuery){array_push($AlertMessages, "Error al Actualizar Datos"); break;}  //Envia mensaje si todo mal
+            else {array_push($AlertMessages, "Datos Actualizados");break;}                      //Envia mensaje si todo bien
+
+        } while (false);                                                                        //Solo eras para el break
+    }
 
     //============= SEE EMPLOYESS  =============
     if ($IAmAManager) {                                                                         //Si es que eres un manager
@@ -58,58 +103,6 @@
 
         if ($QueryInfoEmployees->num_rows == 0)                                                 //Si es que no hay tuplas
             array_push($AlertMessages, "No se puede acceder a Info de tus Empleados");          //Envia mensajes
-    }
-
-    if ($IAmAManager and isset($_POST['CheckDataToChangeValues'])) {
-
-        do {
-            $ToChangeID = ClearSQLInyection(htmlspecialchars(trim($_POST['ID'])));              //Dame la info
-            if (!is_numeric($ToChangeID)) {array_push($AlertMessages, "ID Invalido"); break;}  //Envia mensajes
-
-            $Salary = ClearSQLInyection(htmlspecialchars(trim($_POST['Salary'])));              //Dame la info
-            if (!is_numeric($Salary)) {array_push($AlertMessages, "Salario Invalido"); break;}  //Envia mensajes
-
-            $Turn = ClearSQLInyection(htmlspecialchars(trim($_POST['Turn'])));                  //Dame el turno
-            if ($Turn != "Matutino" and $Turn != "Vespetirno") {                                //Eres valido
-                array_push($AlertMessages, "Turno Invalido"); break;}                           //O no?
-
-            $QueryID = $DataBase->query("
-                SELECT ID FROM Empleado WHERE 
-                    IDGerente = {$_SESSION['DataBaseID']} AND
-                    ID != {$_SESSION['DataBaseID']}");                                          //Haz la consulta
-
-            if ($QueryID->num_rows == 0)                                                        //Si es que no hay tuplas
-                array_push($AlertMessages, "No se puede acceder a Info de tus Empleados");      //Envia mensajes
-
-            $ValidID = false;
-            while (($PossibleID = $QueryInfoEmployees->fetch_assoc()) and !$ValidID)
-                if ($PossibleID['ID'] == $ToChangeID) $ValidID = true; 
-
-            if (!$ValidID) {array_push($AlertMessages, "ID Invalido"); break;}                  //Envia mensajes
-
-            $ValidQuery = $DataBase->query("
-                UPDATE Empleado
-                SET Turno = '{$Turn}', Sueldo = {$Salary}
-                WHERE ID = {$ToChangeID};");
-
-
-            if (!$ValidQuery) 
-                {array_push($AlertMessages, "No pude actualizar la base de datos"); break;}     //Envia mensajes
-            else
-                {
-                $QueryInfoEmployees = $DataBase->query("
-                SELECT * FROM Empleado WHERE 
-                    IDGerente = {$_SESSION['DataBaseID']} AND
-                    ID != {$_SESSION['DataBaseID']}");                                          //Haz la consulta
-
-                array_push($AlertMessages, "Datos Actualizados");
-                break;
-            }
-
-        } while (false);
-
-    
-        
     }
 
 
@@ -149,7 +142,7 @@
             <!-- ========  MATERIAL TABLE CARD  ================ -->
             <table
                 id="EmployeesTables" 
-                style="display: none; font-size: 0.9rem"
+                style="<?php if (!isset($_POST['CheckDataToChangeValues'])) echo "display: none; "?>font-size: 0.9rem"
                 class="centered hoverable striped responsive-table bordered">
 
                 <!-- ========  TITLES ================ -->
@@ -232,10 +225,19 @@
                     </select>
                     <label>ID del Empleado</label>
                 </div>
-                
+
                 <!-- ========  WORK TIME ========== -->
                 <div class="input-field">                        
-                    <select name="Turn" id="Turno">
+                    <select name="Rol" id="Rol">
+                        <option value="Dulceria">Dulceria</option>
+                        <option value="Taquilla">Taquilla</option>
+                    </select>
+                    <label>Rol Actual</label>
+                </div>
+
+                <!-- ========  WORK TIME ========== -->
+                <div class="input-field">                        
+                    <select name="Turn" id="Turn">
                         <option value="Matutino">Matutino</option>
                         <option value="Vespetirno">Vespetirno</option>
                     </select>
@@ -265,40 +267,7 @@
 
         <br><br><br><br>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <!-- ========  MATERIAL CARD  ================ -->
-        <div class="card-panel ambar lighten-4 col s12 m8 l8 offset-m2 offset-l2">
-
-            <h4 class="grey-text text-darken-2">
-                <br><b>Cambia </b> tu Contraseña
-            </h4>
-
-            <span class="grey-text" style="font-size: 1.25rem;">
-                Cambia tu contraseña
-                <br><br>
-            </span>
-
-        </div>
-
-        <br><br><br><br>
-
     </div>
-
-
-
 
 
 
