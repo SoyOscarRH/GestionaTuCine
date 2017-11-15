@@ -56,7 +56,7 @@
              mysqli_query($DataBase, $Query);
 
 
-             echo $Query;
+             
       
             ?>
       
