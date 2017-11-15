@@ -7,7 +7,7 @@
     include("PHP/ForAllPages.php");                                                             //Dame todas las ventajas
 
     // ================ VARIABLES =============================
-    $HTMLTitle  = $Title = 'Administrador';                                                  	//Titulo de cada Pagina
+    $HTMLTitle  = 'Administrador';                                                  	        //Titulo de cada Pagina
     $UpdateDate = '23 de Julio del 2017';                                                       //Fecha de actualizacion de pagina
 
     $AlertMessages = array();                                                                   //Mensajes que mostramos 
@@ -42,7 +42,7 @@
     }
 
     $IAmAManager = false;                                                                       //Pero ... ¿Eres gerente?
-    if ($_SESSION["IDGerente"] == $_SESSION["DataBaseID"]) $IAmAManager = true;                 //Pues pregunta :v
+    if ($_SESSION["IDGerente"] == $_SESSION["ID"]) $IAmAManager = true;                         //Pues pregunta :v
 
 
     /*===================================================================
@@ -71,8 +71,8 @@
 
             //=============  VERIFY THE ID =============
             $QueryID = $DataBase->query(" SELECT ID FROM Empleado WHERE 
-                                            IDGerente = {$_SESSION['DataBaseID']} AND
-                                            ID != {$_SESSION['DataBaseID']}");                  //Haz la consulta
+                                            IDGerente = {$_SESSION['ID']} AND
+                                            ID != {$_SESSION['ID']}");                          //Haz la consulta
 
             if ($QueryID->num_rows == 0)                                                        //Si es que no hay tuplas
                 array_push($AlertMessages, "No se puede acceder a Info de tus Empleados");      //Envia mensajes
@@ -99,7 +99,7 @@
     if ($IAmAManager) {                                                                         //Si es que eres un manager
         $QueryInfoEmployees = $DataBase->query("
             SELECT * FROM Empleado WHERE 
-                IDGerente = {$_SESSION['DataBaseID']} AND ID != {$_SESSION['DataBaseID']}");    //Haz la consulta
+                IDGerente = {$_SESSION['ID']} AND ID != {$_SESSION['ID']}");                    //Haz la consulta
 
         if ($QueryInfoEmployees->num_rows == 0)                                                 //Si es que no hay tuplas
             array_push($AlertMessages, "No se puede acceder a Info de tus Empleados");          //Envia mensajes
@@ -270,7 +270,9 @@
     </div>
 
 
-
+    <!-- ================================================================= -->    
+    <!-- =======================    CODE FOR THE PAGE   ================== -->    
+    <!-- ================================================================= -->
     <script>
         $(document).ready(function() {
             $('select').material_select();
@@ -287,7 +289,7 @@
                 <?php foreach ($InfoEmployees as $Row): ?>
                 
                     if (SelectedID == <?php echo $Row['ID'];?> ) {
-                        $('#Rol').val("<?php echo $Row['RolActual'] ?>");
+                        $('#Rol').val("<?php echo $Row['RolActual'] ?>");       
                         $('#Salary').val("<?php echo $Row['Sueldo'] ?>");
                         $('#Turn').val("<?php echo $Row['Turno'] ?>");
                     }

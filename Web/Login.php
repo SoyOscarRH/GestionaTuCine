@@ -44,28 +44,17 @@
             }
 
             $QueryResult = $DataBase->query('
-                SELECT ID, Correo,  Contrasena, Nombre, ApellidoPaterno, ApellidoMaterno, IDGerente,  Turno , Genero, Sueldo , RolActual
-                    FROM Empleado
-                    WHERE Correo = "'.$UserName.'";');                                          //Haz la consulta
+                SELECT * FROM Empleado WHERE Correo = "'.$UserName.'";');                       //Haz la consulta
 
             if ($QueryResult->num_rows > 0) {                                                   //Si es de verdad el men existe
-                $Row = $QueryResult->fetch_row();                                               //Entonces dame el resultado
+                $Row = $QueryResult->fetch_assoc();                                             //Entonces dame el resultado
 
-                if (sha1($Password."ManageYourCinemaSalt") == $Row[2]) {                        //Si es que contraseña correcta
+                if (sha1($Password."ManageYourCinemaSalt") == $Row['Contrasena']) {             //Si es que contraseña correcta
                   
                     session_start();                                                            //Inicia la Sesion :0
-                    $_SESSION["CompleteUserName"] = "{$Row[3]} {$Row[4]} {$Row[5]}";            //Dame su info
-                    $_SESSION["DataBaseID"]       = $Row[0];                                    //Dame su info
-                    $_SESSION["Email"]            = $Row[1];                                    //Dame su info
-                    $_SESSION["Name"]             = $Row[3];                                    //Dame su info
-                    $_SESSION["Surname1"]         = $Row[4];                                    //Dame su info
-                    $_SESSION["Surname2"]         = $Row[5];                                    //Dame su info
-                    $_SESSION["IDGerente"]        = $Row[6];                                    //Dame su info
-                    $_SESSION["Turno"]            = $Row[7];
-                    $_SESSION["Genero"]           = $Row[8];
-                    $_SESSION["Sueldo"]           = $Row[9];  
-                    $_SESSION["Password"]         = $Password;
-                    $_SESSION["Rol"]              = $Row[10];
+                    $_SESSION = array_merge($_SESSION, $Row);
+                    $_SESSION["CompleteUserName"] = $Row['Nombre']." ".$Row['ApellidoPaterno'];//Dame su info
+                    $_SESSION["CompleteUserName"].= " ".$Row['ApellidoMaterno'];               //Dame su info
 
                     header("Location: MenuEmployeeOrManager.php");                              //Envia a link
                     exit();                                                                     //Y ahora sal!

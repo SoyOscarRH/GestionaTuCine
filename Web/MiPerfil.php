@@ -53,8 +53,6 @@ if ($CambiarPer):
         $ButtonLinkErrorPage = $HTMLDocumentRoot."Login.php";                                   //Error variables
         $ButtonTextErrorPage = "Accede (otra vez) al Sistema";                                  //Error variables
         session_destroy();
-
-
         include("Error.php");                                                                   //Llama a la pagina de error
      
                                                                           //Llama a la pagina de error
@@ -108,8 +106,8 @@ if ($EditarP && ($PasswordC == $_SESSION["Password"])):
  </table><center>
      <h5 class="white-text">Su sesion sera cerrada para efectuar el cambio</h5>
  <button class="btn waves-effect waves-light" type="submit" name="CloseSession">
-    			Cambiar
-    		</button>
+                Cambiar
+            </button>
 </form>
  </center>
     <?php
@@ -164,13 +162,13 @@ endif;
              <center>
                     Contraseña <input class='validate' type='text' name='PasswordC' id='PasswordC' />
                         
-    		<button class="btn waves-effect waves-light" type="submit" name="EditarP">
-    			Editar
-    		</button>
+            <button class="btn waves-effect waves-light" type="submit" name="EditarP">
+                Editar
+            </button>
         </center>                
                 
             </form>
             
             <br>
         </div>
-        <?php        endif; ?>
+<?php        endif; ?>

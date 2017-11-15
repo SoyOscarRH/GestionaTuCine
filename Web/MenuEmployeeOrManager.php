@@ -39,7 +39,7 @@
     $CompleteName = $_SESSION["CompleteUserName"];                                              //Dame el nombre completo
     $IAmAManager = false;                                                                       //Pero ... ¿Eres gerente?
     
-    if ($_SESSION["IDGerente"] == $_SESSION["DataBaseID"]) $IAmAManager = true;                 //Pues pregunta :v
+    if ($_SESSION["IDGerente"] == $_SESSION["ID"]) $IAmAManager = true;                         //Pues pregunta :v
 
     include("PHP/HTMLHeader.php");                                                              //Incluimos un Asombroso Encabezado
 ?>
@@ -57,11 +57,12 @@
         <div class="card-panel light-green lighten-5 col s12 m8 l8 offset-m2 offset-l2">
 
             <h4 class="grey-text text-darken-2">
-                <br><b>Bienvenido(a)</b> de Nuevo
+                <br><b>Bienvenid<?php if ($_SESSION['Genero'] == 'Masculino') echo "o"; else echo "a";?> </b> de Nuevo
             </h4>
 
             <span class="grey-text flow-text">
-                Bienvenid@ al Sistema <?php echo $CompleteName; ?>
+                Bienvenid<?php if ($_SESSION['Genero'] == 'Masculino') echo "o"; else echo "a";?>
+                al Sistema <?php echo $CompleteName; ?>
                 <br><br><br>
             </span>
 
@@ -93,8 +94,20 @@
                 </form>
                 <br><br><br>
 
-                <br>
                 <?php endif;?>
+
+                <form action="MyProfile.php" method="post">
+                    <button 
+                        type='submit'
+                        name='MyProfile'
+                        class="green lighten-2 waves-effect btn-large col s10 m8 l8 offset-s1 offset-m2 offset-l2 hoverable">
+                        Mi Perfil
+                    </button> 
+                </form>
+
+                <br><br><br>
+
+                <br>
 
                 <form action="VerHorarios.php" method="post">
                     <button 
@@ -192,20 +205,7 @@
                     </button> 
                 </form>
 
-                  <br>
-                  <br>
-                
-                <form action="MiPerfil.php" method="post">
-                    <button 
-                        type='submit'
-                        name='MiPerfil'
-                        class="red lighten-2 waves-effect btn-large col s10 m8 l8 offset-s1 offset-m2 offset-l2 hoverable">
-                        Mi Perfil
-                    </button> 
-                </form>
-
-                
-                
+                <br>
                 
                 </div>
 
