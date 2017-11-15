@@ -245,9 +245,9 @@
                 </div>
 
                 <!-- ========  SALARY ============= -->
-                <div class='input-field col s10 m8 l8 offset-s1 offset-m2 offset-l2'>
+                <div class='input-field'>
                     <input class='validate' type='number' name='Salary' id='Salary' />
-                    <label for='UserName'>Sueldo</label>
+                    <label>Sueldo</label>
                 </div>
 
                 <!-- ========  BUTTON TO SEND ===== -->
@@ -273,12 +273,32 @@
 
     <script>
         $(document).ready(function() {
+            $('select').material_select();
+
             <?php 
-                $ErrorSymbol = '<span class = "yellow-text"><b>Alerta: &nbsp; </b></span>';
-                foreach ($AlertMessages as $Alert) echo "Materialize.toast('{$ErrorSymbol} {$Alert}', 9000);"; 
+                $TitleAlert = '<span class = "yellow-text"><b>Alerta: &nbsp; </b></span>';
+                foreach ($AlertMessages as $Alert) echo "Materialize.toast('$TitleAlert $Alert', 9000);"; 
             ?>
 
-            $('select').material_select();
+
+            $("#ID").change(function() {
+                let SelectedID = $('#ID').val();
+
+                <?php foreach ($InfoEmployees as $Row): ?>
+                
+                    if (SelectedID == <?php echo $Row['ID'];?> ) {
+                        $('#Rol').val("<?php echo $Row['RolActual'] ?>");
+                        $('#Salary').val("<?php echo $Row['Sueldo'] ?>");
+                        $('#Turn').val("<?php echo $Row['Turno'] ?>");
+                    }
+
+                <?php endforeach;?>
+
+                Materialize.updateTextFields();
+            });
+
+            $('#ID').trigger('change');
+
         });
     </script>
 
