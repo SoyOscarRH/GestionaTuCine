@@ -57,13 +57,6 @@
         // === DEFAULT LINKS ===== 
             if(!isset($_SESSION)) session_start();                                              //Si es que ya iniciamos sesion
 
-            if (!empty($_SESSION)) {                                                            //Asi que ya iniciaste sesion
-                unset($LinksForPages["Iniciar Sesión"]);                                        //Bye link :(
-                $LinksForPages = array("Menú de Opciones"=>"Login.php") + $LinksForPages;       //Menu de Sesion
-                $LinksForPages["Cerrar Sesion"] = "MenuEmployeeOrManager.php?CloseSession";     //Añadimos el Sesion
-            }
-
-
 
 
 
