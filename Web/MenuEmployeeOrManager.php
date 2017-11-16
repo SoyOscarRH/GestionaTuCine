@@ -35,12 +35,6 @@
         exit();                                                                                 //Adios vaquero
     }
 
-    unset($LinksForPages["Iniciar Sesión"]);                                                    //Bye link :(
-    $LinksForPages = array("Menú de Opciones"=>"Login.php") + $LinksForPages;                   //Menu de Sesion
-    $LinksForPages["Administrador"] = "AdminAccounts.php";                                      //Añadimos el Sesion
-    $LinksForPages["Mi Perfil"] = "MyProfile.php";                                              //Añadimos el Sesion
-    $LinksForPages["Cerrar Sesion"] = "MenuEmployeeOrManager.php?CloseSession";                 //Añadimos el Sesion
-
     // ================ VARIABLES =============================
     $CompleteName = $_SESSION["CompleteUserName"];                                              //Dame el nombre completo
     $IAmAManager = false;                                                                       //Pero ... ¿Eres gerente?

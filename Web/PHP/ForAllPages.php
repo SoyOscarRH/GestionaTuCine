@@ -46,7 +46,6 @@
         // === DEFAULT LINKS ===== 
             $LinksForPages = array();                                                           //Guarda los links
             $LinksForPages["Iniciar Sesión"] = "Login.php";                                     //Iniciar Sesion
-            $LinksForPages["Administrador"]  = "AdminAccounts.php";                             //Herramientas de Administrador
 
 
 
@@ -55,7 +54,12 @@
     // *****************************************************************************************************
 
         // === DEFAULT LINKS ===== 
-            if(!isset($_SESSION)) session_start();                                              //Si es que ya iniciamos sesion
+        if(!isset($_SESSION)){
+            session_start();                                                                    //Si es que ya iniciamos sesion
+            unset($LinksForPages["Iniciar Sesión"]);                                            //Bye link :(
+            $LinksForPages = array("Menú de Opciones"=>"Login.php") + $LinksForPages;           //Menu de Sesion
+            $LinksForPages["Cerrar Sesion"] = "MenuEmployeeOrManager.php?CloseSession";         //Añadimos el Sesion
+        }
 
 
 
