@@ -16,7 +16,7 @@
      $CompleteName = $_SESSION["CompleteUserName"];                                              
     $IAmAManager = false;                                                                       
     
-    if ($_SESSION["IDGerente"] == $_SESSION["DataBaseID"]) {
+    if ($_SESSION["IDGerente"] == $_SESSION["ID"]) {
     $IAmAManager = true;
 }                
     include("PHP/HTMLHeader.php");     

@@ -41,8 +41,8 @@
         exit();                                                                                 //Adios vaquero
     }
 
-    $IAmAManager = false;                                                                       //Pero ... ¿Eres gerente?
-    if ($_SESSION["IDGerente"] == $_SESSION["ID"]) $IAmAManager = true;                         //Pues pregunta :v
+    $_SESSION["IAmAManager"] = false;                                                                       //Pero ... ¿Eres gerente?
+    if ($_SESSION["IDGerente"] == $_SESSION["ID"]) $_SESSION["IAmAManager"] = true;                         //Pues pregunta :v
 
 
     /*===================================================================
@@ -50,7 +50,7 @@
     ===================================================================*/
 
     //=============  IF YOU WANT TO MODIFY THE DATA  =============
-    if ($IAmAManager and isset($_POST['CheckDataToChangeValues'])) {                            //Si es que quieres actualizar datos
+    if ($_SESSION["IAmAManager"] and isset($_POST['CheckDataToChangeValues'])) {                //Si es que quieres actualizar datos
 
         do {                                                                                    //while para usar el break XD
 
@@ -96,7 +96,7 @@
     }
 
     //============= SEE EMPLOYESS  =============
-    if ($IAmAManager) {                                                                         //Si es que eres un manager
+    if ($_SESSION["IAmAManager"]) {                                                             //Si es que eres un manager
         $QueryInfoEmployees = $DataBase->query("
             SELECT * FROM Empleado WHERE 
                 IDGerente = {$_SESSION['ID']} AND ID != {$_SESSION['ID']}");                    //Haz la consulta
@@ -125,7 +125,7 @@
         <!-- ================================================================== -->    
         <!-- =====================    SHOW EMPLOYEES      ===================== -->      
         <!-- ================================================================== -->    
-        <?php if ($IAmAManager):?>
+        <?php if ($_SESSION["IAmAManager"]):?>
         <div class="card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
 
             <!-- ========  TITLE  ================ -->

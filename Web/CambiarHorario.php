@@ -18,7 +18,7 @@ include("PHP/ForAllPages.php");
 
 
 
-    if ($_SESSION["IDGerente"] != $_SESSION["DataBaseID"]) {                                    //Si ya iniciaste sesión
+    if ($_SESSION["IDGerente"] != $_SESSION["ID"]) {                                    //Si ya iniciaste sesión
         $TitleErrorPage      = "Error Permisos";                                                //Error variables
         $MessageErrorPage    = "No eres gerente, no puedes acceder a esto";                     //Error variables
         $ButtonLinkErrorPage = $HTMLDocumentRoot."MenuEmployeeOrManager.php";                   //Error variables

@@ -56,6 +56,8 @@
                     $_SESSION["CompleteUserName"] = $Row['Nombre']." ".$Row['ApellidoPaterno'];//Dame su info
                     $_SESSION["CompleteUserName"].= " ".$Row['ApellidoMaterno'];               //Dame su info
 
+                    $_SESSION["IAmAManager"] = ($_SESSION["IDGerente"] == $_SESSION["ID"]);     //Dice true si eres gerente
+
                     header("Location: MenuEmployeeOrManager.php");                              //Envia a link
                     exit();                                                                     //Y ahora sal!
                 }
