@@ -7,19 +7,20 @@
     include("PHP/ForAllPages.php");                                                             //Dame todas las ventajas que tiene incluir
 
     // ================ VARIABLES =============================
-    $HTMLTitle  = 'Inicia Sesión';                                                      		//Titulo de cada Pagina
+    $HTMLTitle  = 'Inicia Sesión';                                                              //Titulo de cada Pagina
     $UpdateDate = '23 de Julio del 2017';                                                       //Fecha de actualizacion de la pagina
 
-	// ========== SPECIFIC FOR THIS SCRIPT ==========
-	$ErrorAccountMessage  = "";                                                                 //Mensajes para el usuario final 
-	$ErrorPasswordMessage = "";                                                                 //Mensajes para el usuario final
+    // ========== SPECIFIC FOR THIS SCRIPT ==========
+    $ErrorAccountMessage  = "";                                                                 //Mensajes para el usuario final 
+    $ErrorPasswordMessage = "";                                                                 //Mensajes para el usuario final
 
     $UserName = "";                                                                             //Email
     $Password = "";                                                                             //Contraseña            
 
 
     // ========== WAIT ... WE HAVE ALREADY STAR SESSION? ==========
-    if (!empty($_SESSION)) {header("Location: MenuEmployeeOrManager.php");exit();}              //Envia a la pagina correcta
+    if (!empty($_SESSION)) {header("Location: MenuEmployeeOrManager.php"); exit();}             //Envia a la pagina correcta
+
 
 
     // ================================================================================
@@ -50,7 +51,6 @@
                 $Row = $QueryResult->fetch_assoc();                                             //Entonces dame el resultado
 
                 if (sha1($Password."ManageYourCinemaSalt") == $Row['Contrasena']) {             //Si es que contraseña correcta
-                  
                     session_start();                                                            //Inicia la Sesion :0
                     $_SESSION = array_merge($_SESSION, $Row);
                     $_SESSION["CompleteUserName"] = $Row['Nombre']." ".$Row['ApellidoPaterno'];//Dame su info
@@ -64,7 +64,7 @@
                 else $ErrorPasswordMessage = "Contraseña Incorrecta";                           //Contraseña incorrecta
             }
             else $ErrorAccountMessage = "NO existe el Usuario en la Base de Datos";             //No existe usuario
-    	}
+        }
     }
 
     include("PHP/HTMLHeader.php");                                                              //Incluimos un Asombroso Encabezado

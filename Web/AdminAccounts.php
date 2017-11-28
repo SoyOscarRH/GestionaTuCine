@@ -7,43 +7,16 @@
     include("PHP/ForAllPages.php");                                                             //Dame todas las ventajas
 
     // ================ VARIABLES =============================
-    $HTMLTitle  = 'Administrador';                                                  	        //Titulo de cada Pagina
+    $HTMLTitle  = 'Administrador';                                                              //Titulo de cada Pagina
     $UpdateDate = '23 de Julio del 2017';                                                       //Fecha de actualizacion de pagina
 
     $AlertMessages = array();                                                                   //Mensajes que mostramos 
     $InfoEmployees = array();                                                                   //Info de los empleados  
 
+    StandardCheckForStartedSession();                                                           //Asegurate de que si pueda estar aqui
+    $DataBase = StandardCheckForCorrectDataBase();                                              //Asegurate de que si pueda estar aqui
 
-    /*===================================================================
-    ============         WE CAN ACCESS TO THE PAGE    ===================
-    ===================================================================*/
-
-    // ============ YOU HAVE LOGIN?  =================
-    if (empty($_SESSION)) {                                                                     //Si ya iniciaste sesión
-        $TitleErrorPage      = "Error Permisos";                                                //Error variables
-        $MessageErrorPage    = "No iniciaste sesión en el Sistema";                             //Error variables
-        $ButtonLinkErrorPage = $HTMLDocumentRoot."Login.php";                                   //Error variables
-        $ButtonTextErrorPage = "Accede al Sistema";                                             //Error variables
-
-        include("Error.php");                                                                   //Llama a la pagina de error
-        exit();                                                                                 //Adios vaquero
-    }
-
-    // ============ OPEN THE DATA BASE ==============
-    $DataBase = @new mysqli("127.0.0.1", "root", "root", "Proyect");                            //Abrir una conexión
-    if ((mysqli_connect_errno() != 0) or !$DataBase) {                                          //Si hubo problemas
-        $TitleErrorPage      = "Error con la BD";                                               //Error variables
-        $MessageErrorPage    = "No podemos acceder a la base de datos";                         //Error variables
-        $ButtonLinkErrorPage = $HTMLDocumentRoot."Login.php";                                   //Error variables
-        $ButtonTextErrorPage = "Intenta otra vez";                                              //Error variables
-
-        include("Error.php");                                                                   //Llama a la pagina de error
-        exit();                                                                                 //Adios vaquero
-    }
-
-    $_SESSION["IAmAManager"] = false;                                                                       //Pero ... ¿Eres gerente?
-    if ($_SESSION["IDGerente"] == $_SESSION["ID"]) $_SESSION["IAmAManager"] = true;                         //Pues pregunta :v
-
+    if ($_SESSION["IAmAManager"] == false) CallErrorPageOnlyForAdmins();                        //Si no tienes permiso de estar aqui
 
     /*===================================================================
     ============         GET THE DATABASE      ==========================
@@ -180,12 +153,12 @@
             <br>
 
             <!-- ========  BUTTON ============= -->
-    		<button 
+            <button 
                 id="EmployeesTablesButton"
                 class="btn waves-effect waves-light"
                 name="ShowEmployees">
-    			Ve los Empleados
-    		</button>
+                Ve los Empleados
+            </button>
             <script>
                 $("#EmployeesTablesButton").click( function() {$("#EmployeesTables").toggle();});
             </script>

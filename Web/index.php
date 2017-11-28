@@ -4,7 +4,7 @@
     =======================================================================================================================================
 
     This works like the index for the complete system */
-    include("./PHP/ForAllPages.php");                                                       //Dame todas las ventajas que tiene incluir
+    include("PHP/ForAllPages.php");                                                         //Dame todas las ventajas que tiene incluir
 
     // ================ VARIABLES =============================
     $HTMLTitle = 'Maneja tu Cine';                                                          //Titulo de cada Pagina

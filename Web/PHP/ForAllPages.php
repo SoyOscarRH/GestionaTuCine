@@ -19,15 +19,6 @@
         setlocale(LC_TIME, 'es_ES.UTF-8');                                                      //Pone un sistema local
 
 
-    // ********************************************************************
-    // *******************    LIBRARIES              **********************
-    // ********************************************************************
-        include_once("Functions.php");                                                          //Aqui se encuentran las fn en general
-        include_once("DataBaseFunctions.php");                                                  //Aqui se encuentran las fn de conexion
-    
-
-
-
     // *****************************************************************************************************
     // *********************************             VARIABLES          ************************************
     // *****************************************************************************************************
@@ -40,12 +31,18 @@
             $HTMLDocumentRoot = "/ManageYourCinema/Web/";                                       //Ruta de los archivos de HTML
             $PageDirection = "localhost";                                                       //Ruta de los archivos de HTML
 
-            $WeShouldAddOriginalLinks = true;                                                   //¿Dbemos cambiarlos?
-
-
-        // === DEFAULT LINKS ===== 
             $LinksForPages = array();                                                           //Guarda los links
-            $LinksForPages["Iniciar Sesión"] = "Login.php";                                     //Iniciar Sesion
+            if (session_status() == PHP_SESSION_NONE) session_start();                          //Si es que no has sesión crear una plox
+
+
+
+
+    // ****************************************************************************************************
+    // ********************************    LIBRARIES              *****************************************
+    // ****************************************************************************************************
+        include_once("Functions.php");                                                          //Aqui se encuentran las fn en general
+        include_once("DataBaseFunctions.php");                                                  //Aqui se encuentran las fn de conexion
+    
 
 
 
@@ -53,10 +50,12 @@
     // *********************************             IMPORTANT STUFF          ******************************
     // *****************************************************************************************************
 
+
         // === DEFAULT LINKS ===== 
-        if(!isset($_SESSION)){
-            session_start();                                                                    //Si es que ya iniciamos sesion
-            unset($LinksForPages["Iniciar Sesión"]);                                            //Bye link :(
+        if (empty($_SESSION)) {                                                                 //Si es que no has iniciado sesión 
+            $LinksForPages["Iniciar Sesión"] = "Login.php";                                     //Iniciar Sesion
+        }
+        else {
             $LinksForPages = array("Menú de Opciones"=>"Login.php") + $LinksForPages;           //Menu de Sesion
             $LinksForPages["Cerrar Sesion"] = "MenuEmployeeOrManager.php?CloseSession";         //Añadimos el Sesion
         }
