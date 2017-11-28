@@ -4,13 +4,13 @@
     =======================================================================================================================================
 
     This works like the index for the complete system */
-    include("./PHP/ForAllPages.php");                                                           //Dame todas las ventajas que tiene incluir
+    include("./PHP/ForAllPages.php");                                                       //Dame todas las ventajas que tiene incluir
 
     // ================ VARIABLES =============================
-    $HTMLTitle ='Maneja tu Cine';                                                               //Titulo de cada Pagina
-    $UpdateDate = '23 de Julio del 2017';                                                       //Fecha de actualizacion de la pagina
+    $HTMLTitle = 'Maneja tu Cine';                                                          //Titulo de cada Pagina
+    $UpdateDate = '23 de Julio del 2017';                                                   //Fecha de actualizacion de la pagina
 
-    include("./PHP/HTMLHeader.php");                                                            //Incluimos un Asombroso Encabezado
+    include("./PHP/HTMLHeader.php");                                                        //Incluimos un Asombroso Encabezado
 ?>
 
 
@@ -27,7 +27,9 @@
             
             <h1 class="header teal-text text-lighten-4">Maneja tu Cine</h1>
 
-            <h5 class="header col s12 teal-text text-lighten-3">Administrador de Cinemas</h5>
+            <h5 class="header col s12 teal-text text-lighten-3">
+                Administrador de Cinemas
+            </h5>
 
             <!-- ===== BUTTON ===== -->
             <center>

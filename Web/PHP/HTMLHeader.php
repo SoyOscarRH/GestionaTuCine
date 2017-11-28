@@ -43,7 +43,8 @@ if (!isset($ColorOfNavbarMobile)) $ColorOfNavbarMobile = "teal lighten-2";      
         <!--  +++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
             <!-- Icon of the Page -->
-            <link href="MediaAndStyle/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+            <link rel="shortcut icon" href="<?php echo $HTMLDocumentRoot;?>Media/favicon.ico" type="image/x-icon">
+            <link rel="icon" href="<?php echo $HTMLDocumentRoot;?>Media/favicon.ico" type="image/x-icon">
 
             <!-- Google Material Fonts -->
             <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
