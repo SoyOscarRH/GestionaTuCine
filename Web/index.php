@@ -15,12 +15,22 @@
 
 
     <!--  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!--  ++++++++++++++         CSS CHANGES        +++++++++++++++++++++ -->
+    <!--  ++++++++++++++++++++++++*++++++++++++++++++++++++++++++++++++++ -->
+    <style>
+        .parallax-container {
+          height: 350px;
+        }
+    </style>
+
+
+    <!--  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <!--  ++++++++++++++   PARALLAX CONTAINER       +++++++++++++++++++++ -->
     <!--  ++++++++++++++++++++++++*++++++++++++++++++++++++++++++++++++++ -->
     <div class="parallax-container valign-wrapper">
         
         <!-- ===== THE IMAGE ===== -->
-        <div class="parallax"><img src="Media/Movies1.jpg"></div>
+        <div class="parallax"><img src="Media/General/Film.jpg"></div>
 
         <!-- ===== CONTAINER ===== -->
         <div class="container center">
@@ -36,7 +46,8 @@
             <a  href  = "Login.php"
                 id    = "download-button"
                 class = "btn-large waves-effect waves-light teal lighten-1">
-                Iniciar Sesión
+
+                <?php echo (empty($_SESSION)? "Iniciar Sesión" : "Ve al Menú");?>
             </a>
             </center>
 
@@ -128,68 +139,37 @@
 
 
     <!--  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <!--  ++++++++++++++   PARALLAX CONTAINER 2     +++++++++++++++++++++ -->
+    <!--  ++++++++++++++   PARALLAX CONTAINER       +++++++++++++++++++++ -->
     <!--  ++++++++++++++++++++++++*++++++++++++++++++++++++++++++++++++++ -->
     <div class="parallax-container valign-wrapper">
         
         <!-- ===== THE IMAGE ===== -->
-        <div class="parallax"><img src="Media/Movies2.jpg"></div>
+        <div class="parallax"><img src="Media/General/Movies.jpg"></div>
 
-    </div>
+        <!-- ===== CONTAINER ===== -->
+        <div class="container center">
+            
+            <h2 class="header col s12 white-text ">
+                Ver las Películas
+            </h2>
 
-
-
-
-    <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <!--  ++++++++++++++   INFORMATION   +++++++++++++++++++++ -->
-    <!--  ++++++++++++++++++++++++*+++++++++++++++++++++++++++ -->
-    <div class="container section">
-        <div class="row">
-        <div class="col s12 center">
-
-            <!--  =========  Title   ======== -->
-            <h3><i class="mdi-content-send brown-text"></i></h3>
-            <h4>Llamame chiquito</h4>
-          
-            <p class="light" align="justify">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Nullam scelerisque id nunc nec volutpat. Etiam pellentesque
-                tristique arcu, non consequat magna fermentum ac. Cras ut
-                ultricies eros. Maecenas eros justo, ullamcorper a sapien id,
-                viverra ultrices eros. Morbi sem neque, posuere et pretium eget,
-                bibendum sollicitudin lacus. Aliquam eleifend sollicitudin diam,
-                eu mattis nisl maximus sed. Morbi massa odio, condimentum sed
-                ipsum ac, gravida ultrices erat. Nullam eget dignissim mauris, non
-                tristique erat. Vestibulum ante ipsum primis in faucibus orci luctus
-                et ultrices posuere cubilia Curae
-            </p>
-
-        </div>
-        </div>
-
-    </div>
-
-
-
-
-
-    <!--  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <!--  ++++++++++++++   PARALLAX CONTAINER 2     +++++++++++++++++++++ -->
-    <!--  ++++++++++++++++++++++++*++++++++++++++++++++++++++++++++++++++ -->
-    <div class="parallax-container valign-wrapper">
-        
-        <!-- ===== THE IMAGE ===== -->
-        <div class="parallax"><img src="Media/Movies3.jpg"></div>
-
-        <h5 class="container center header col s12 light">
-            Un texto bonito :D
-        </h5>
+            <!-- ===== BUTTON ===== -->
+            <center>
+            <a  href  = "Login.php"
+                id    = "download-button"
+                class = "btn-large waves-effect waves-light blue lighten-1">
+                Checa la Cartelera
+            </a>
+            </center>
 
         </div>
 
     </div>
 
 
-    
+
+
+
+
     <?php include("./PHP/HTMLFooter.php"); ?>
 

@@ -30,8 +30,8 @@
 
         // ======================  TRY TO GET ACCOUNT NUMBER   ============================
         if (isset($_POST['UserName']) == true and isset($_POST['Password']) == true) {          //Hay informacion?
-            $UserName = ClearSQLInyection(htmlspecialchars(trim($_POST['UserName'])));          //Limpia numero de cuenta
-            $Password = ClearSQLInyection(htmlspecialchars(trim($_POST['Password'])));          //Limpia numero de cuenta
+            $UserName = ClearSQLInyection($_POST['UserName']);                                  //Limpia numero de cuenta
+            $Password = ClearSQLInyection($_POST['Password']);                                  //Limpia numero de cuenta
 
             $DataBase = @new mysqli("127.0.0.1", "root", "root", "Proyect");                    //Abrir una conexión
             if ((mysqli_connect_errno() != 0) or !$DataBase) {                                  //Si hubo problemas

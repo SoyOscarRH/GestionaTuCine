@@ -105,7 +105,7 @@ if (!isset($ColorOfNavbarMobile)) $ColorOfNavbarMobile = "teal lighten-2";      
                  
                 <!-- Links for Normal Web -->
                 <ul class="right hide-on-med-and-down">
-                    <?php foreach($LinksForPages as $NameOfLink => $Link): ?>
+                    <?php foreach($LinksForPagesDesktop as $NameOfLink => $Link): ?>
 
                         <li>
                             <a class="white-text" href="<?php echo $Link ?>">
@@ -128,7 +128,7 @@ if (!isset($ColorOfNavbarMobile)) $ColorOfNavbarMobile = "teal lighten-2";      
             <h4 class="center-align white-text" style="font-weight: 300;"><b>Menú</b> de Páginas</h4>
             <br><br>
 
-            <?php foreach($LinksForPages as $NameOfLink => $Link): ?>
+            <?php foreach($LinksForPagesMobile as $NameOfLink => $Link): ?>
                 <li>
                     <a href="<?php echo$Link;?>">
                         <span class="white-text flow-text"><?php echo $NameOfLink; ?></span>

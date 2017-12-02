@@ -16,7 +16,7 @@
 
                 <!--  =========  Text   ======== -->
                 <p class="grey-text text-lighten-4" style="font-size: 0.85rem;">
-                    Somos pro :v
+                    Somos pro :v y usamos software libre
                 </p>
             </div>
 
@@ -27,8 +27,14 @@
             <div class="col l3 s12">
                 <h5 class="white-text" style="font-size: 1.1rem;">Paginas Adicionales</h5>
                 <ul style="font-size: 0.85rem;">
-                    <li><a class="white-text" href="#!">Link 1</a></li>
-                    <li><a class="white-text" href="#!">Link 2</a></li>
+                    <li>
+                        <a class="white-text" href="/ManageYourCinema/Web/">Página Base</a>
+                    </li>
+                    <li>
+                        <a class="white-text" href="https://github.com/SoyOscarRH/ManageYourCinema/tree/master/Web">
+                            Código Fuente del Proyecto
+                        </a>
+                    </li>
                 </ul>
             </div>
 

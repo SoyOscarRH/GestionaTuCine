@@ -13,8 +13,8 @@
     $AlertMessages = array();                                                                   //Mensajes que mostramos 
     $InfoEmployees = array();                                                                   //Info de los empleados  
 
-    StandardCheckForStartedSession();                                                           //Asegurate de que si pueda estar aqui
-    $DataBase = StandardCheckForCorrectDataBase();                                              //Asegurate de que si pueda estar aqui
+    StandardCheckForStartedSession();                                                           //Asegurate de que pueda estar aqui
+    $DataBase = StandardCheckForCorrectDataBase();                                              //Asegurate de que pueda estar aqui
 
     if ($_SESSION["IAmAManager"] == false) CallErrorPageOnlyForAdmins();                        //Si no tienes permiso de estar aqui
 
@@ -28,17 +28,17 @@
         do {                                                                                    //while para usar el break XD
 
             //=============  GET THE DATA =============
-            $ToChangeID = ClearSQLInyection(htmlspecialchars(trim($_POST['ID'])));              //Dame la info
+            $ToChangeID = ClearSQLInyection($_POST['ID']);                                      //Dame la info
             if (!is_numeric($ToChangeID)) {array_push($AlertMessages, "ID Invalido"); break;}   //Envia mensajes
 
-            $Salary = ClearSQLInyection(htmlspecialchars(trim($_POST['Salary'])));              //Dame la info
+            $Salary = ClearSQLInyection($_POST['Salary']);                                      //Dame la info
             if (!is_numeric($Salary)) {array_push($AlertMessages, "Salario Invalido"); break;}  //Envia mensajes
 
-            $Turn = ClearSQLInyection(htmlspecialchars(trim($_POST['Turn'])));                  //Dame el turno
+            $Turn = ClearSQLInyection($_POST['Turn']);                                          //Dame el turno
             if ($Turn != "Matutino" and $Turn != "Vespetirno") {                                //Eres valido
                 array_push($AlertMessages, "Turno Invalido"); break;}                           //O no?
 
-            $Rol = ClearSQLInyection(htmlspecialchars(trim($_POST['Rol'])));                    //Dame el turno
+            $Rol = ClearSQLInyection($_POST['Rol']);                                            //Dame el turno
             if ($Rol != "Taquilla" and $Rol != "Dulceria") {                                    //Eres valido
                 array_push($AlertMessages, "Rol Invalido"); break;}                             //O no?
 
@@ -69,17 +69,12 @@
     }
 
     //============= SEE EMPLOYESS  =============
-    if ($_SESSION["IAmAManager"]) {                                                             //Si es que eres un manager
-        $QueryInfoEmployees = $DataBase->query("
-            SELECT * FROM Empleado WHERE 
-                IDGerente = {$_SESSION['ID']} AND ID != {$_SESSION['ID']}");                    //Haz la consulta
+    $QueryInfoEmployees = $DataBase->query("
+        SELECT * FROM Empleado WHERE 
+            IDGerente = {$_SESSION['ID']} AND ID != {$_SESSION['ID']}");                        //Haz la consulta
 
-        if ($QueryInfoEmployees->num_rows == 0)                                                 //Si es que no hay tuplas
-            array_push($AlertMessages, "No se puede acceder a Info de tus Empleados");          //Envia mensajes
-    }
-
-
-
+    if ($QueryInfoEmployees->num_rows == 0)                                                     //Si es que no hay tuplas
+        array_push($AlertMessages, "No se puede acceder a Info de tus Empleados");              //Envia mensajes
 
 
 
@@ -98,7 +93,6 @@
         <!-- ================================================================== -->    
         <!-- =====================    SHOW EMPLOYEES      ===================== -->      
         <!-- ================================================================== -->    
-        <?php if ($_SESSION["IAmAManager"]):?>
         <div class="card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
 
             <!-- ========  TITLE  ================ -->
@@ -122,7 +116,7 @@
                 <thead>
                     <tr>
                     <?php foreach ($QueryInfoEmployees->fetch_fields() as $Column): 
-                        if ($Column->name == 'Contrasena' or $Column->name == 'IDGerente') continue;?>
+                        if ($Column->name == 'Contrasena' or $Column->name == 'ID' or $Column->name == 'IDGerente') continue;?>
                         <th><?php echo $Column->name; ?></th>
                     <?php endforeach; ?>
                     </tr>
@@ -133,14 +127,14 @@
                 <?php
                     while ($Row = $QueryInfoEmployees->fetch_assoc()) : 
                         array_push($InfoEmployees, $Row);?>
-                    <tr>
-                    
-                    <?php foreach ($Row as $Name => $Value): 
-                        if ($Name == 'Contrasena' or $Name == 'IDGerente') continue;?>
-                        <td><?php echo $Value; ?></td>
-                    <?php endforeach; ?>
+                        <tr>
+                        
+                        <?php foreach ($Row as $Name => $Value): 
+                            if ($Name == 'Contrasena' or $Name == 'ID' or $Name == 'IDGerente') continue;?>
+                            <td><?php echo $Value; ?></td>
+                        <?php endforeach; ?>
 
-                    </tr>
+                        </tr>
 
                     <?php endwhile;
 
@@ -160,13 +154,15 @@
                 Ve los Empleados
             </button>
             <script>
-                $("#EmployeesTablesButton").click( function() {$("#EmployeesTables").toggle();});
+                $("#EmployeesTablesButton").click( function() {
+                    $("#EmployeesTables").toggle();
+                });
             </script>
 
         </div>
 
 
-        <br><br><br>
+        <br><br>
 
 
         <!-- ================================================================== -->    
@@ -193,10 +189,10 @@
                     <select name="ID" id="ID" class="left-align">
                         <?php foreach ($InfoEmployees as $Row): 
                             $TemporalCompleteName = $Row['ApellidoPaterno']." ".$Row['ApellidoMaterno']." ".$Row['Nombre'];?>
-                        <option value="<?php echo $Row["ID"];?>"><?php echo $Row['ID']." - ".$TemporalCompleteName;?></option>
+                        <option value="<?php echo $Row["ID"];?>"><?php echo $TemporalCompleteName;?></option>
                         <?php endforeach; ?>
                     </select>
-                    <label>ID del Empleado</label>
+                    <label>Nombre del Empleado</label>
                 </div>
 
                 <!-- ========  WORK TIME ========== -->
@@ -234,11 +230,137 @@
             </form>
 
         </div>
-        
 
-        <?php endif; ?>
 
         <br><br><br><br>
+
+
+        <!-- ================================================================== -->    
+        <!-- =====================      ADD EMPLOYEES     ===================== -->      
+        <!-- ================================================================== -->    
+        <div class="card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
+            
+            <!-- ========  TITLE  ================ -->
+            <h4 class="grey-text text-darken-2">
+                <b>Añade</b> un Empleado
+            </h4>
+
+            <!-- ========  TEXT  ================ -->
+            <span class="grey-text" style="font-size: 1.25rem;">
+                Añade un empleado o administrador al sistema
+                <br><br>
+            </span>
+
+            <!-- ========  MATERIAL FORM  ================ -->
+            <form class="container" action="AdminAccounts.php" method="post">
+
+                <!-- ========  EMPLOYEERS ID ============= -->
+                <div class="input-field">                        
+                    <select name="ID" id="ID" class="left-align">
+                        <?php foreach ($InfoEmployees as $Row): 
+                            $TemporalCompleteName = $Row['ApellidoPaterno']." ".$Row['ApellidoMaterno']." ".$Row['Nombre'];?>
+                        <option value="<?php echo $Row["ID"];?>"><?php echo $TemporalCompleteName;?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <label>Nombre del Empleado</label>
+                </div>
+
+                <!-- ========  WORK TIME ========== -->
+                <div class="input-field">                        
+                    <select name="Rol" id="Rol">
+                        <option value="Dulceria">Dulceria</option>
+                        <option value="Taquilla">Taquilla</option>
+                    </select>
+                    <label>Rol Actual</label>
+                </div>
+
+                <!-- ========  WORK TIME ========== -->
+                <div class="input-field">                        
+                    <select name="Turn" id="Turn">
+                        <option value="Matutino">Matutino</option>
+                        <option value="Vespetirno">Vespetirno</option>
+                    </select>
+                    <label>Turno</label>
+                </div>
+
+                <!-- ========  SALARY ============= -->
+                <div class='input-field'>
+                    <input class='validate' type='number' name='Salary' id='Salary' />
+                    <label>Sueldo</label>
+                </div>
+
+                <!-- ========  BUTTON TO SEND ===== -->
+                <button 
+                    type='submit'
+                    name='CheckDataToChangeValues'
+                    class='col s10 m6 l6 offset-s1 offset-m3 offset-l3 btn btn-large waves-effect green lighten-1'>
+                    Cambiar Valores
+                </button>
+
+            </form>
+
+        </div>
+
+        <br><br>
+        
+
+        <!-- ================================================================== -->    
+        <!-- =====================    DELETE EMPLOYEES     ==================== -->      
+        <!-- ================================================================== -->    
+        <div class="card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
+            
+            <!-- ========  TITLE  ================ -->
+            <h4 class="grey-text text-darken-2">
+                <b>Elimina</b> a un Empleado
+            </h4>
+
+            <!-- ========  TEXT  ================ -->
+            <span class="grey-text" style="font-size: 1.25rem;">
+                Añade un empleado o administrador al sistema
+                <br><br>
+            </span>
+
+
+            <!-- ========  MATERIAL FORM  ================ -->
+            <form class="container" action="AdminAccounts.php" method="post">
+
+                <!-- ========  EMPLOYEERS ID ============= -->
+                <div class="input-field">                        
+                    <select name="ID" id="ID" class="left-align">
+                        <?php foreach ($InfoEmployees as $Row): 
+                            $TemporalCompleteName = $Row['ApellidoPaterno']." ".$Row['ApellidoMaterno']." ".$Row['Nombre'];?>
+                        <option value="<?php echo $Row["ID"];?>"><?php echo $TemporalCompleteName;?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <label>Nombre del Empleado</label>
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <br><br><br>
+
+
+        <!-- ================================================================== -->    
+        <!-- =====================    CREATE ADMIN         ==================== -->      
+        <!-- ================================================================== -->    
+        <div class="card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
+            
+            <!-- ========  TITLE  ================ -->
+            <h4 class="grey-text text-darken-2">
+                <b>Crea </b> un nuevo Administrador
+            </h4>
+
+            <!-- ========  TEXT  ================ -->
+            <span class="grey-text" style="font-size: 1.25rem;">
+                Añade un empleado o administrador al sistema
+                <br><br>
+            </span>
+
+        </div>
+
 
     </div>
 
@@ -276,6 +398,8 @@
 
         });
     </script>
+
+    <br><br><br><br>
 
 
 <?php include("PHP/HTMLFooter.php"); $DataBase->close(); ?>
