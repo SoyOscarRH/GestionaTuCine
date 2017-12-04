@@ -1,3 +1,8 @@
+
+<?php // TODO: ACABAR TODO LO QUE ME FALTA, ESTO ESTA INCOMPLETO ?>
+
+
+
 <?php
     /*=======================================================================================================================
     ============================================         ADMINISTRATOR POWERS          ======================================
@@ -8,7 +13,7 @@
 
     // ================ VARIABLES =============================
     $HTMLTitle  = 'Administrador';                                                              //Titulo de cada Pagina
-    $UpdateDate = '23 de Julio del 2017';                                                       //Fecha de actualizacion de pagina
+    $UpdateDate = '23 de Noviembre del 2017';                                                   //Fecha de actualizacion de pagina
 
     $AlertMessages = array();                                                                   //Mensajes que mostramos 
     $InfoEmployees = array();                                                                   //Info de los empleados  
@@ -18,12 +23,17 @@
 
     if ($_SESSION["IAmAManager"] == false) CallErrorPageOnlyForAdmins();                        //Si no tienes permiso de estar aqui
 
+
+
+
+
+
     /*===================================================================
     ============         GET THE DATABASE      ==========================
     ===================================================================*/
 
     //=============  IF YOU WANT TO MODIFY THE DATA  =============
-    if ($_SESSION["IAmAManager"] and isset($_POST['CheckDataToChangeValues'])) {                //Si es que quieres actualizar datos
+    if (isset($_POST['ChangeEmployeeData'])) {                                                  //Si es que quieres actualizar datos
 
         do {                                                                                    //while para usar el break XD
 
@@ -60,13 +70,16 @@
             $ValidQuery = $DataBase->query("
                 UPDATE Empleado
                 SET Turno = '{$Turn}', Sueldo = {$Salary}, RolActual = '{$Rol}'
-                WHERE ID = {$ToChangeID};");                                                    //AHORA SI PUEDES HACER ESTO
+                WHERE ID = {$ToChangeID}");                                                     //AHORA SI PUEDES HACER ESTO
 
             if (!$ValidQuery){array_push($AlertMessages, "Error al Actualizar Datos"); break;}  //Envia mensaje si todo mal
             else {array_push($AlertMessages, "Datos Actualizados");break;}                      //Envia mensaje si todo bien
 
         } while (false);                                                                        //Solo eras para el break
     }
+
+
+
 
     //============= SEE EMPLOYESS  =============
     $QueryInfoEmployees = $DataBase->query("
@@ -82,18 +95,25 @@
 
 
 
+
+
+
     // *****************************************************************************************
     // *************************     PROCESS TO START THE SYSTEM   *****************************
     // *****************************************************************************************
+    $StandardGreyCard = "card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2";          //Es una forma de que sea mas sencilla 
+    $StandardButton = "col s10 m6 l6 offset-s1 offset-m3 offset-l3 btn btn-large waves-effect"; //Es una forma de que sea mas sencilla 
+
     include("PHP/HTMLHeader.php");                                                              //Incluimos un Asombroso Encabezado
 ?>
     <br><br>
     <div class="container center-align">
         
+
         <!-- ================================================================== -->    
         <!-- =====================    SHOW EMPLOYEES      ===================== -->      
         <!-- ================================================================== -->    
-        <div class="card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
+        <div class="<?php echo $StandardGreyCard;?>">
 
             <!-- ========  TITLE  ================ -->
             <h4 class="grey-text text-darken-2">
@@ -109,14 +129,14 @@
             <!-- ========  MATERIAL TABLE CARD  ================ -->
             <table
                 id="EmployeesTables" 
-                style="<?php if (!isset($_POST['CheckDataToChangeValues'])) echo "display: none; "?>font-size: 0.9rem"
+                style="<?php if (!isset($_POST['ChangeEmployeeData'])) echo "display: none; "?>font-size: 0.9rem"
                 class="centered hoverable striped responsive-table bordered">
 
                 <!-- ========  TITLES ================ -->
                 <thead>
                     <tr>
                     <?php foreach ($QueryInfoEmployees->fetch_fields() as $Column): 
-                        if ($Column->name == 'Contrasena' or $Column->name == 'ID' or $Column->name == 'IDGerente') continue;?>
+                        if (in_array($Column->name, array('ID', 'IDGerente', 'Contrasena'))) continue; ?>
                         <th><?php echo $Column->name; ?></th>
                     <?php endforeach; ?>
                     </tr>
@@ -124,22 +144,18 @@
 
                 <!-- ========  CELLS ================ -->
                 <tbody>
-                <?php
-                    while ($Row = $QueryInfoEmployees->fetch_assoc()) : 
-                        array_push($InfoEmployees, $Row);?>
-                        <tr>
-                        
-                        <?php foreach ($Row as $Name => $Value): 
-                            if ($Name == 'Contrasena' or $Name == 'ID' or $Name == 'IDGerente') continue;?>
-                            <td><?php echo $Value; ?></td>
-                        <?php endforeach; ?>
+                <?php while ($Row = $QueryInfoEmployees->fetch_assoc()) : 
+                    array_push($InfoEmployees, $Row);?>
+                    <tr>
+                    
+                    <?php foreach ($Row as $Name => $Value): 
+                        if (in_array($Name, array('ID', 'IDGerente', 'Contrasena'))) continue; ?>
+                        <td><?php echo $Value; ?></td>
+                    <?php endforeach; ?>
 
-                        </tr>
+                    </tr>
 
-                    <?php endwhile;
-
-                    $QueryInfoEmployees->close();
-                ?>
+                    <?php endwhile;?>
 
                 </tbody>
             </table>
@@ -149,13 +165,19 @@
             <!-- ========  BUTTON ============= -->
             <button 
                 id="EmployeesTablesButton"
-                class="btn waves-effect waves-light"
+                class='col s10 m6 l6 offset-s1 offset-m3 offset-l3 btn-large waves-effect teal lighten-1'
                 name="ShowEmployees">
                 Ve los Empleados
             </button>
+
+            <!-- ========  BUTTON SCRIPT  ===== -->
             <script>
                 $("#EmployeesTablesButton").click( function() {
                     $("#EmployeesTables").toggle();
+
+                    if ($.trim($(this).text()) === 'Ve los Empleados')
+                        $(this).text('Oculta los Empleados');
+                    else $(this).text('Ve los Empleados');        
                 });
             </script>
 
@@ -168,7 +190,7 @@
         <!-- ================================================================== -->    
         <!-- =====================    ALTER EMPLOYEES     ===================== -->      
         <!-- ================================================================== -->    
-        <div class="card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
+        <div class="<?php echo $StandardGreyCard;?>">
             
             <!-- ========  TITLE  ================ -->
             <h4 class="grey-text text-darken-2">
@@ -186,7 +208,7 @@
 
                 <!-- ========  EMPLOYEERS ID ============= -->
                 <div class="input-field">                        
-                    <select name="ID" id="ID" class="left-align">
+                    <select name="SelectedEmployee" id="SelectedEmployee" class="left-align">
                         <?php foreach ($InfoEmployees as $Row): 
                             $TemporalCompleteName = $Row['ApellidoPaterno']." ".$Row['ApellidoMaterno']." ".$Row['Nombre'];?>
                         <option value="<?php echo $Row["ID"];?>"><?php echo $TemporalCompleteName;?></option>
@@ -222,12 +244,33 @@
                 <!-- ========  BUTTON TO SEND ===== -->
                 <button 
                     type='submit'
-                    name='CheckDataToChangeValues'
-                    class='col s10 m6 l6 offset-s1 offset-m3 offset-l3 btn btn-large waves-effect indigo lighten-1'>
+                    name='ChangeEmployeeData'
+                    class='<?php echo $StandardButton;?> indigo lighten-1'>
                     Cambiar Valores
                 </button>
 
             </form>
+
+            <!-- ========  CODE OF THE SELECT ===== -->
+            <script>
+                 $("#SelectedEmployee").change(function() {
+                    let SelectedID = $('#SelectedEmployee').val();
+
+                    <?php foreach ($InfoEmployees as $Row): ?>
+                    
+                        if (SelectedID == <?php echo $Row['ID'];?> ) {
+                            $('#Rol').val("<?php echo $Row['RolActual'] ?>");       
+                            $('#Salary').val("<?php echo $Row['Sueldo'] ?>");
+                            $('#Turn').val("<?php echo $Row['Turno'] ?>");
+                        }
+
+                    <?php endforeach;?>
+
+                    Materialize.updateTextFields();
+                });
+
+                $('#SelectedEmployee').trigger('change');
+            </script>
 
         </div>
 
@@ -238,7 +281,7 @@
         <!-- ================================================================== -->    
         <!-- =====================      ADD EMPLOYEES     ===================== -->      
         <!-- ================================================================== -->    
-        <div class="card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
+        <div class="<?php echo $StandardGreyCard;?>">
             
             <!-- ========  TITLE  ================ -->
             <h4 class="grey-text text-darken-2">
@@ -247,7 +290,7 @@
 
             <!-- ========  TEXT  ================ -->
             <span class="grey-text" style="font-size: 1.25rem;">
-                Añade un empleado o administrador al sistema
+                Añade un empleado al sistema
                 <br><br>
             </span>
 
@@ -255,13 +298,8 @@
             <form class="container" action="AdminAccounts.php" method="post">
 
                 <!-- ========  EMPLOYEERS ID ============= -->
-                <div class="input-field">                        
-                    <select name="ID" id="ID" class="left-align">
-                        <?php foreach ($InfoEmployees as $Row): 
-                            $TemporalCompleteName = $Row['ApellidoPaterno']." ".$Row['ApellidoMaterno']." ".$Row['Nombre'];?>
-                        <option value="<?php echo $Row["ID"];?>"><?php echo $TemporalCompleteName;?></option>
-                        <?php endforeach; ?>
-                    </select>
+                <div class='input-field'>
+                    <input class='validate' type='number' name='Name' id='Name' />
                     <label>Nombre del Empleado</label>
                 </div>
 
@@ -292,9 +330,9 @@
                 <!-- ========  BUTTON TO SEND ===== -->
                 <button 
                     type='submit'
-                    name='CheckDataToChangeValues'
-                    class='col s10 m6 l6 offset-s1 offset-m3 offset-l3 btn btn-large waves-effect green lighten-1'>
-                    Cambiar Valores
+                    name='AddEmployee'
+                    class='<?php echo $StandardButton;?> green lighten-1'>
+                    Añadir Empleado
                 </button>
 
             </form>
@@ -307,7 +345,7 @@
         <!-- ================================================================== -->    
         <!-- =====================    DELETE EMPLOYEES     ==================== -->      
         <!-- ================================================================== -->    
-        <div class="card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
+        <div class="<?php echo $StandardGreyCard;?>">
             
             <!-- ========  TITLE  ================ -->
             <h4 class="grey-text text-darken-2">
@@ -316,7 +354,7 @@
 
             <!-- ========  TEXT  ================ -->
             <span class="grey-text" style="font-size: 1.25rem;">
-                Añade un empleado o administrador al sistema
+                Elimina a algún empleado del sistema
                 <br><br>
             </span>
 
@@ -346,7 +384,7 @@
         <!-- ================================================================== -->    
         <!-- =====================    CREATE ADMIN         ==================== -->      
         <!-- ================================================================== -->    
-        <div class="card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
+        <div class="<?php echo $StandardGreyCard;?>">
             
             <!-- ========  TITLE  ================ -->
             <h4 class="grey-text text-darken-2">
@@ -370,31 +408,15 @@
     <!-- ================================================================= -->
     <script>
         $(document).ready(function() {
+
+            // Start a Select
             $('select').material_select();
 
+            // Create all the Toast
             <?php 
                 $TitleAlert = '<span class = "yellow-text"><b>Alerta: &nbsp; </b></span>';
                 foreach ($AlertMessages as $Alert) echo "Materialize.toast('$TitleAlert $Alert', 9000);"; 
             ?>
-
-
-            $("#ID").change(function() {
-                let SelectedID = $('#ID').val();
-
-                <?php foreach ($InfoEmployees as $Row): ?>
-                
-                    if (SelectedID == <?php echo $Row['ID'];?> ) {
-                        $('#Rol').val("<?php echo $Row['RolActual'] ?>");       
-                        $('#Salary').val("<?php echo $Row['Sueldo'] ?>");
-                        $('#Turn').val("<?php echo $Row['Turno'] ?>");
-                    }
-
-                <?php endforeach;?>
-
-                Materialize.updateTextFields();
-            });
-
-            $('#ID').trigger('change');
 
         });
     </script>
@@ -402,4 +424,20 @@
     <br><br><br><br>
 
 
-<?php include("PHP/HTMLFooter.php"); $DataBase->close(); ?>
+
+
+<?php 
+    /*===================================================================
+    ============         CLOSE ALL DATABASE     =========================
+    ===================================================================*/
+    include("PHP/HTMLFooter.php");
+
+
+    $DataBase->close();
+
+?>
+
+
+
+
+
