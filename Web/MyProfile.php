@@ -14,16 +14,10 @@
     $InfoEmployees = array();                                                                   //Info de los empleados  
 
      
-    // ============ YOU HAVE LOGIN?  =================
-    if (empty($_SESSION)) {                                                                     //Si ya iniciaste sesión
-        $TitleErrorPage      = "Error Permisos";                                                //Error variables
-        $MessageErrorPage    = "No iniciaste sesión en el Sistema";                             //Error variables
-        $ButtonLinkErrorPage = $HTMLDocumentRoot."Login.php";                                   //Error variables
-        $ButtonTextErrorPage = "Accede al Sistema";                                             //Error variables
 
-        include("Error.php");                                                                   //Llama a la pagina de error
-        exit();                                                                                 //Adios vaquero
-    }
+    StandardCheckForStartedSession();                                                           //Asegurate de que pueda estar aqui
+    $DataBase = StandardCheckForCorrectDataBase();                                              //Asegurate de que pueda estar aqui
+
 
     if (isset($_POST['CheckDataToChangeValues'])) {
         do {                                                                                    //while para usar el break XD
@@ -36,6 +30,7 @@
             $Password  = ClearSQLInyection(htmlspecialchars(trim($_POST['Password'])));         //Dame la info
             $NewPassword1 = ClearSQLInyection(htmlspecialchars(trim($_POST['NewPassword1'])));  //Dame la info
             $NewPassword2 = ClearSQLInyection(htmlspecialchars(trim($_POST['NewPassword2'])));  //Dame la info
+            
             $Password = sha1($Password."ManageYourCinemaSalt");                                 //Esta es la de verdad
             if ($NewPassword1 != $NewPassword2) {                                               //Eres valido
                 array_push($AlertMessages, "Las constraseñas no coinciden"); break;}            //O no?
@@ -45,18 +40,6 @@
             $NewSex = ClearSQLInyection(htmlspecialchars(trim($_POST['Sex'])));                 //Dame el turno
             if ($NewSex != "Masculino" and $NewSex != "Femenino") {                             //Eres valido
                 array_push($AlertMessages, "Sexo no válido :/"); break;}                        //O no?
-
-            // ============ OPEN THE DATA BASE ==============
-            $DataBase = @new mysqli("127.0.0.1", "root", "root", "Proyect");                    //Abrir una conexión
-            if ((mysqli_connect_errno() != 0) or !$DataBase) {                                  //Si hubo problemas
-                $TitleErrorPage      = "Error con la BD";                                       //Error variables
-                $MessageErrorPage    = "No podemos acceder a la base de datos";                 //Error variables
-                $ButtonLinkErrorPage = $HTMLDocumentRoot."Login.php";                           //Error variables
-                $ButtonTextErrorPage = "Intenta otra vez";                                      //Error variables
-
-                include("Error.php");                                                           //Llama a la pagina de error
-                exit();                                                                         //Adios vaquero
-            }
 
             //=============  CHANGE THE DATA =============
             $ValidQuery = $DataBase->query("
@@ -86,6 +69,8 @@
     // *****************************************************************************************
     // *************************     PROCESS TO START THE SYSTEM   *****************************
     // *****************************************************************************************
+    $StandardGreyCard = "card grey lighten-4 col s12 m8 l8 offset-m2 offset-l2";                //Es una forma de que sea mas sencilla 
+
 
     include("PHP/HTMLHeader.php");                                                              //Incluimos un Asombroso Encabezado
 ?>
@@ -97,7 +82,7 @@
         <!-- ================================================================== -->    
         <!-- =====================    ALTER ME            ===================== -->      
         <!-- ================================================================== -->    
-        <div class="card grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
+        <div class="<?php echo $StandardGreyCard;?>">
 
             <div class="card-image">
                 <a id="Edit" name="Edit" class="btn-floating halfway-fab waves-effect waves-light btn-large red">
@@ -182,20 +167,37 @@
                     <br><br>
 
                     <div id="PasswordSection" name="PasswordSection" style="display: none;">
+
                         <!-- =========  TITLE ====-->
-                        <h5 class="grey-text text-darken-2 left-align"><b>Contraseña</b></h5><br>
+                        <h5 class="grey-text text-darken-2 left-align">
+                            <b>Contraseña para Verificar tu Identidad</b>
+                        </h5>
 
-                            <!-- ========  EMAIL ============= -->
-                            <div class='input-field'>
-                                <input
-                                    required
-                                    class = 'validate'
-                                    type  = 'password'
-                                    name  = 'Password'
-                                    id    = 'Password' />
-                                <label>Contraseña Actual</label>
-                            </div>
+                        <br>
 
+                        <!-- ========  EMAIL ============= -->
+                        <div class='input-field'>
+                            <input
+                                required
+                                class = 'validate'
+                                type  = 'password'
+                                name  = 'Password'
+                                id    = 'Password' />
+                            <label>Contraseña Actual</label>
+                        </div>
+
+                        <!-- ========  SWITCH ============= -->
+                        <div id="ChangePassword" class="switch left-align">
+                            <label>
+                                Usa Contraseña Actual
+                                <input required type="checkbox">
+                                <span class="lever"></span>
+                                Cambia Contraseña 
+                            </label>
+                        </div>
+
+                        <div id="SectionNewPassword" style="display: none;">
+                            
                             <!-- ========  EMAIL ============= -->
                             <div class='input-field'>
                                 <input
@@ -203,7 +205,7 @@
                                     type  = 'password'
                                     name  = 'NewPassword1'
                                     id    = 'NewPassword1' />
-                                <label>Nueva Contraseña</label>
+                                <label>Escribe la Nueva Contraseña</label>
                             </div>
 
                             <!-- ========  EMAIL ============= -->
@@ -216,45 +218,17 @@
                                 <label>Confirma la Nueva Contraseña</label>
                             </div>
 
-                            <br><br>
+                        </div>
+
+                        <script>
+                            $('#ChangePassword').change (function() {                           //Cada vez que le piques
+                                $('#SectionNewPassword').toggle();                              //Alterna la parte de la contraseña
+                            });
+                        </script>
+
+                        <br><br>
                         
                     </div>
-
-                    
-
-                    <!-- =========  TITLE ====-->
-                    <h5 class="grey-text text-darken-2 left-align"><b>Información</b> de tu Usuario</h5><br>
-
-                        <!-- ========  SURNAME 2 ============= -->
-                        <div class='input-field'>
-                            <input
-                                disabled
-                                class = 'validate'
-                                type  = 'number'
-                                name  = 'Money'
-                                id    = 'Money'
-                                value = "<?php echo $_SESSION['Sueldo'];?>" />
-                            <label>Sueldo</label>
-                        </div>
-
-                        <!-- ========  WORK TIME ========== -->
-                        <div class="input-field">                        
-                            <select disabled name="Turn" id="Turn">
-                                <option value="Matutino">Matutino</option>
-                                <option value="Vespetirno">Vespertino</option>
-                            </select>
-                            <label>Turno</label>
-                        </div>
-
-                        <!-- ========  WORK  ========== -->
-                        <div class="input-field">                        
-                            <select disabled name="Rol" id="Rol">
-                                <option value="1"><?php echo $_SESSION['RolActual'];?></option>
-                            </select>
-                            <label>Rol Actual</label>
-                        </div>
-
-                    <br>
 
                     <!-- ========  BUTTON TO SEND ===== -->
                     <button
@@ -271,8 +245,59 @@
             
         </div>
 
+        <br>
+        <br>
+        <br>
 
-        <br><br><br>
+        <!-- ================================================================== -->    
+        <!-- =====================    INFO ABOUT ME        ==================== -->      
+        <!-- ================================================================== -->    
+        <div class="<?php echo $StandardGreyCard;?>">
+
+            <div class="card-content">
+
+                <form class="container">
+                
+                    <!-- =========  TITLE ====-->
+                    <h4 class="grey-text text-darken-2 left-align"><b>Información</b> de tu Usuario</h4><br>
+
+                    <!-- ========  SURNAME 2 ============= -->
+                    <div class='input-field'>
+                        <input
+                            disabled
+                            class = 'validate'
+                            type  = 'number'
+                            name  = 'Money'
+                            id    = 'Money'
+                            value = "<?php echo $_SESSION['Sueldo'];?>" />
+                        <label>Sueldo</label>
+                    </div>
+
+                    <!-- ========  WORK TIME ========== -->
+                    <div class="input-field">                        
+                        <select disabled name="Turn" id="Turn">
+                            <option value="Matutino">Matutino</option>
+                            <option value="Vespetirno">Vespertino</option>
+                        </select>
+                        <label>Turno</label>
+                    </div>
+
+                    <!-- ========  WORK  ========== -->
+                    <div class="input-field">                        
+                        <select disabled name="Rol" id="Rol">
+                            <option value="1"><?php echo $_SESSION['RolActual'];?></option>
+                        </select>
+                        <label>Rol Actual</label>
+                    </div>
+
+
+                </form>
+            </div>
+            
+        </div>
+
+
+        <br><br>
 
     </div> 
 

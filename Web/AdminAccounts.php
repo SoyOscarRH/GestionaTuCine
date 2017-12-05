@@ -1,8 +1,3 @@
-
-<?php // TODO: ACABAR TODO LO QUE ME FALTA, ESTO ESTA INCOMPLETO ?>
-
-
-
 <?php
     /*=======================================================================================================================
     ============================================         ADMINISTRATOR POWERS          ======================================
@@ -27,7 +22,6 @@
 
 
 
-
     /*===================================================================
     ============         GET THE DATABASE      ==========================
     ===================================================================*/
@@ -38,7 +32,7 @@
         do {                                                                                    //while para usar el break XD
 
             //=============  GET THE DATA =============
-            $ToChangeID = ClearSQLInyection($_POST['ID']);                                      //Dame la info
+            $ToChangeID = ClearSQLInyection($_POST['SelectedEmployee']);                        //Dame la info
             if (!is_numeric($ToChangeID)) {array_push($AlertMessages, "ID Invalido"); break;}   //Envia mensajes
 
             $Salary = ClearSQLInyection($_POST['Salary']);                                      //Dame la info
@@ -78,6 +72,137 @@
         } while (false);                                                                        //Solo eras para el break
     }
 
+    //=============  IF YOU WANT TO ADD THE DATA  =============
+    if (isset($_POST['AddEmployee'])) {                                                         //Si es que quieres añadir un empleado
+
+        do {                                                                                    //while para usar el break XD
+            //=============  GET THE DATA =============
+            $Name = ClearSQLInyection($_POST['Name']);                                          //Dame la info
+            if ($Name == "") {array_push($AlertMessages, "Coloca Nombre"); break;}              //Envia mensajes
+
+            $Surname1 = ClearSQLInyection($_POST['Surname1']);                                  //Dame la info
+            if ($Surname1 == "") {array_push($AlertMessages, "Coloca Apellidos"); break;}       //Envia mensajes
+
+            $Surname2 = ClearSQLInyection($_POST['Surname2']);                                  //Dame la info
+            if ($Surname2 == "") {array_push($AlertMessages, "Coloca Apellidos"); break;}       //Envia mensajes
+
+            $Salary = ClearSQLInyection($_POST['Salary']);                                      //Dame la info
+            if (!is_numeric($Salary)) {array_push($AlertMessages, "Salario Invalido"); break;}  //Envia mensajes
+
+            $Sex = ClearSQLInyection($_POST['Sex']);                                            //Dame el turno
+            if ($Sex != "Masculino" and $Turn != "Femenino") {                                  //Eres valido
+                array_push($AlertMessages, "Sexo Invalido"); break;}                            //O no?
+
+            $Turn = ClearSQLInyection($_POST['Turn']);                                          //Dame el turno
+            if ($Turn != "Matutino" and $Turn != "Vespetirno") {                                //Eres valido
+                array_push($AlertMessages, "Turno Invalido"); break;}                           //O no?
+
+            $Rol = ClearSQLInyection($_POST['Rol']);                                            //Dame el turno
+            if ($Rol != "Taquilla" and $Rol != "Dulceria") {                                    //Eres valido
+                array_push($AlertMessages, "Rol Invalido"); break;}                             //O no?
+
+
+            $Email = ClearSQLInyection($_POST['Email']);                                          //Dame email
+            if ($Email == "") {array_push($AlertMessages, "Email vacío"); break;}                //Envia mensajes
+
+            $Password = ClearSQLInyection($_POST['Password']);                                  //Dame el turno
+            if ($Password == "") {array_push($AlertMessages, "Contraseña vacío"); break;}       //Envia password
+            $Password = sha1($Password."ManageYourCinemaSalt");                                 //Esta es la de verdad
+
+
+            //=============  VERIFY THE ID =============
+            $DataBase->query(" 
+                INSERT INTO Empleado (
+                    Sueldo,
+                    Turno,
+                    Genero,
+                    Nombre,
+                    ApellidoPaterno,
+                    ApellidoMaterno,
+                    Correo,
+                    Contrasena,
+                    RolActual,
+                    IDGerente
+                )
+                VALUES (
+                    {$Salary},
+                    '{$Turn}',
+                    '{$Sex}',
+                    '{$Name}',
+                    '{$Surname1}',
+                    '{$Surname2}',
+                    '{$Email}',
+                    '{$Password}',
+                    '{$Rol}',
+                    {$_SESSION['ID']}
+            )");
+
+            if ($DataBase->affected_rows != 0) array_push($AlertMessages, "Empleado Añadido");  //Añadir Empleados
+            else array_push($AlertMessages, "Lo siento, Error al Actualizar");                  //Envia mensaje si todo bien
+
+        } while (false);                                                                        //Solo eras para el break
+    }
+
+    //=============  IF YOU WANT TO DELETE THE DATA  ==========
+    if (isset($_POST['DeleteEmployee'])) {                                                      //Si es que quieres actualizar datos
+
+        do {                                                                                    //while para usar el break XD
+
+            //=============  GET THE DATA =============
+            $ToChangeID = ClearSQLInyection($_POST['SelectedEmployee']);                        //Dame la info
+            if (!is_numeric($ToChangeID)) {array_push($AlertMessages, "ID Invalido"); break;}   //Envia mensajes
+
+            //=============  VERIFY THE ID =============
+            $QueryID = $DataBase->query(" SELECT ID FROM Empleado WHERE 
+                                            IDGerente = {$_SESSION['ID']} AND
+                                            ID = {$ToChangeID}");                               //Haz la consulta
+            if ($QueryID->num_rows == 0)                                                        //Si es que no hay tuplas
+                array_push($AlertMessages, "No es un empleado a tu cargo");                     //Envia mensajes
+
+            //=============  CHANGE THE DATA =============
+            $ValidQuery = $DataBase->query("DELETE FROM Empleado WHERE ID = {$ToChangeID}");    //AHORA SI PUEDES HACER ESTO
+
+            if (!$ValidQuery){array_push($AlertMessages, "Error al Eliminar Datos"); break;}    //Envia mensaje si todo mal
+            else {array_push($AlertMessages, "Empleado Eliminado");break;}                      //Envia mensaje si todo bien
+
+        } while (false);                                                                        //Solo eras para el break
+    }
+
+
+
+    //=============  IF YOU WANT TO ADD ADMIN  ===============
+    if (isset($_POST['AddAdmin'])) {                                                            //Si es que quieres actualizar datos
+        do {                                                                                    //while para usar el break XD
+
+            //=============  GET THE DATA =============
+            $NewAdminID = ClearSQLInyection($_POST['NewAdminID']);                              //Dame la info
+            if (!is_numeric($NewAdminID)) {array_push($AlertMessages, "ID Invalido"); break;}   //Envia mensajes
+
+            //=============  VERIFY THE ID =============
+            $NewEmployeesID = "";                                                               //Crea un String
+            foreach ($_POST['NewEmployees'] as $Key => $Value) $NewEmployeesID .= "{$Value} ,"; //Con los numeros
+            $NewEmployeesID = substr($NewEmployeesID, 0, -2);                                   //Y elimina la ultima coma
+
+            $QueryID = $DataBase->query("SELECT ID FROM Empleado WHERE 
+                                            IDGerente = {$_SESSION['ID']} AND
+                                            ID IN ({$NewEmployeesID})");                        //Haz la consulta
+
+            if ($QueryID->num_rows != sizeof($_POST['NewEmployees'])) {                          //Si es que hay problemas
+                array_push($AlertMessages, "Seleccionaste empleados que no estan a tu cargo");   //Envia mensajes
+                break;
+            } 
+
+            //=============  CHANGE THE DATA =============
+            $NewEmployeesID .= ", {$NewAdminID}";                                               //Tu eres tu nuevo jefe
+            $ValidQuery = $DataBase->query("
+                UPDATE Empleado
+                    SET IDGerente = {$NewAdminID} 
+                    WHERE ID IN ({$NewEmployeesID})");                                          //AHORA SI PUEDES HACER ESTO
+
+            if (!$ValidQuery){array_push($AlertMessages, "Error al poner nuevo jefe"); break;}  //Envia mensaje si todo mal
+            else {array_push($AlertMessages, "Nuevo jefe seleccionado");break;}                 //Envia mensaje si todo bien
+        } while (false);                                                                        //Solo eras para el break
+    }
 
 
 
@@ -128,7 +253,7 @@
 
             <!-- ========  MATERIAL TABLE CARD  ================ -->
             <table
-                id="EmployeesTables" 
+                id="EmployeesTable" 
                 style="<?php if (!isset($_POST['ChangeEmployeeData'])) echo "display: none; "?>font-size: 0.9rem"
                 class="centered hoverable striped responsive-table bordered">
 
@@ -173,7 +298,7 @@
             <!-- ========  BUTTON SCRIPT  ===== -->
             <script>
                 $("#EmployeesTablesButton").click( function() {
-                    $("#EmployeesTables").toggle();
+                    $("#EmployeesTable").toggle();
 
                     if ($.trim($(this).text()) === 'Ve los Empleados')
                         $(this).text('Oculta los Empleados');
@@ -208,7 +333,7 @@
 
                 <!-- ========  EMPLOYEERS ID ============= -->
                 <div class="input-field">                        
-                    <select name="SelectedEmployee" id="SelectedEmployee" class="left-align">
+                    <select required name="SelectedEmployee" id="SelectedEmployee" class="left-align">
                         <?php foreach ($InfoEmployees as $Row): 
                             $TemporalCompleteName = $Row['ApellidoPaterno']." ".$Row['ApellidoMaterno']." ".$Row['Nombre'];?>
                         <option value="<?php echo $Row["ID"];?>"><?php echo $TemporalCompleteName;?></option>
@@ -219,7 +344,7 @@
 
                 <!-- ========  WORK TIME ========== -->
                 <div class="input-field">                        
-                    <select name="Rol" id="Rol">
+                    <select required name="Rol" id="Rol">
                         <option value="Dulceria">Dulceria</option>
                         <option value="Taquilla">Taquilla</option>
                     </select>
@@ -228,7 +353,7 @@
 
                 <!-- ========  WORK TIME ========== -->
                 <div class="input-field">                        
-                    <select name="Turn" id="Turn">
+                    <select required requiredname="Turn" id="Turn">
                         <option value="Matutino">Matutino</option>
                         <option value="Vespetirno">Vespetirno</option>
                     </select>
@@ -237,7 +362,7 @@
 
                 <!-- ========  SALARY ============= -->
                 <div class='input-field'>
-                    <input class='validate' type='number' name='Salary' id='Salary' />
+                    <input required class='validate' type='number' name='Salary' id='Salary' />
                     <label>Sueldo</label>
                 </div>
 
@@ -253,7 +378,7 @@
 
             <!-- ========  CODE OF THE SELECT ===== -->
             <script>
-                 $("#SelectedEmployee").change(function() {
+                $("#SelectedEmployee").change(function() {
                     let SelectedID = $('#SelectedEmployee').val();
 
                     <?php foreach ($InfoEmployees as $Row): ?>
@@ -266,6 +391,7 @@
 
                     <?php endforeach;?>
 
+                    $('select').material_select();
                     Materialize.updateTextFields();
                 });
 
@@ -295,26 +421,51 @@
             </span>
 
             <!-- ========  MATERIAL FORM  ================ -->
-            <form class="container" action="AdminAccounts.php" method="post">
+            <form class="container col s12" action="AdminAccounts.php" method="post">
 
                 <!-- ========  EMPLOYEERS ID ============= -->
                 <div class='input-field'>
-                    <input class='validate' type='number' name='Name' id='Name' />
+                    <input required class='validate' type='text' name='Name' id='Name' />
                     <label>Nombre del Empleado</label>
+                </div>
+
+                <div class="row">
+                    
+                    <!-- ========  EMPLOYEERS ID ============= -->
+                    <div class='input-field col s6'>
+                        <input required class='validate' type='text' name='Surname1' id='Surname1' />
+                        <label>Apellido Paterno</label>
+                    </div>
+
+                    <!-- ========  EMPLOYEERS ID ============= -->
+                    <div class='input-field col s6'>
+                        <input class='validate' type='text' name='Surname2' id='Surname2' />
+                        <label>Apellido Materno</label>
+                    </div>
+
                 </div>
 
                 <!-- ========  WORK TIME ========== -->
                 <div class="input-field">                        
-                    <select name="Rol" id="Rol">
+                    <select required name="Sex" id="Sex">
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                    </select>
+                    <label>Género</label>
+                </div>
+
+                <!-- ========  WORK ROL ========== -->
+                <div class="input-field">                        
+                    <select required name="Rol" id="Rol">
                         <option value="Dulceria">Dulceria</option>
                         <option value="Taquilla">Taquilla</option>
                     </select>
                     <label>Rol Actual</label>
                 </div>
 
-                <!-- ========  WORK TIME ========== -->
+                <!-- ========  WORK TURN ========== -->
                 <div class="input-field">                        
-                    <select name="Turn" id="Turn">
+                    <select required name="Turn" id="Turn">
                         <option value="Matutino">Matutino</option>
                         <option value="Vespetirno">Vespetirno</option>
                     </select>
@@ -323,9 +474,24 @@
 
                 <!-- ========  SALARY ============= -->
                 <div class='input-field'>
-                    <input class='validate' type='number' name='Salary' id='Salary' />
+                    <input required class='validate' type='number' name='Salary' id='Salary' />
                     <label>Sueldo</label>
                 </div>
+
+
+                <!-- ========  EMPLOYEERS ID ============= -->
+                <div class='input-field'>
+                    <input required class='validate' type='email' name='Email' id='Email' />
+                    <label>Correo del Empleado</label>
+                </div>
+
+                <!-- ========  EMPLOYEERS ID ============= -->
+                <div class='input-field'>
+                    <input required class='validate' type='password' name='Password' id='Password' />
+                    <label>Contraseña</label>
+                </div>
+
+                <br>
 
                 <!-- ========  BUTTON TO SEND ===== -->
                 <button 
@@ -364,7 +530,7 @@
 
                 <!-- ========  EMPLOYEERS ID ============= -->
                 <div class="input-field">                        
-                    <select name="ID" id="ID" class="left-align">
+                    <select required name="SelectedEmployee" id="SelectedEmployee" class="left-align">
                         <?php foreach ($InfoEmployees as $Row): 
                             $TemporalCompleteName = $Row['ApellidoPaterno']." ".$Row['ApellidoMaterno']." ".$Row['Nombre'];?>
                         <option value="<?php echo $Row["ID"];?>"><?php echo $TemporalCompleteName;?></option>
@@ -372,6 +538,14 @@
                     </select>
                     <label>Nombre del Empleado</label>
                 </div>
+
+                <!-- ========  BUTTON TO SEND ===== -->
+                <button 
+                    type='submit'
+                    name='DeleteEmployee'
+                    class='<?php echo $StandardButton;?> red lighten-2'>
+                    Eliminar Empleado
+                </button>
 
             </form>
 
@@ -397,6 +571,68 @@
                 <br><br>
             </span>
 
+            <!-- ========  MATERIAL FORM  ================ -->
+            <form class="container" action="AdminAccounts.php" method="post">
+
+                <!-- ========  EMPLOYEERS ID ============= -->
+                <div class="input-field">                        
+                    <select required name="NewAdminID" id="NewAdminID" class="left-align">
+                        <?php foreach ($InfoEmployees as $Row): 
+                            $TemporalCompleteName = $Row['ApellidoPaterno']." ".$Row['ApellidoMaterno']." ".$Row['Nombre'];?>
+                        <option value="<?php echo $Row["ID"];?>"><?php echo $TemporalCompleteName;?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <label>Nombre del Nuevo Administrador</label>
+                </div>
+
+                <!-- ========  EMPLOYEERS ID ============= -->
+                <div class="input-field">                        
+                    <select required name="NewEmployees[]" id="NewEmployees" class="left-align" multiple>
+                        <?php foreach ($InfoEmployees as $Row): 
+                            $TemporalCompleteName = $Row['ApellidoPaterno']." ".$Row['ApellidoMaterno']." ".$Row['Nombre'];?>
+                        <option value="<?php echo $Row["ID"];?>"><?php echo $TemporalCompleteName;?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <label>Nuevos Empleados a su Cargo</label>
+                </div>
+
+                <!-- ========  BUTTON TO SEND ===== -->
+                <button 
+                    type='submit'
+                    name='AddAdmin'
+                    class='<?php echo $StandardButton;?> blue lighten-1'>
+                    Crear Administrador
+                </button>
+
+            </form>
+
+            <!-- ========  CODE OF THE SELECT ===== -->
+            <script>
+                $(document).ready(function() {
+
+                    let DeletedID = $('#NewAdminID').val();
+                    let DeletedKey = $('#NewAdminID :selected').text();
+
+                    $("#NewEmployees option[value='"+ $('#NewAdminID').val() +"']").remove();
+
+                    $('select').material_select();
+
+                     $("#NewAdminID").change(function() {
+
+                        $("#NewEmployees").append('<option value="'+DeletedID+'">'+DeletedKey+'</option>');
+
+                        DeletedID = $('#NewAdminID').val();
+                        DeletedKey = $('#NewAdminID :selected').text();
+
+                        $("#NewEmployees option[value='"+ $('#NewAdminID').val() +"']").remove();
+
+                        $('select').material_select();
+                        Materialize.updateTextFields();
+                    });
+
+                });
+            </script>
+
         </div>
 
 
@@ -411,6 +647,7 @@
 
             // Start a Select
             $('select').material_select();
+            Materialize.updateTextFields();
 
             // Create all the Toast
             <?php 

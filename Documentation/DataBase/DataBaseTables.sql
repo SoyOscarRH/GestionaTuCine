@@ -28,7 +28,7 @@ CREATE TABLE Sala (
 
 
 CREATE TABLE Empleado (
-    ID                  INT NOT NULL PRIMARY KEY,
+    ID                  INT NOT NULL AUTO_INCREMENT,
     Sueldo              REAL,
     Turno               ENUM('Matutino', 'Vespetirno'),
     Genero              ENUM('Masculino', 'Femenino'),
@@ -39,6 +39,8 @@ CREATE TABLE Empleado (
     Contrasena          VARCHAR(100),
     RolActual           ENUM('Dulceria', 'Taquilla', 'Gerente'),
     IDGerente           INT,
+
+    PRIMARY KEY(ID),
 
     FOREIGN KEY (IDGerente)
         REFERENCES Empleado(ID)
