@@ -8,7 +8,7 @@
 
     // ================ VARIABLES =============================
     $HTMLTitle  = 'Administrador';                                                              //Titulo de cada Pagina
-    $UpdateDate = '23 de Noviembre del 2017';                                                   //Fecha de actualizacion de pagina
+    $UpdateDate = '3 de Diciembre del 2017';                                                    //Fecha de actualizacion de pagina
 
     $AlertMessages = array();                                                                   //Mensajes que mostramos 
     $InfoEmployees = array();                                                                   //Info de los empleados  
@@ -17,8 +17,6 @@
     $DataBase = StandardCheckForCorrectDataBase();                                              //Asegurate de que pueda estar aqui
 
     if ($_SESSION["IAmAManager"] == false) CallErrorPageOnlyForAdmins();                        //Si no tienes permiso de estar aqui
-
-
 
 
 
@@ -43,8 +41,8 @@
                 array_push($AlertMessages, "Turno Invalido"); break;}                           //O no?
 
             $Rol = ClearSQLInyection($_POST['Rol']);                                            //Dame el turno
-            if ($Rol != "Taquilla" and $Rol != "Dulceria") {                                    //Eres valido
-                array_push($AlertMessages, "Rol Invalido"); break;}                             //O no?
+            if ($Rol != "Taquilla" and $Rol != "Dulceria")                                      //Eres valido
+                {array_push($AlertMessages, "Rol Invalido"); break;}                            //O no?
 
             //=============  VERIFY THE ID =============
             $QueryID = $DataBase->query(" SELECT ID FROM Empleado WHERE 
@@ -90,23 +88,24 @@
             if (!is_numeric($Salary)) {array_push($AlertMessages, "Salario Invalido"); break;}  //Envia mensajes
 
             $Sex = ClearSQLInyection($_POST['Sex']);                                            //Dame el turno
-            if ($Sex != "Masculino" and $Turn != "Femenino") {                                  //Eres valido
-                array_push($AlertMessages, "Sexo Invalido"); break;}                            //O no?
+            if ($Sex != "Masculino" and $Turn != "Femenino")                                    //Eres valido
+                {array_push($AlertMessages, "Sexo Invalido"); break;}                           //O no?
 
             $Turn = ClearSQLInyection($_POST['Turn']);                                          //Dame el turno
-            if ($Turn != "Matutino" and $Turn != "Vespetirno") {                                //Eres valido
-                array_push($AlertMessages, "Turno Invalido"); break;}                           //O no?
+            if ($Turn != "Matutino" and $Turn != "Vespetirno")                                  //Eres valido
+                {array_push($AlertMessages, "Turno Invalido"); break;}                          //O no?
 
             $Rol = ClearSQLInyection($_POST['Rol']);                                            //Dame el turno
-            if ($Rol != "Taquilla" and $Rol != "Dulceria") {                                    //Eres valido
-                array_push($AlertMessages, "Rol Invalido"); break;}                             //O no?
+            if ($Rol != "Taquilla" and $Rol != "Dulceria")                                      //Eres valido
+                {array_push($AlertMessages, "Rol Invalido"); break;}                            //O no?
 
 
-            $Email = ClearSQLInyection($_POST['Email']);                                          //Dame email
+            $Email = ClearSQLInyection($_POST['Email']);                                         //Dame email
             if ($Email == "") {array_push($AlertMessages, "Email vacío"); break;}                //Envia mensajes
 
             $Password = ClearSQLInyection($_POST['Password']);                                  //Dame el turno
             if ($Password == "") {array_push($AlertMessages, "Contraseña vacío"); break;}       //Envia password
+            
             $Password = sha1($Password."ManageYourCinemaSalt");                                 //Esta es la de verdad
 
 
@@ -669,9 +668,7 @@
     ===================================================================*/
     include("PHP/HTMLFooter.php");
 
-
-    $DataBase->close();
-
+    if (isset($DataBase)) $DataBase->close();
 ?>
 
 

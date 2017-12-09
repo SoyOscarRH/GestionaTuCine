@@ -14,7 +14,7 @@
         // ====================        CLEAR FOR HORRIBLE QUERYS        =============================
         // ==========================================================================================
         function ClearSQLInyection($SomeString) {                                                       //=== LIMPIAMOS UN STRING ===
-            $SomeString = htmlspecialchars(trim($SomeString));                                          //Empieza a limpiar
+            $SomeString = htmlspecialchars($SomeString);                                                //Empieza a limpiar
 
             $Bad = array('INSERT ','DELETE ','SELECT ','UPDATE ','"','=',"'",'<',';',' AND ',' OR ');   //Valores a cambiar
             $Good = array('','','','','','','','','','','');                                            //Valores nuevos

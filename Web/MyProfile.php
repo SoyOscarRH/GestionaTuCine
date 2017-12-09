@@ -11,57 +11,77 @@
     $UpdateDate = '10 de Noviembre del 2017';                                                   //Fecha de actualizacion de pagina
 
     $AlertMessages = array();                                                                   //Mensajes que mostramos 
-    $InfoEmployees = array();                                                                   //Info de los empleados  
-
-     
 
     StandardCheckForStartedSession();                                                           //Asegurate de que pueda estar aqui
     $DataBase = StandardCheckForCorrectDataBase();                                              //Asegurate de que pueda estar aqui
 
 
-    if (isset($_POST['CheckDataToChangeValues'])) {
-        do {                                                                                    //while para usar el break XD
-            //=============  GET THE DATA =============
-            $NewName     = ClearSQLInyection(htmlspecialchars(trim($_POST['Name'])));           //Dame la info
-            $NewSurname1 = ClearSQLInyection(htmlspecialchars(trim($_POST['Surname1'])));       //Dame la info
-            $NewSurname2 = ClearSQLInyection(htmlspecialchars(trim($_POST['Surname2'])));       //Dame la info
-            $NewEmail    = ClearSQLInyection(htmlspecialchars(trim($_POST['Email'])));          //Dame la info
 
-            $Password  = ClearSQLInyection(htmlspecialchars(trim($_POST['Password'])));         //Dame la info
-            $NewPassword1 = ClearSQLInyection(htmlspecialchars(trim($_POST['NewPassword1'])));  //Dame la info
-            $NewPassword2 = ClearSQLInyection(htmlspecialchars(trim($_POST['NewPassword2'])));  //Dame la info
+
+    /*===================================================================
+    ============         GET THE DATABASE      ==========================
+    ===================================================================*/
+
+    //=============  IF YOU WANT TO MODIFY THE DATA  =============
+    if (isset($_POST['CheckDataToChangeValues'])) {                                             //Si es que quieres crear valores
+
+        do {                                                                                    //While para usar el break XD
+            //=============  GET AND CHECK THE DATA =============
+            $NewName      = ClearSQLInyection($_POST['Name']);                                  //Dame la info
+            $NewSurname1  = ClearSQLInyection($_POST['Surname1']);                              //Dame la info
+            $NewSurname2  = ClearSQLInyection($_POST['Surname2']);                              //Dame la info
+            $NewEmail     = ClearSQLInyection($_POST['Email']);                                 //Dame la info
+
+            $Password     = ClearSQLInyection($_POST['Password']);                              //Dame la info
+            $NewPassword1 = ClearSQLInyection($_POST['NewPassword1']);                          //Dame la info
+            $NewPassword2 = ClearSQLInyection($_POST['NewPassword2']);                          //Dame la info
+            $NewSex       = ClearSQLInyection($_POST['Sex']);                                   //Dame el turno
             
-            $Password = sha1($Password."ManageYourCinemaSalt");                                 //Esta es la de verdad
-            if ($NewPassword1 != $NewPassword2) {                                               //Eres valido
-                array_push($AlertMessages, "Las constraseñas no coinciden"); break;}            //O no?
-            else if ($NewPassword1 == '') $NewPassword = $Password;                             //Si no pusieron nada dejalos en paz
-            else $NewPassword = sha1($NewPassword1."ManageYourCinemaSalt");                     //Esta es la de verdad
+            if ($NewSex != "Masculino" and $NewSex != "Femenino")                               //Eres valido
+                {array_push($AlertMessages, "Sexo no válido :/"); break;}                       //O no?
 
-            $NewSex = ClearSQLInyection(htmlspecialchars(trim($_POST['Sex'])));                 //Dame el turno
-            if ($NewSex != "Masculino" and $NewSex != "Femenino") {                             //Eres valido
-                array_push($AlertMessages, "Sexo no válido :/"); break;}                        //O no?
+            //=============  THINGS ABOUT THE PASSWORD  ==========
+            $CurrentPassword = sha1($Password."ManageYourCinemaSalt");                          //Ponle el pass de verdad :D
+
+            if (isset($_POST['UserWantsNewPassword'])) {                                        //Si es que quieres nuevo pass
+                if ($NewPassword1 != $NewPassword2)                                             //Eres valido
+                    {array_push($AlertMessages, "Las contraseñas no coinciden"); break;}        //O no?
+                else $NewPassword = sha1($NewPassword1."ManageYourCinemaSalt");                 //Esta es la de verdad
+            }
+            else $NewPassword = $CurrentPassword;                                               //Si no pusieron nada dejalos en paz
+
 
             //=============  CHANGE THE DATA =============
             $ValidQuery = $DataBase->query("
                 UPDATE Empleado
-                SET Nombre = '{$NewName}', ApellidoPaterno = '{$NewSurname1}', 
-                    ApellidoMaterno = '{$NewSurname2}', Correo = '{$NewEmail}',
-                    Genero = '{$NewSex}', Contrasena = '{$NewPassword}'
-                WHERE ID = {$_SESSION['ID']} AND Contrasena = '{$Password}';");                 //AHORA SI PUEDES HACER ESTO
+                    SET Nombre = '{$NewName}', 
+                        ApellidoPaterno = '{$NewSurname1}', 
+                        ApellidoMaterno = '{$NewSurname2}', 
+                        Correo = '{$NewEmail}',
+                        Genero = '{$NewSex}',
+                        Contrasena = '{$NewPassword}'
+                    WHERE 
+                        ID = {$_SESSION['ID']} AND
+                        Contrasena = '{$CurrentPassword}'");                                    //AHORA SI PUEDES HACER ESTO
+
+            if (!$ValidQuery)                                                                   //Si es que no era la contra
+                {array_push($AlertMessages, "Contraseña Incorrecta"); break;}                   //Envia mensaje si todo mal
 
             $NewDataFromBase = $DataBase->query("
                 SELECT * FROM Empleado WHERE ID = {$_SESSION['ID']};");                         //AHORA SI PUEDES HACER ESTO
 
-            if (!$ValidQuery or !$NewDataFromBase)
-                {array_push($AlertMessages, "Error al Actualizar Datos"); break;}               //Envia mensaje si todo mal
-            else {                                                                              //Si es que todo bien :D
-                array_push($AlertMessages, "Datos Actualizados");                               //Actualiza valores de Sesion
-                $_SESSION = array_merge($_SESSION, $NewDataFromBase->fetch_assoc());            //Actualiza valores de Sesion
-                $_SESSION["CompleteUserName"] = $_SESSION['Nombre'];                            //Actualiza valores de Sesion
-                $_SESSION["CompleteUserName"].= " ".$_SESSION['ApellidoPaterno'];               //Dame su info
-                $_SESSION["CompleteUserName"].= " ".$_SESSION['ApellidoMaterno'];               //Dame su info
-                break;
-            }                    
+            if (!$NewDataFromBase)
+                {array_push($AlertMessages, "Error Desconocido. Cierre Sesión. Porfa"); break;} //Envia mensaje si todo mal
+
+
+            //=============  CHANGE TO THE NEW DATA =============
+            array_push($AlertMessages, "Datos Actualizados");                                   //Actualiza valores de Sesion
+            
+            $_SESSION = array_merge($_SESSION, $NewDataFromBase->fetch_assoc());                //Actualiza valores de Sesion
+            
+            $_SESSION["CompleteUserName"] = $_SESSION['Nombre'];                                //Actualiza valores de Sesion
+            $_SESSION["CompleteUserName"].= " ".$_SESSION['ApellidoPaterno'];                   //Dame su info
+            $_SESSION["CompleteUserName"].= " ".$_SESSION['ApellidoMaterno'];                   //Dame su info
 
         } while (false);                                                                        //Solo eras para el break
     }
@@ -113,8 +133,8 @@
                                 disabled
                                 class = 'validate'
                                 type  = 'text'
-                                name  = 'Name'
                                 id    = 'Name'
+                                name  = 'Name'
                                 value = "<?php echo $_SESSION['Nombre'];?>" />
                             <label>Nombre</label>
                         </div>
@@ -125,8 +145,8 @@
                                 disabled
                                 class = 'validate'
                                 type  = 'text'
-                                name  = 'Surname1'
                                 id    = 'Surname1'
+                                name  = 'Surname1'
                                 value = "<?php echo $_SESSION['ApellidoPaterno'];?>" />
                             <label>Apellido Paterno</label>
                         </div>
@@ -137,8 +157,8 @@
                                 disabled
                                 class = 'validate'
                                 type  = 'text'
-                                name  = 'Surname2'
                                 id    = 'Surname2'
+                                name  = 'Surname2'
                                 value = "<?php echo $_SESSION['ApellidoMaterno'];?>" />
                             <label>Apellido Materno</label>
                         </div>
@@ -149,15 +169,15 @@
                                 disabled
                                 class = 'validate'
                                 type  = 'email'
-                                name  = 'Email'
                                 id    = 'Email'
+                                name  = 'Email'
                                 value = "<?php echo $_SESSION['Correo'];?>" />
                             <label>Email</label>
                         </div>
 
                         <!-- ========  SEX ========== -->
                         <div class="input-field">                        
-                            <select disabled name="Sex" id="Sex">
+                            <select disabled id="Sex" name="Sex">
                                 <option value="Masculino">Masculino</option>
                                 <option value="Femenino">Femenino</option>
                             </select>
@@ -181,16 +201,16 @@
                                 required
                                 class = 'validate'
                                 type  = 'password'
-                                name  = 'Password'
-                                id    = 'Password' />
+                                id    = 'Password'
+                                name  = 'Password' />
                             <label>Contraseña Actual</label>
                         </div>
 
                         <!-- ========  SWITCH ============= -->
-                        <div id="ChangePassword" class="switch left-align">
+                        <div id="ChangePassword" name="ChangePassword" class="switch left-align">
                             <label>
                                 Usa Contraseña Actual
-                                <input required type="checkbox">
+                                <input type="checkbox" id="UserWantsNewPassword" name="UserWantsNewPassword">
                                 <span class="lever"></span>
                                 Cambia Contraseña 
                             </label>
@@ -203,8 +223,8 @@
                                 <input
                                     class = 'validate'
                                     type  = 'password'
-                                    name  = 'NewPassword1'
-                                    id    = 'NewPassword1' />
+                                    id    = 'NewPassword1'
+                                    name  = 'NewPassword1' />
                                 <label>Escribe la Nueva Contraseña</label>
                             </div>
 
@@ -213,8 +233,8 @@
                                 <input
                                     class = 'validate'
                                     type  = 'password'
-                                    name  = 'NewPassword2'
-                                    id    = 'NewPassword2' />
+                                    id    = 'NewPassword2'
+                                    name  = 'NewPassword2' />
                                 <label>Confirma la Nueva Contraseña</label>
                             </div>
 
@@ -232,15 +252,16 @@
 
                     <!-- ========  BUTTON TO SEND ===== -->
                     <button
-                        style='display: none;'
-                        type='submit'
-                        name='CheckDataToChangeValues'
-                        id='CheckDataToChangeValues'
-                        class='col btn-large waves-effect indigo lighten-1'>
+                        style = 'display: none;'
+                        type  = 'submit'
+                        id    = 'CheckDataToChangeValues'
+                        name  = 'CheckDataToChangeValues'
+                        class = 'col btn-large waves-effect indigo lighten-1'>
                         Actualiza los datos
                     </button>
 
                 </form>
+
             </div>
             
         </div>
@@ -254,44 +275,40 @@
         <!-- ================================================================== -->    
         <div class="<?php echo $StandardGreyCard;?>">
 
-            <div class="card-content">
-
-                <form class="container">
+            <div class="card-content container">
                 
-                    <!-- =========  TITLE ====-->
-                    <h4 class="grey-text text-darken-2 left-align"><b>Información</b> de tu Usuario</h4><br>
+                <!-- =========  TITLE ====-->
+                <h4 class="grey-text text-darken-2 left-align"><b>Información</b> de tu Usuario</h4><br>
 
-                    <!-- ========  SURNAME 2 ============= -->
-                    <div class='input-field'>
-                        <input
-                            disabled
-                            class = 'validate'
-                            type  = 'number'
-                            name  = 'Money'
-                            id    = 'Money'
-                            value = "<?php echo $_SESSION['Sueldo'];?>" />
-                        <label>Sueldo</label>
-                    </div>
+                <!-- ========  SURNAME 2 ============= -->
+                <div class='input-field'>
+                    <input
+                        disabled
+                        class = 'validate'
+                        type  = 'number'
+                        name  = 'Money'
+                        id    = 'Money'
+                        value = "<?php echo $_SESSION['Sueldo'];?>" />
+                    <label>Sueldo</label>
+                </div>
 
-                    <!-- ========  WORK TIME ========== -->
-                    <div class="input-field">                        
-                        <select disabled name="Turn" id="Turn">
-                            <option value="Matutino">Matutino</option>
-                            <option value="Vespetirno">Vespertino</option>
-                        </select>
-                        <label>Turno</label>
-                    </div>
+                <!-- ========  WORK TIME ========== -->
+                <div class="input-field">                        
+                    <select disabled name="Turn" id="Turn">
+                        <option value="Matutino">Matutino</option>
+                        <option value="Vespetirno">Vespertino</option>
+                    </select>
+                    <label>Turno</label>
+                </div>
 
-                    <!-- ========  WORK  ========== -->
-                    <div class="input-field">                        
-                        <select disabled name="Rol" id="Rol">
-                            <option value="1"><?php echo $_SESSION['RolActual'];?></option>
-                        </select>
-                        <label>Rol Actual</label>
-                    </div>
+                <!-- ========  WORK  ========== -->
+                <div class="input-field">                        
+                    <select disabled name="Rol" id="Rol">
+                        <option value="1"><?php echo $_SESSION['RolActual'];?></option>
+                    </select>
+                    <label>Rol Actual</label>
+                </div>
 
-
-                </form>
             </div>
             
         </div>
@@ -308,13 +325,13 @@
     <!-- =======================    CODE FOR THE PAGE   ================== -->    
     <!-- ================================================================= -->
     <script>
-        $(document).ready(function() {
+        $(document).ready(function() {                                                      //Ahora al front-end
             $('select').material_select();                                                  //SIEMPRE ACTUALIZA LOS SELECTS!
 
             <?php 
                 $TitleAlert = '<span class = "yellow-text"><b>Alerta: &nbsp; </b></span>';  //El mini titulo
                 foreach ($AlertMessages as $Alert):?>                                       //Para cada Alert
-                Materialize.toast(<?php echo "'{$TitleAlert} {$Alert}'";?>, 4000);          //Muestralo por 4 segundos
+                    Materialize.toast(<?php echo "'{$TitleAlert} {$Alert}'";?>, 4000);      //Muestralo por 4 segundos
             <?php endforeach;?> 
 
             $('#Edit').click (function() {                                                  //Cada vez que le piques
@@ -333,6 +350,11 @@
     </script>
 
 
+<?php 
+    /*===================================================================
+    ============         CLOSE ALL DATABASE     =========================
+    ===================================================================*/
+    include("PHP/HTMLFooter.php");
 
-<?php include("PHP/HTMLFooter.php"); if (isset($DataBase)) $DataBase->close(); ?>
-
+    if (isset($DataBase)) $DataBase->close();
+?>

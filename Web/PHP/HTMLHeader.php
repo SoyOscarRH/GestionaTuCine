@@ -31,7 +31,7 @@ if (!isset($ColorOfNavbarMobile)) $ColorOfNavbarMobile = "teal lighten-2";      
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
             <!-- Color in Android Header -->
-            <meta name="theme-color" content="#2196F3">
+            <meta name="theme-color" content="#80cbc4">
 
             <!-- Please UFT IS LOVE -->
             <meta charset="UTF-8">
