@@ -26,10 +26,13 @@
         // ==========================================================================================
         // ====================       STANDAR ERROR MESSAGES     ====================================
         // ==========================================================================================
-        function CallErrorPagePermissions() {                                                           //== NO INICIASTE SESION ==
+        function CallErrorPageSession($CostumMessage = "") {                                            //== AQUI HAY PROBLEMAS  ==
             global $HTMLDocumentRoot;                                                                   //Eres global :D
-            $TitleErrorPage      = "Error Permisos";                                                    //Error variables
-            $MessageErrorPage    = "No iniciaste sesión en el Sistema";                                 //Error variables
+            $TitleErrorPage      = "Error de Sesión";                                                   //Error variables
+
+            if ($CostumMessage != "") $MessageErrorPage = $CostumMessage;                               //Cosas de Mensajes
+            else $MessageErrorPage  = "No iniciaste sesión en el Sistema";                              //Error variables
+
             $ButtonLinkErrorPage = $HTMLDocumentRoot."Login.php";                                       //Error variables
             $ButtonTextErrorPage = "Accede al Sistema";                                                 //Error variables
 
@@ -37,22 +40,56 @@
             exit();                                                                                     //Adios vaquero
         }
 
-        function CallErrorPageOnlyForAdmins() {                                                         //== NO MIJO, NO PERMISO ==
+        function CallErrorPagePermissions($CostumMessage = "") {                                        //== AQUI HAY PROBLEMAS  ==
             global $HTMLDocumentRoot;                                                                   //Eres global :D
             $TitleErrorPage      = "Error Permisos";                                                    //Error variables
-            $MessageErrorPage    = "No eres un Administrador por lo tanto no puedes ver esta página";   //Error variables
-            $ButtonLinkErrorPage = $HTMLDocumentRoot."MenuEmployeeOrManager.php";                       //Error variables
+
+            if ($CostumMessage != "") $MessageErrorPage = $CostumMessage;                               //Cosas de Mensajes
+            else $MessageErrorPage  = "No tienes permiso de estar en esta página";                      //Error variables
+
+            $ButtonLinkErrorPage = $HTMLDocumentRoot."MenuEmployee.php";                                //Error variables
             $ButtonTextErrorPage = "Volver al Menu";                                                    //Error variables
 
             include("Error.php");                                                                       //Llama a la pagina de error
             exit();                                                                                     //Adios vaquero
         }
 
-        function CallClosePage() {                                                                      //== YA QUE CARGO AL VER... ==
+        function CallGeneralErrorPage($CostumMessage = "") {                                            //== AQUI HAY PROBLEMAS  ==
+            global $HTMLDocumentRoot;                                                                   //Eres global :D
+            $TitleErrorPage      = "Error";                                                             //Error variables
+
+            if ($CostumMessage != "") $MessageErrorPage = $CostumMessage;                               //Cosas de Mensajes
+            else $MessageErrorPage  = "Ha ocurrido un error D':";                                       //Error variables
+
+            $ButtonLinkErrorPage = $HTMLDocumentRoot;                                                   //Error variables
+            $ButtonTextErrorPage = "Ve al Inicio";                                                      //Error variables
+
+            include("Error.php");                                                                       //Llama a la pagina de error
+            exit();                                                                                     //Adios vaquero
+        }
+
+        function CallErrorPageOnlyForAdmins($CostumMessage = "") {                                      //== NO MIJO, NO PERMISO ==
+            global $HTMLDocumentRoot;                                                                   //Eres global :D
+            $TitleErrorPage      = "Error Permisos";                                                    //Error variables
+
+            if ($CostumMessage != "") $MessageErrorPage = $CostumMessage;                               //Cosas de Mensajes
+            else $MessageErrorPage  = "No eres un Administrador, no puedes ver esta página";            //Error variables
+
+            $ButtonLinkErrorPage = $HTMLDocumentRoot."MenuEmployee.php";                                //Error variables
+            $ButtonTextErrorPage = "Volver al Menu";                                                    //Error variables
+
+            include("Error.php");                                                                       //Llama a la pagina de error
+            exit();                                                                                     //Adios vaquero
+        }
+
+        function CallClosePage($CostumMessage = "") {                                                   //== YA QUE CARGO AL VER... ==
             global $HTMLDocumentRoot;                                                                   //Eres global :D
             $NewHTMLTitle        = "Cerrar Sesión";                                                     //Cambia el titulo de pag error
-            $TitleErrorPage      = "Sesión Cerrado";                                                    //Error variables
-            $MessageErrorPage    = "La sesión se ha cerrado";                                           //Error variables
+            $TitleErrorPage      = "Sesión Cerrada";                                                    //Error variables
+
+            if ($CostumMessage != "") $MessageErrorPage = $CostumMessage;                               //Cosas de Mensajes
+            else $MessageErrorPage    = "La sesión se ha cerrado";                                      //Error variables
+            
             $ButtonLinkErrorPage = $HTMLDocumentRoot."Login.php";                                       //Error variables
             $ButtonTextErrorPage = "Accede (otra vez) al Sistema";                                      //Error variables
             session_destroy();
@@ -65,7 +102,7 @@
         // ====================       CHECK FOR CORRECT STARTED SESSION  == =========================
         // ==========================================================================================
         function StandardCheckForStartedSession() {                                                     //=== INICIASTE SESION ===
-            if (empty($_SESSION)) CallErrorPagePermissions();                                           //Go to call error page
+            if (empty($_SESSION)) CallErrorPageSession();                                               //Go to call error page
         }
 
 
@@ -87,6 +124,40 @@
             }
 
             return $DataBase;
+        }
+
+        // ==========================================================================================
+        // ====================       CHECK FOR UP TO DATE DATA     =================================
+        // ==========================================================================================
+        function StandardUpdateSessionData($ID, $DataBase) {                                            //=== INICIASTE SESION ===
+            
+            $NewDataFromBase = $DataBase->query("
+                SELECT * FROM Empleado WHERE ID = {$ID}");                                              //AHORA SI PUEDES HACER ESTO
+
+            if (!$NewDataFromBase) CallClosePage("Error con el Valor de Sesión");                       //Envia mensaje si todo mal
+
+            $_SESSION = array_merge($_SESSION, $NewDataFromBase->fetch_assoc());                        //Actualiza valores de Sesion
+            unset($_SESSION['Contrasena']);                                                             //Creo que esto no es buena idea :0
+
+            $_SESSION["CompleteUserName"] = $_SESSION['Nombre'];                                        //Actualiza valores de Sesion
+            $_SESSION["CompleteUserName"].= " ".$_SESSION['ApellidoPaterno'];                           //Dame su info
+            $_SESSION["CompleteUserName"].= " ".$_SESSION['ApellidoMaterno'];                           //Dame su info
+
+            $_SESSION["IAmAManager"] = ($_SESSION["IDGerente"] == $_SESSION["ID"]);                     //Dice true si eres gerente
+        }
+
+
+        // ==========================================================================================
+        // ====================       CHECK FOR UP TO DATE DATA     =================================
+        // ==========================================================================================
+        function StandardCheckForAdminStatus($ID, $DataBase) {                                          //=== INICIASTE SESION ===
+
+            $QueryID = $DataBase->query(" SELECT ID FROM Empleado WHERE 
+                                            IDGerente = {$ID} AND
+                                            ID = {$ID}");                                               //Haz la consulta
+
+            if (!$QueryID) return false;
+            else return true;                                                    //Dime si encontraste algo
         }
 
 

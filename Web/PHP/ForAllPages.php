@@ -76,8 +76,8 @@
             $LinksForPagesDesktop["Ver Cartelera"] = "Movies.php";                                  //Iniciar Sesion
             $LinksForPagesMobile["Ver Cartelera"]  = "Movies.php";                                  //Iniciar Sesion
 
-            $LinksForPagesDesktop["Cerrar Sesion"] = "MenuEmployeeOrManager.php?CloseSession";      //Añadimos el Sesion
-            $LinksForPagesMobile["Cerrar Sesion"]  = "MenuEmployeeOrManager.php?CloseSession";      //Añadimos el Sesion
+            $LinksForPagesDesktop["Cerrar Sesion"] = "MenuEmployee.php?CloseSession";               //Añadimos el Sesion
+            $LinksForPagesMobile["Cerrar Sesion"]  = "MenuEmployee.php?CloseSession";               //Añadimos el Sesion
         }
 
 

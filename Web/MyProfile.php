@@ -10,12 +10,13 @@
     $HTMLTitle  = 'Mi Perfil';                                                                  //Titulo de cada Pagina
     $UpdateDate = '10 de Noviembre del 2017';                                                   //Fecha de actualizacion de pagina
 
+
+    // ========== SPECIFIC FOR THIS SCRIPT ==========
     $AlertMessages = array();                                                                   //Mensajes que mostramos 
 
     StandardCheckForStartedSession();                                                           //Asegurate de que pueda estar aqui
     $DataBase = StandardCheckForCorrectDataBase();                                              //Asegurate de que pueda estar aqui
-
-
+    StandardUpdateSessionData($_SESSION['ID'], $DataBase);                                      //Asegurate que tdo este al dia
 
 
     /*===================================================================
@@ -67,21 +68,9 @@
             if (!$ValidQuery)                                                                   //Si es que no era la contra
                 {array_push($AlertMessages, "Contraseña Incorrecta"); break;}                   //Envia mensaje si todo mal
 
-            $NewDataFromBase = $DataBase->query("
-                SELECT * FROM Empleado WHERE ID = {$_SESSION['ID']};");                         //AHORA SI PUEDES HACER ESTO
-
-            if (!$NewDataFromBase)
-                {array_push($AlertMessages, "Error Desconocido. Cierre Sesión. Porfa"); break;} //Envia mensaje si todo mal
-
-
             //=============  CHANGE TO THE NEW DATA =============
+            StandardUpdateSessionData($_SESSION['ID'], $DataBase);                              //Actualizo info
             array_push($AlertMessages, "Datos Actualizados");                                   //Actualiza valores de Sesion
-            
-            $_SESSION = array_merge($_SESSION, $NewDataFromBase->fetch_assoc());                //Actualiza valores de Sesion
-            
-            $_SESSION["CompleteUserName"] = $_SESSION['Nombre'];                                //Actualiza valores de Sesion
-            $_SESSION["CompleteUserName"].= " ".$_SESSION['ApellidoPaterno'];                   //Dame su info
-            $_SESSION["CompleteUserName"].= " ".$_SESSION['ApellidoMaterno'];                   //Dame su info
 
         } while (false);                                                                        //Solo eras para el break
     }
@@ -104,13 +93,18 @@
         <!-- ================================================================== -->    
         <div class="<?php echo $StandardGreyCard;?>">
 
+            <!-- =================   CARD ICON   ================= -->      
             <div class="card-image">
-                <a id="Edit" name="Edit" class="btn-floating halfway-fab waves-effect waves-light btn-large red">
+                <a 
+                    id    = "Edit" 
+                    name  = "Edit"
+                    class = "btn-floating halfway-fab waves-effect waves-light btn-large red">
                     <i class="material-icons">edit</i>
                 </a>
             </div>
 
-            <div class="card-content">
+            <!-- =================   CARD CONTENT  ================ -->      
+            <div id="CardEditInfo" name="CardEditInfo" class="card-content">
 
                 <!-- ========  TITLE  ================ -->
                 <h4 class="grey-text text-darken-2"><b>Ve y Modifica </b> tu Información Personal</h4>
@@ -240,12 +234,6 @@
 
                         </div>
 
-                        <script>
-                            $('#ChangePassword').change (function() {                           //Cada vez que le piques
-                                $('#SectionNewPassword').toggle();                              //Alterna la parte de la contraseña
-                            });
-                        </script>
-
                         <br><br>
                         
                     </div>
@@ -263,20 +251,55 @@
                 </form>
 
             </div>
+
+            <!-- =======================    CODE FOR THE PAGE   ================== -->    
+            <script>
+                $(document).ready(function() {                                                      //Ahora al front-end
+                    $('select').material_select();                                                  //SIEMPRE ACTUALIZA LOS SELECTS!
+
+                    <?php 
+                        $TitleAlert = '<span class = "yellow-text"><b>Alerta: &nbsp; </b></span>';  //El mini titulo
+                        foreach ($AlertMessages as $Alert):?>                                       //Para cada Alert
+                            Materialize.toast(<?php echo "'{$TitleAlert} {$Alert}'";?>, 4000);      //Muestralo por 4 segundos
+                    <?php endforeach;?> 
+
+                    $('#Edit').click (function() {                                                  //Cada vez que le piques
+                        $("#Name").prop('disabled', ! $("#Name").prop('disabled'));                 //Alterna entre visto e invisible
+                        $("#Surname1").prop('disabled', ! $("#Surname1").prop('disabled'));         //Alterna entre visto e invisible
+                        $("#Surname2").prop('disabled', ! $("#Surname2").prop('disabled'));         //Alterna entre visto e invisible
+                        $("#Email").prop('disabled', ! $("#Email").prop('disabled'));               //Alterna entre visto e invisible
+                        $("#Sex").prop('disabled', ! $("#Sex").prop('disabled'));                   //Alterna entre visto e invisible
+                        $('#PasswordSection').toggle();                                             //Alterna la parte de la contraseña
+                        $('#CheckDataToChangeValues').toggle();                                     //Alterna el boton
+
+                        $('select').material_select();                                              //Actualiza el select
+                    });
+
+                    $('#ChangePassword').change (function() {                                       //Cada vez que le piques
+                        $('#SectionNewPassword').toggle();                                          //Alterna la parte de la contraseña
+                    });
+                });
+            </script>
             
         </div>
 
-        <br>
-        <br>
-        <br>
+        <br><br>
 
         <!-- ================================================================== -->    
         <!-- =====================    INFO ABOUT ME        ==================== -->      
         <!-- ================================================================== -->    
         <div class="<?php echo $StandardGreyCard;?>">
 
-            <div class="card-content container">
-                
+            <!-- =================   CARD ICON   ================= -->      
+            <div class="card-image">
+                <a class = "btn-floating halfway-fab waves-effect waves-light btn-large indigo">
+                    <i class="material-icons">info_outline</i>
+                </a>
+            </div>
+
+            <!-- =================   CARD CONTENT  ================ -->      
+            <div id="CardSeeInfo" name="CardSeeInfo" class="card-content container">
+
                 <!-- =========  TITLE ====-->
                 <h4 class="grey-text text-darken-2 left-align"><b>Información</b> de tu Usuario</h4><br>
 
@@ -309,45 +332,15 @@
                     <label>Rol Actual</label>
                 </div>
 
+                <br><br>
+
             </div>
             
         </div>
 
-
         <br><br>
 
     </div> 
-
-
-
-
-    <!-- ================================================================= -->    
-    <!-- =======================    CODE FOR THE PAGE   ================== -->    
-    <!-- ================================================================= -->
-    <script>
-        $(document).ready(function() {                                                      //Ahora al front-end
-            $('select').material_select();                                                  //SIEMPRE ACTUALIZA LOS SELECTS!
-
-            <?php 
-                $TitleAlert = '<span class = "yellow-text"><b>Alerta: &nbsp; </b></span>';  //El mini titulo
-                foreach ($AlertMessages as $Alert):?>                                       //Para cada Alert
-                    Materialize.toast(<?php echo "'{$TitleAlert} {$Alert}'";?>, 4000);      //Muestralo por 4 segundos
-            <?php endforeach;?> 
-
-            $('#Edit').click (function() {                                                  //Cada vez que le piques
-                $("#Name").prop('disabled', ! $("#Name").prop('disabled'));                 //Alterna entre visto e invisible
-                $("#Surname1").prop('disabled', ! $("#Surname1").prop('disabled'));         //Alterna entre visto e invisible
-                $("#Surname2").prop('disabled', ! $("#Surname2").prop('disabled'));         //Alterna entre visto e invisible
-                $("#Email").prop('disabled', ! $("#Email").prop('disabled'));               //Alterna entre visto e invisible
-                $("#Sex").prop('disabled', ! $("#Sex").prop('disabled'));                   //Alterna entre visto e invisible
-                $('#PasswordSection').toggle();                                             //Alterna la parte de la contraseña
-                $('#CheckDataToChangeValues').toggle();                                     //Alterna el boton
-
-                $('select').material_select();                                              //Actualiza el select
-            });
-
-        });
-    </script>
 
 
 <?php 

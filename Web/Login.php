@@ -19,7 +19,7 @@
 
 
     // ========== WAIT ... WE HAVE ALREADY STAR SESSION? ==========
-    if (!empty($_SESSION)) {header("Location: MenuEmployeeOrManager.php"); exit();}             //Envia a la pagina correcta
+    if (!empty($_SESSION)) {header("Location: MenuEmployee.php"); exit();}                      //Envia a la pagina correcta
 
 
 
@@ -53,12 +53,13 @@
                 if (sha1($Password."ManageYourCinemaSalt") == $Row['Contrasena']) {             //Si es que contraseña correcta
                     session_start();                                                            //Inicia la Sesion :0
                     $_SESSION = array_merge($_SESSION, $Row);
+                    unset($_SESSION['Contrasena']);                                             //Creo que esto no es buena idea :0
                     $_SESSION["CompleteUserName"] = $Row['Nombre']." ".$Row['ApellidoPaterno'];//Dame su info
                     $_SESSION["CompleteUserName"].= " ".$Row['ApellidoMaterno'];               //Dame su info
 
                     $_SESSION["IAmAManager"] = ($_SESSION["IDGerente"] == $_SESSION["ID"]);     //Dice true si eres gerente
 
-                    header("Location: MenuEmployeeOrManager.php");                              //Envia a link
+                    header("Location: MenuEmployee.php");                                       //Envia a link
                     exit();                                                                     //Y ahora sal!
                 }
                 else $ErrorPasswordMessage = "Contraseña Incorrecta";                           //Contraseña incorrecta

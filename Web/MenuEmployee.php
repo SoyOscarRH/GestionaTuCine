@@ -99,7 +99,7 @@
 
 
                 <?php if ($_SESSION["IAmAManager"]):?>
-                <form action="MenuEmployeeOrManager.php" method="post">
+                <form action="MenuEmployee.php" method="post">
                     <button 
                         type='submit'
                         name='MoviesSchedules'
@@ -110,7 +110,7 @@
                 <br><br><br>
                 <?php endif;?>
 
-                <form action="MenuEmployeeOrManager.php" method="post">
+                <form action="MenuEmployee.php" method="post">
                     <button 
                         type='submit'
                         name='SellMovieTickets'
@@ -146,7 +146,7 @@
 
                 <br>
 
-                <form action="MenuEmployeeOrManager.php" method="post">
+                <form action="CandyStore.php" method="post">
                     <button 
                         type='submit'
                         name='SellMovieTickets'
@@ -160,7 +160,7 @@
 
 
                 <?php if ($_SESSION["IAmAManager"]):?>
-                <form action="MenuEmployeeOrManager.php" method="post">
+                <form action="MenuEmployee.php" method="post">
                     <button 
                         type='submit'
                         name='MoviesSchedules'
@@ -173,7 +173,7 @@
 
                 <br>
                 
-                <form action="MenuEmployeeOrManager.php" method="post">
+                <form action="MenuEmployee.php" method="post">
                     <button 
                         type='submit'
                         name='CloseSession'
