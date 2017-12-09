@@ -47,13 +47,13 @@ if (!isset($ColorOfNavbarMobile)) $ColorOfNavbarMobile = "teal lighten-2";      
             <link rel="icon" href="<?php echo $HTMLDocumentRoot;?>Media/favicon.ico" type="image/x-icon">
 
             <!-- Google Material Fonts -->
-            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+            <link href="Style/MaterialIcons/Definition.css" rel="stylesheet">
 
             <!-- Materialize -->
             <link href="Style/CSS/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
             <link href="Style/CSS/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 
-            <script src="https://code.jquery.com/jquery-3.2.1.min.js">  </script>
+            <script src="Javascript/jquery-3.2.1.min.js">               </script>
             <script src="Javascript/Materialize/materialize.js">        </script>
             <script src="Javascript/Materialize/init.js">               </script>
     
