@@ -43,7 +43,8 @@ include("PHP/ForAllPages.php");
     if (isset($_POST['Venta']))
     {       
         $_SESSION['nueva']=1;                                           
-     header('Location: ventadulces.php');           
+        $_SESSION['NewSale'] = true;                                           
+     header('Location: CandyStore.php');           
     }
 
   include("PHP/HTMLHeader.php");     

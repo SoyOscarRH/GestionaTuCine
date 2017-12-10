@@ -255,9 +255,9 @@
 
                 <!-- ========  MATERIAL TABLE CARD  ================ -->
                 <table
-                    id="EmployeesTable" 
-                    style="<?php if (!isset($_POST['ChangeEmployeeData'])) echo "display: none; "?>font-size: 0.9rem"
-                    class="centered hoverable striped responsive-table bordered">
+                    id    = "EmployeesTable" 
+                    style = "<?php if (!isset($_POST['ChangeEmployeeData'])) echo "display: none; "?>font-size: 0.9rem"
+                    class = "centered hoverable striped responsive-table bordered">
 
                     <!-- ========  TITLES ================ -->
                     <thead>
@@ -282,8 +282,7 @@
 
                         </tr>
 
-                        <?php endwhile;?>
-
+                    <?php endwhile;?>
                     </tbody>
                 </table>
 

@@ -244,26 +244,26 @@ INSERT INTO TicketBoleto VALUES
 
 
 INSERT INTO ProductoDulceria VALUES 
-    (1, 30, 'Palomitas de Maiz grande', 48.5, 1), 
-    (2, 30, 'Palomitas de Maiz Mediana', 43.5, 1), 
+    (1, 30, 'Palomitas de Maiz Grandes', 48.5, 1), 
+    (2, 30, 'Palomitas de Maiz Medianas', 43.5, 1), 
     (3, 30, 'Palomitas de Maiz Chicas', 39, 1), 
     (4, 100, 'Refresco Grande', 38, 2), 
     (5, 100, 'Refresco Mediano', 34.5, 2), 
     (6, 100, 'Refresco chico', 30, 2), 
     (7, 50, 'Ice', 50.5, 3), 
-    (8, 30, 'Palomitas de caramelo grande', 51, 4), 
-    (9, 30, 'Palomitas de caramelo mediana', 47, 4), 
-    (10, 30, 'Palomitas de chile medianas', 41, 4), 
-    (11, 30, 'Mega palomitas de chile', 100, 11), 
-    (12, 30, 'Palomitas de chile grandes', 50.5, 15), 
-    (13, 30, 'Mega palomitas de maiz', 70.5, 14), 
-    (14, 30, 'Mega palomitas acarameladas', 130, 14), 
-    (15, 20, 'Bota de dulce variado', 100, 12), 
-    (16, 20, 'Nachos con queso medianos', 50.5, 12), 
-    (17, 40, 'Pizza mediana sabor pepperoni', 130, 17), 
-    (18, 20, 'Nachos con queso grandes', 70.5, 13), 
-    (19, 40, 'Pizza grande sabor pepperoni', 200, 17), 
-    (20, 40, 'Pizza grande sabor hawaiana', 200, 16);
+    (8, 30, 'Palomitas de Caramelo Grandes', 51, 4), 
+    (9, 30, 'Palomitas de Caramelo Medianas', 47, 4), 
+    (10, 30, 'Palomitas de Chile Medianas', 41, 4), 
+    (11, 30, 'Mega Palomitas de Chile', 100, 11), 
+    (12, 30, 'Palomitas de Chile Grandes', 50.5, 15), 
+    (13, 30, 'Mega Palomitas de Maiz', 70.5, 14), 
+    (14, 30, 'Mega Palomitas Acarameladas', 130, 14), 
+    (15, 20, 'Bota de Dulce Variado', 100, 12), 
+    (16, 20, 'Nachos con Queso Medianos', 50.5, 12), 
+    (17, 40, 'Pizza Mediana Pepperoni', 130, 17), 
+    (18, 20, 'Nachos con Queso Grandes', 70.5, 13), 
+    (19, 40, 'Pizza Grande Pepperoni', 200, 17), 
+    (20, 40, 'Pizza Grande Hawaiana', 200, 16);
 
 INSERT INTO TicketDulceria VALUES
     (48.5, 2, 11, 1), 
