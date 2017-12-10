@@ -87,7 +87,6 @@
     //=============  ADD SOMETHING TO THE SHOPING BOX =============
     foreach ($_POST as $Name => $Value) {                                                       //Buscar el POST[] correcto
         if (fnmatch("*QuantityProduct", $Name)) {                                               //Se tiene que parecer a esto
-
             do {                                                                                //Bien, vamos a intentar que todo ok
                 //=============  GET THE DATA  =============
                 $ProductID = str_replace("QuantityProduct", "", $Name); 
@@ -157,6 +156,15 @@
                     array_push($AlertMessages, "Producto Actualizado en el Carrito");           //Mensajito de Felicidades
                 }
 
+                //=============  UPDATE THE SHOPPING STOCK ======
+                $TemporalQueryResult = $DataBase->query("
+                        UPDATE ProductoDulceria
+                            SET Stock = Stock - {$QuantityProduct}
+                            WHERE ID = {$ProductID}");                                          //Actualizo datos
+
+                if (!$TemporalQueryResult) array_push($AlertMessages, "Error con el Stock");    //Error Misterioso
+                else array_push($AlertMessages, "Stock Actualizado");                           //Error Misterioso
+
             }
             while (false);
 
@@ -193,11 +201,8 @@
     include("PHP/HTMLHeader.php");                                                              //Incluimos un Asombroso Encabezado
 ?>
 
-
     <br><br>
     <div class="container center-align">
-
-
 
         <!-- ================================================================== -->    
         <!-- =====================    SELL THINGS          ==================== -->      
@@ -439,167 +444,6 @@
     </div>
 
 
-<div class="container center-align row">
-
-        <div class="card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
-
-            <form action="CandyStore.php" method="post">
-                
-                <h4 class="grey-text text-darken-2"><br>Venta <br> </h4>
-
-                <span class="grey-text">
-                    <?php 
-                    echo "IDVenta= ".$_SESSION['IDVenta']."<br>Total = $".  $_SESSION['total'] ."<br>";
-                    echo $_SESSION['mensaje'];
-                    ?>
-                    <br><br>
-                </span>
-                <div class='row'>
-                    <div class='input-field col s10 m8 l8 offset-s1 offset-m2 offset-l2'>
-                        <input class='validate' type='text' id='SearchProduct' name='SearchProduct' />
-                        <label for='Busqueda'>Busca un Producto</label>
-                    </div>
-                </div>
-                <button
-                        type='submit'
-                        id='SearchForProduct'
-                        name='SearchForProduct'
-                        class='col s10 m6 l6 offset-s1 offset-m3 offset-l3 btn btn-large waves-effect indigo lighten-1'>
-                        Buscar
-                </button>
-
-
-
-
-
-
-
-
-               <table class="centered hoverable striped responsive-table">
-                <thead>
-                    <tr>
-                          <th>ID</th>
-                          <th>Stock</th>
-                          <th>Nombre</th>
-                          <th>Costo</th>
-                          <th>Cantidad</th>
-                          <th>Agregar</th>                           
-                    </tr>
-                </thead>
-                <tbody>
-                <?php
-                if ($QueryResult = $DataBase->query($QueryForProduct)) 
-                {
-                    $i=1;
-                    while ($Row = $QueryResult->fetch_row()) : ?>
-                    <tr>
-                    
-                    <?php foreach ($Row as $Number => $Value): ?>
-                        
-                        <td><?php echo $Value; ?></td>
-                        
-                    <?php endforeach; ?>
-                        <td>
-                            <input
-                            type='text'
-                            <?php  echo "name='Cantidad".$Row[0]."'";?>
-                            >
-                            </input>
-                        </td>
-                        <td>
-                            <button
-                            type='submit'
-                            <?php  echo "name='Agregar".$Row[0]."'";?>
-                            >
-                            Agregar
-                            </button>
-                        </td>
-                    </tr>
-                    
-                    <?php 
-                    $ID[$i]=$Row[0];
-                    $i++;
-                    endwhile;
-                    $QueryResult->close();
-                }
-                ?>
-                </tbody>
-            </table>
-
-            Vendido
-            <table class="centered hoverable striped responsive-table">
-                <thead>
-                    <tr>
-                          <th>ID</th>
-                          <th>Nombre</th>
-                          <th>Costo</th>
-                          <th>Cantidad</th>
-                          <th>Eliminar</th>                           
-                    </tr>
-                </thead>
-                <tbody>
-                <?php
-                if ($QueryResult2 = $DataBase->query($Query2)) 
-                {
-                    $IDventa[0]=1;//bandera para saber si existieron compras
-                    $i=1;
-                    while ($Row = $QueryResult2->fetch_row()) : ?>
-                    <tr>
-                    
-                    <?php foreach ($Row as $Number => $Value): ?>
-                        
-                        <td><?php echo $Value; ?></td>
-                        
-                    <?php endforeach; ?>
-                        <td>
-                            <button
-                            type='submit'
-                            <?php  echo "name='Eliminar".$Row[0]."'";?>
-                            >
-                            Eliminar
-                            </button>
-                        </td>
-                    </tr>
-                    
-                    <?php 
-                    $IDventa[$i]=$Row[0];
-                    $i++;
-                    endwhile;
-                    $QueryResult2->close();
-                    if($i==1)//no existieron compras
-                    {
-                        $IDventa[0]=0;
-                        echo "Ninguno";
-                    }
-                }
-                ?>
-                </tbody>
-            </table>
-                <button
-                        type='submit'
-                        name='Cancelar'
-                        class='col s10 m6 l6 offset-s1 offset-m3 offset-l3 btn btn-large waves-effect indigo lighten-1'>
-                        cancelar
-                </button>
-                <button
-                        type='submit'
-                        name='Finalizar'
-                        class='col s10 m6 l6 offset-s1 offset-m3 offset-l3 btn btn-large waves-effect indigo lighten-1'>
-                        Finalizar Venta
-                </button>
-
-                <br />
-
-
-                <br />
-
-            </form>
-        </div>
-    </div>
-
-
-
-
     <!-- ================================================================= -->    
     <!-- ===============         FAB FOR THE PAGE       ================== -->    
     <!-- ================================================================= -->
@@ -662,39 +506,6 @@
         
         ////////////////////////////BOTONONES AGREGAR////////////////////////////////////////
     
-        for ($i=1; $i <= count($ID); $i++) 
-        { 
-            if (isset($_POST['Agregar'.$ID[$i]]))                                               //al presionar un boton de agregar
-            {
-                $Cantidad=$_POST['Cantidad'.$ID[$i]];//obtenemos la cantidad vendida    
-
-                 $QueryResult = $DataBase->query('select Costo from productodulceria WHERE id='. $ID[$i] .';' );//obtenemos el costo del producto
-                 $Row = $QueryResult->fetch_row();                                                              
-                $Costo=$Row[0];
-                $QueryResult2->close();
-                //comprobamos que no se hay vendido ya de este producto
-                $queryConsulta='select count(*) from ticketdulceria WHERE idProducto= '. $ID[$i] .' and IDVenta = '. $_SESSION['IDVenta'].';';
-
-                 $QueryResult = $DataBase->query( $queryConsulta);//buscamos si la venta es existenete
-                $Row = $QueryResult->fetch_row();
-                $Numero=$Row[0];
-                if ($Numero == 0)   //si no existe esta venta                                                         
-                {
-                    $QueryVenta= ' insert into ticketdulceria values('. $Costo .',' . $Cantidad . ' , ' .$_SESSION['IDVenta'] . ' , ' .$ID[$i] .');';//insertamos en ticket venta
-                     $DataBase->query($QueryVenta);
-                     $_SESSION['total']=$_SESSION['total']+($Cantidad*$Costo);//aumentamos el valor del total 
-                     $_SESSION['mensaje']="venta realizada";                                                                      
-                } 
-                else   
-                {
-                    $_SESSION['mensaje']="Ya lo Usaste";
-                }
-
-            $_SESSION['nueva']=0; 
-            header('Location: extra.php'); 
-            } 
-                
-        }
         //////////////////////////BOTONES ELIMINAR/////////////////////////////////////////////
         for ($i=1; $i <= count($IDventa)-1 && $IDventa[0]!=0; $i++) //id venta en reliada son los id de productos ya vendidos no el de la entidad venta XD
         { 
@@ -736,4 +547,13 @@
         $DataBase->close(); 
      ob_end_flush();  
 
+?>
+
+<?php 
+    /*===================================================================
+    ============         CLOSE ALL DATABASE     =========================
+    ===================================================================*/
+    include("PHP/HTMLFooter.php");
+
+    if (isset($DataBase)) $DataBase->close();
 ?>
