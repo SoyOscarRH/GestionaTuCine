@@ -135,7 +135,7 @@ CREATE TABLE TicketBoleto (
 
 CREATE TABLE  ProductoDulceria (
     ID                  INT NOT NULL PRIMARY KEY,
-    Stock               UNSIGNED INT,
+    Stock               INT UNSIGNED,
     Nombre              VARCHAR(50),
     Costo               REAL,
     IDProveedor         INT,
