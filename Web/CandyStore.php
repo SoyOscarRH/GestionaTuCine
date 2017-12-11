@@ -7,7 +7,7 @@
     include("PHP/ForAllPages.php");                                                             //Dame todas las ventajas que tiene incluir
 
     // ================ VARIABLES =============================
-    $HTMLTitle  = 'Area De Dulcería';                                                           //Titulo de cada Pagina
+    $HTMLTitle  = 'Venta Dulcería';                                                             //Titulo de cada Pagina
     $UpdateDate = '8 de Diciembre del 2017';                                                    //Fecha de actualizacion de la pagina
 
 
@@ -18,73 +18,84 @@
     $DataBase = StandardCheckForCorrectDataBase();                                              //Asegurate de que pueda estar aqui
     StandardUpdateSessionData($_SESSION['ID'], $DataBase);                                      //Asegurate que tdo este al dia
 
-    ob_start();
-
     //=============  ADVANCE CHECK FOR VISITING THIS PAGE  =============
     if ($_SESSION['RolActual'] != 'Dulceria' AND !$_SESSION['IAmAManager'])                     //Solos los empleados entran
         CallErrorPagePermissions("No estas designado para Dulcería");                           //Sino error :o
 
-    
+
+
+    // ======================================================================
+    // ======================   FINISH A SELL  ==============================
+    // ======================================================================
+
+    //=============  END HAPPY SELL  =============
+    if (isset($_POST['CancelSellButton']) AND ($_SESSION['TotalSellCandyShop'] != 0.0)) {      //Si es que vamos a hacer un feliz Salida
+
+        $TemporalQueryResult = $DataBase->query("
+                DELETE FROM TicketDulceria 
+                        WHERE IDventa = {$_SESSION['CurrentSaleIDCandyShop']}");                //Liberamos lo que necesito
+
+        if (!$TemporalQueryResult) array_push($AlertMessages, "Error al Cancelar Venta");       //Mensajito
+        else array_push($AlertMessages, "Venta Cancelada :D");                                  //Mensajito
+
+        $_SESSION['TotalSellCandyShop'] = 0.0;                                                  //Volvemos todo a la normalidad
+    }
+
     //=============  END HAPPY SELL  =============
     if (isset($_POST['FinalizeSuccessfulSell'])) {                                              //Si es que vamos a hacer un feliz Salida
 
-        if ($_SESSION['TotalSell'] != 0.0) {
+        if ($_SESSION['TotalSellCandyShop'] != 0.0) {
             $TemporalQueryResult = $DataBase->query("
                     UPDATE Venta
-                        SET Total = {$_SESSION['TotalSell']} 
-                        WHERE ID = {$_SESSION['CurrentSaleID']}");                              //Liberamos lo que necesito
+                        SET Total = {$_SESSION['TotalSellCandyShop']} 
+                        WHERE ID = {$_SESSION['CurrentSaleIDCandyShop']}");                     //Liberamos lo que necesito
 
             if (!$TemporalQueryResult) array_push($AlertMessages, "Error al Finalizar Venta");  //Mensajito
 
-            unset($_SESSION['CurrentSaleID']);                                                  //Adios Sesion    
+            unset($_SESSION['CurrentSaleIDCandyShop']);                                         //Adios Sesion    
         }
     }
 
-    //=============  END HAPPY SELL  =============
-    if (isset($_POST['CancelSellButton'])) {                                                    //Si es que vamos a hacer un feliz Salida
 
-        if ($_SESSION['TotalSell'] != 0.0) {
+    // ======================================================================
+    // ======================   START A SELL   ==============================
+    // ======================================================================
+    if (empty($_SESSION['CurrentSaleIDCandyShop'])) {                                           //Si es que no tienes ID de Venta
+        do {                                                                                    //Solo para los breaks :v
+            $_SESSION['TotalSellCandyShop'] = 0.0;                                              //Lo que se va a cobrar a un cliente
+
+            $TemporalQueryResult = $DataBase->query('LOCK TABLES Venta WRITE');                 //NO ME TOQUES
+            if (!$TemporalQueryResult)                                                          //Si es que hay algo mal
+                {array_push($AlertMessages, "Error al Crear Nueva Venta");break;}               //Vemos que todo ok
+
+            $TemporalQueryResult = $DataBase->query('SELECT MAX(ID) FROM Venta');               //Dame el ID Maximo de Venta
+            if (!$TemporalQueryResult)                                                          //Si es que hay algo mal
+                {array_push($AlertMessages, "Error al Crear Nueva Venta");break;}               //Vemos que todo ok
+            
+            $OldUltimateSellID = $TemporalQueryResult->fetch_row();                             //Ahora dame todo lo que salio
+            $_SESSION['CurrentSaleIDCandyShop'] = $OldUltimateSellID[0] + 1;                    //Ahora guardalo y aumenta uno
+
             $TemporalQueryResult = $DataBase->query("
-                    DELETE FROM TicketDulceria 
-                            WHERE IDventa = {$_SESSION['CurrentSaleID']}");                     //Liberamos lo que necesito
+                                INSERT INTO Venta (ID, IDEmpleado, Fecha)
+                                    VALUES (
+                                        {$_SESSION['CurrentSaleIDCandyShop']}, 
+                                        {$_SESSION['ID']},
+                                        now()
+                                    )");                                                        //Ahora crea uno más
+            
+            if (!$TemporalQueryResult)                                                          //Si es que hay algo mal
+                {array_push($AlertMessages, "Error al Crear Nueva Venta");break;}               //Vemos que todo ok
 
-            if (!$TemporalQueryResult) array_push($AlertMessages, "Error al Cancelar Venta");   //Mensajito
+            $TemporalQueryResult = $DataBase->query('UNLOCK TABLES');                           //NO ME TOQUES
+            if (!$TemporalQueryResult)                                                          //Si es que hay algo mal
+                {array_push($AlertMessages, "Error al Crear Nueva Venta");break;}               //Vemos que todo ok
         }
+        while (false);                                                                          //Solo te quiero por el break :v
     }
 
-
-
-
-
-    //======      IF WE NEED THE VARS FOR A NEW SALE    ===================
-    if (empty($_SESSION['CurrentSaleID'])) {                                                    //Si es que no tienes ID de Venta
-        
-        $_SESSION['TotalSell'] = 0.0;                                                           //Lo que se va a cobrar a un cliente
-
-        $QueryResult = $DataBase->query('LOCK TABLES Venta WRITE');                             //NO ME TOQUES
-        if (!$QueryResult) array_push($AlertMessages, "Error al Crear Nueva Venta");            //Vemos que todo ok
-
-        $QueryResult = $DataBase->query('SELECT MAX(ID) FROM Venta');                           //Dame el ID Maximo de Venta
-        if (!$QueryResult) array_push($AlertMessages, "Error al Crear Nueva Venta");            //Vemos que todo ok
-        
-        $Row = $QueryResult->fetch_row();                                                       //Ahora dame todo lo que salio
-        $_SESSION['CurrentSaleID'] = $Row[0] + 1;                                               //Ahora guardalo y aumenta uno
-
-        $QueryResult = $DataBase->query("
-                            INSERT INTO Venta (ID, IDEmpleado, Fecha)
-                                VALUES (
-                                    {$_SESSION['CurrentSaleID']}, 
-                                    {$_SESSION['ID']},
-                                    now()
-                                )");                                                            //Ahora crea uno más
-        
-        if (!$QueryResult) array_push($AlertMessages, "Error al Crear Nueva Venta");            //Vemos que todo ok
-
-        $QueryResult = $DataBase->query('UNLOCK TABLES');                                       //NO ME TOQUES
-        if (!$QueryResult) array_push($AlertMessages, "Error al Crear Nueva Venta");            //Vemos que todo ok
-    }
-
-    //=============  IF YOU WANT TO MODIFY THE DATA  =============
+    // ======================================================================
+    // =================  IF YOU WANT TO MODIFY THE DATA  ===================
+    // ======================================================================
     if (isset($_POST['SearchForProduct'])) {                                                    //Si es que quieres actualizar datos
         do {
             $PossibleProductName = ClearSQLInyection($_POST['PossibleProductName']);            //Dame la info
@@ -96,7 +107,7 @@
                             WHERE
                                 Nombre LIKE "%'.$PossibleProductName.'%"');                     //Busquemos productos posibles
 
-            if (!$QueryPossibleProducts)  {                                                     //Si error
+            if (!$QueryPossibleProducts) {                                                      //Si error
                 array_push($AlertMessages, "Error con la Base de Datos");                       //Envia mensajes
                 unset($_POST['SearchForProduct']);                                              //Adios al texto y todo
                 break;                                                                          //Adios proceso
@@ -110,10 +121,13 @@
         while (false);                                                                          //Solo queria el break :v
     }
 
-    //=============  ADD / DELETE SOMETHING TO THE SHOPING BOX ===
+    // ======================================================================
+    // ==========   DELETE, ALTER, ADD ITEM SHOPPING CAR      ===============
+    // ======================================================================
     foreach ($_POST as $Name => $Value) {                                                       //Buscar el POST[] correcto
-        if (fnmatch("*ButtonChangeShoppingCar",$Name) OR fnmatch("*ButtonDeleteProduct",$Name)){//Se tiene que parecer a esto
+        if(fnmatch("*ButtonChangeShoppingCar",$Name) OR fnmatch("*ButtonDeleteProduct",$Name)){ //Se tiene que parecer a esto
             do {                                                                                //Bien, vamos a intentar que todo ok
+                
                 //=============  GET THE DATA  =============
                 if (fnmatch("*ButtonChangeShoppingCar", $Name))                                 //Si es que eras de aqui
                     $ProductID = str_replace("ButtonChangeShoppingCar", "", $Name);             //Puede que seas tu
@@ -126,6 +140,7 @@
                     $OriginalQuantity=ClearSQLInyection($_POST[$ProductID.'OriginalQuantity']); //Por si las dudas
                 else $OriginalQuantity = 0;                                                     //Sino era cero :v
 
+                
                 //=============  FIND PRODUCT DETAILS ======
                 $TemporalQueryResult = $DataBase->query("
                         SELECT Costo FROM ProductoDulceria 
@@ -134,17 +149,19 @@
                 if (!$TemporalQueryResult)                                                      //Si es que hubo un problema
                     {array_push($AlertMessages, "Error con la Base de Datos"); break;}          //Error Misterioso
 
-                $Row = $TemporalQueryResult->fetch_row();                                       //Dame todos producto que hagan eso
-                $ProductUnitCost = $Row[0];                                                     //Dame este valor
+                $TemporalQueryData = $TemporalQueryResult->fetch_row();                         //Dame todos producto que hagan eso
+                $ProductUnitCost = $TemporalQueryData[0];                                       //Dame este valor
                 $ProductTotalCost = $ProductUnitCost * $QuantityProduct;                        //Seguro que solo hay uno
                 $TemporalQueryResult->close();                                                  //Adios al Query
 
 
+                //============================================
                 //=============  WE WANNA DELETE ITEM ? ======
+                //============================================
                 if (isset($_POST[$ProductID.'ButtonDeleteProduct'])){                           // === SI ES QUE QUIERES ELIMINAR ===    
 
                     $QuantityProduct = ClearSQLInyection($_POST[$ProductID.'OriginalQuantity']);//Este es el correcto
-                    $_SESSION['TotalSell'] -= ($ProductUnitCost * $QuantityProduct);            //Añado al total el nuevo
+                    $_SESSION['TotalSellCandyShop'] -= ($ProductUnitCost * $QuantityProduct);   //Añado al total el nuevo
 
                     do {
                         //=============  DELETE PRODUCT DETAILS ======
@@ -152,7 +169,7 @@
                                 DELETE FROM TicketDulceria 
                                     WHERE 
                                         IDProducto = {$ProductID} AND
-                                        IDVenta = {$_SESSION['CurrentSaleID']}");               //Obtenemos el costo del producto
+                                        IDVenta = {$_SESSION['CurrentSaleIDCandyShop']}");      //Obtenemos el costo del producto
 
                         if (!$TemporalQueryResult)                                              //Si es que hubo un problema
                             {array_push($AlertMessages, "Error al Eliminar Elemento"); break;}  //Error Misterioso
@@ -168,8 +185,7 @@
 
                         array_push($AlertMessages, "Producto Eliminado");                       //Adios Producto
                     }
-                    while (false);
-
+                    while (false);                                                              //Solo lo queria por el break
                 }
                 else {                                                                          // === SI QUIERES AÑADIR / ALTERAR ===
                     //=============  THIS PRODUCT WAS ALREADY IN THE LIST ? ======
@@ -177,33 +193,37 @@
                             SELECT Costo FROM TicketDulceria 
                                 WHERE 
                                     IDProducto = {$ProductID} AND 
-                                    IDVenta = {$_SESSION['CurrentSaleID']}");                   //Obtenemos el precio anterior
+                                    IDVenta = {$_SESSION['CurrentSaleIDCandyShop']}");          //Obtenemos el precio anterior
 
                     if (!$TemporalQueryResult)                                                  //Si es que hubo un problema
                     {array_push($AlertMessages, "Error con la Base de Datos"); break;}          //Error Misterioso
 
-                    //========== NO: ADD TO SHOPPING LIST ======
-                    if ($TemporalQueryResult->num_rows == 0) {                                  //Si es que no tenias esto
+                    //============================================
+                    //=========  ADD NEW ITEM TO SHOPPING CAR  ===
+                    //============================================
+                    if ($TemporalQueryResult->num_rows == 0) {                                  //Producto Nuevo :o
                         
                         $TemporalQueryResult = $DataBase->query("
                             INSERT INTO TicketDulceria
                                 VALUES (
                                     {$ProductTotalCost},
                                     {$QuantityProduct},
-                                    {$_SESSION['CurrentSaleID']},
+                                    {$_SESSION['CurrentSaleIDCandyShop']},
                                     {$ProductID}
                                 )");                                                            //Creo nuevo registro del producto
 
                         if (!$TemporalQueryResult)                                              //Si es que hubo un problema
                             {array_push($AlertMessages, "Error con la Base de Datos"); break;}  //Error Misterioso
                         
-                        $_SESSION['TotalSell'] += $ProductTotalCost;                            //Añado al total
+                        $_SESSION['TotalSellCandyShop'] += $ProductTotalCost;                   //Añado al total
                         array_push($AlertMessages, "Producto Añadido al Carrito");              //Muestro lindo Mensajito
                     }
-                    //========= YES: UPDATE THE SHOPPING LIST ======
+                    //============================================
+                    //=========  EXISTING ITEM TO SHOPPING CAR  ==
+                    //============================================
                     else {                                                                      //Si es que ya tenia este producto
-                        $Row = $TemporalQueryResult->fetch_row();                               //Dame el costo anterior
-                        $_SESSION['TotalSell'] -= $Row[0];                                      //Lo quito
+                        $TemporalQueryResult = $TemporalQueryResult->fetch_row();               //Dame el costo anterior
+                        $_SESSION['TotalSellCandyShop'] -= $TemporalQueryResult[0];             //Lo quito
 
                         $TemporalQueryResult = $DataBase->query("
                             UPDATE TicketDulceria
@@ -212,13 +232,12 @@
                                     Cantidad = {$QuantityProduct}
                                 WHERE 
                                     IDProducto = {$ProductID} AND 
-                                    IDVenta = {$_SESSION['CurrentSaleID']}");                   //Actualizo datos
-
+                                    IDVenta = {$_SESSION['CurrentSaleIDCandyShop']}");          //Actualizo datos
 
                         if (!$TemporalQueryResult)                                              //Si es que hubo un problema
                             {array_push($AlertMessages, "Error con la Base de Datos"); break;}  //Error Misterioso
                         
-                        $_SESSION['TotalSell'] += $ProductTotalCost;                            //Añado al total el nuevo
+                        $_SESSION['TotalSellCandyShop'] += $ProductTotalCost;                   //Añado al total el nuevo
                         array_push($AlertMessages, "Producto Actualizado en el Carrito");       //Mensajito de Felicidades
                     }
 
@@ -239,8 +258,9 @@
 
     }
 
-
-    //== CHECK THE INFO OF ALL THE CURRENTS PRODUCTS IN SHOPPING ===
+    // ======================================================================
+    // ====  CHECK THE INFO OF ALL THE CURRENTS PRODUCTS IN SHOPPING   ======
+    // ======================================================================
     if (true) {                                                                                 //Dame la info de todos los productos
         $QueryProductsInCurrentSale = $DataBase->query("
                 SELECT 
@@ -253,18 +273,12 @@
                     FROM 
                         ProductoDulceria, TicketDulceria
                     WHERE 
-                        ProductoDulceria.ID = TicketDulceria.iDProducto AND
-                        IDventa = {$_SESSION['CurrentSaleID']}");                               //Busco productos
+                        ProductoDulceria.ID = TicketDulceria.IDProducto AND
+                        IDventa = {$_SESSION['CurrentSaleIDCandyShop']}");                      //Busco productos
 
-                if (!$QueryProductsInCurrentSale)                                              //Si es que hubo un problema
-                    array_push($AlertMessages, "Error con los Productos Vendidos");
-
+        if (!$QueryProductsInCurrentSale)                                                       //Si es que hubo un problema
+            array_push($AlertMessages, "Error con los Productos Vendidos");
     }
-
-
-
-
-
 
 
 
@@ -274,8 +288,6 @@
     // *************************     PROCESS TO START THE SYSTEM   *****************************
     // *****************************************************************************************
     $StandardGreyCard = "card grey lighten-4 col s12 m8 l8 offset-m2 offset-l2";                //Es una forma de que sea mas sencilla 
-
-
     include("PHP/HTMLHeader.php");                                                              //Incluimos un Asombroso Encabezado
 ?>
 
@@ -296,6 +308,7 @@
                 <!-- ========  TEXT AND MENUS  ======= -->
                 <div class="container">
                     
+                    <!-- ========  TEXT   ======= -->
                     <span class="grey-text" style="font-size: 1.20rem;">
                         <br>
                         Aquí se encuentra la información de la Venta Actual, es decir
@@ -305,153 +318,158 @@
 
                     </span>
 
-                    <span class="grey-text darken-2">
-                        <b>IDVentas: </b> <?php echo $_SESSION['CurrentSaleID']; ?><br>
-                    </span>
+                    <!-- ========  CURRENT ID   ======= -->
+                    <h5 class="grey-text darken-2">
+                        <b>IDVenta: </b> <?php echo $_SESSION['CurrentSaleIDCandyShop']; ?><br>
+                    </h5>
                         
                     <br><br>
 
-                    
-                    <!-- ================================================================== -->    
-                    <!-- ==============       PRODUCTS DETAILS         ==================== -->      
-                    <!-- ================================================================== -->   
-                    <ul class="collapsible" data-collapsible="accordion">
+                    <!-- ========  IF YOU ALREADY SELL SOMETHING   ======= -->
+                    <?php if ($_SESSION['TotalSellCandyShop'] != 0.0) :?>
+                                            
+                        <!-- ================================================================== -->    
+                        <!-- ==============       PRODUCTS DETAILS         ==================== -->      
+                        <!-- ================================================================== -->   
+                        <ul class="collapsible" data-collapsible="accordion">
+                            <?php while ($Product = $QueryProductsInCurrentSale->fetch_assoc()) :?>
 
-                        <?php while ($Row = $QueryProductsInCurrentSale->fetch_assoc()) :?>
+                                <li>
+                                    <!-- ========  THE VITAL INFO OF THE PRODUCT ============ -->
+                                    <div class = "collapsible-header" 
+                                        style = "display: block; <?php if (WeAreAtMobile()) echo 'font-size: 0.9rem;'?>">
 
-                            <li>
-                                <!-- ========  THE VITAL INFO OF THE PRODUCT ============ -->
-                                <div class = "collapsible-header" 
-                                    style = "display: block; <?php if (WeAreAtMobile()) echo 'font-size: 0.9rem;'?>">
+                                        <span class="left grey-text text-darken-1">
+                                            <b><?php echo "({$Product['Cantidad']}) {$Product['Nombre']}"; ?></b>
+                                        </span>
 
-                                    <span class="left grey-text text-darken-1">
-                                        <b><?php echo "({$Row['Cantidad']}) {$Row['Nombre']}"; ?></b>
-                                    </span>
+                                        <span class="right grey-text text-darken-1"> <?php echo "$".$Product['Costo']; ?></span>
 
-                                    <span class="right grey-text text-darken-1"> <?php echo "$".$Row['Costo']; ?></span>
-
-                                    <br>
-
-                                </div>
-
-                                <!-- ========  ALTER THE VITAL INFO OF THE PRODUCT ============ -->
-                                <div class="collapsible-body">
-                                    
-                                    <form action="CandyStore.php" method="post" class="row">
-                                        
-                                        <!-- ========  PRICE  ============ -->
-                                        <div class="col s12 left-align">
-                                            <span class="grey-text text-darken-3" style="font-size: 1.7rem;">
-                                                <b>$<?php echo $Row['CostoProducto']; ?></b>
-                                            </span>
-                                        </div>
-
-                                        <!-- =====  SEND THE NUMBER OF THINGS ===== -->
-                                        <div class="col s6 m8 l8">
-                                            <div class='input-field'>
-                                                <input 
-                                                    class = 'validate'
-                                                    type  = 'number'
-                                                    name  = '<?php echo $Row['ID']."QuantityProduct"; ?>' 
-                                                    id    = '<?php echo $Row['ID']."QuantityProduct"; ?>'
-                                                    min   = '1'
-                                                    max   = '<?php echo ($Row['Stock'] + $Row['Cantidad']);?>'
-                                                    value = '<?php echo $Row['Cantidad'];?>'
-                                                />
-                                                <label>Cantidad</label>
-                                            </div>
-                                        </div>
-
-                                        <!-- =====  INITIAL STATE ===== -->
-                                        <input 
-                                            type  = "hidden" 
-                                            id    = "<?php echo $Row['ID']."OriginalQuantity"; ?>"
-                                            name  = "<?php echo $Row['ID']."OriginalQuantity"; ?>"
-                                            value = '<?php echo $Row['Cantidad'];?>'
-                                            >
-
-                                        <!-- =====  SEND THE NAME OF THINGS ===== -->
-                                        <input 
-                                            type  = "hidden"
-                                            name  = "<?php echo $Row['ID']."ProductName"; ?>"
-                                            id    = "<?php echo $Row['ID']."ProductName"; ?>"
-                                            value = "<?php echo $Row['Nombre']; ?>">
-
-                                        <!-- =====  BUTTON TO SEND THE INFO ===== -->
                                         <br>
-                                        <div class="col s2 l4">
 
-                                            <div class="row">
-                                                <button 
-                                                    class = "btn-flat waves-effect waves-light green lighten-1 white-text"
-                                                    type  = "submit"
-                                                    id    = '<?php echo $Row['ID']."ButtonChangeShoppingCar"; ?>'
-                                                    name  = '<?php echo $Row['ID']."ButtonChangeShoppingCar"; ?>'>
-                                                    Cambiar
-                                                </button>
+                                    </div>
+
+                                    <!-- ========  ALTER THE VITAL INFO OF THE PRODUCT ============ -->
+                                    <div class="collapsible-body">
+                                        
+                                        <form action="CandyStore.php" method="post" class="row">
+                                            
+                                            <!-- ========  PRICE  ============ -->
+                                            <div class="col s12 left-align">
+                                                <span class="grey-text text-darken-3" style="font-size: 1.7rem;">
+                                                    <b>$<?php echo $Product['CostoProducto']; ?></b>
+                                                </span>
                                             </div>
 
-                                            <div class="row">
-                                                <button 
-                                                    class = "btn-flat waves-effect waves-light red lighten-1 white-text"
-                                                    type  = "submit"
-                                                    id    = '<?php echo $Row['ID']."ButtonDeleteProduct"; ?>'
-                                                    name  = '<?php echo $Row['ID']."ButtonDeleteProduct"; ?>'>
-                                                    Eliminar
-                                                </button>
+                                            <!-- =====  SEND THE NUMBER OF THINGS ===== -->
+                                            <div class="col s6 m8 l8">
+                                                <div class='input-field'>
+                                                    <input 
+                                                        class = 'validate'
+                                                        type  = 'number'
+                                                        name  = '<?php echo $Product['ID']."QuantityProduct"; ?>' 
+                                                        id    = '<?php echo $Product['ID']."QuantityProduct"; ?>'
+                                                        min   = '1'
+                                                        max   = '<?php echo ($Product['Stock'] + $Product['Cantidad']);?>'
+                                                        value = '<?php echo $Product['Cantidad'];?>'
+                                                    />
+                                                    <label>Cantidad</label>
+                                                </div>
                                             </div>
 
-                                            
-            
-                                        </div>
-                                            
-                                        <!-- =====  HOW MUCH IN STOCK ===== -->
-                                        <div class="col s12 left-align">
-                                            <span class="grey-text text-darken-2" style="font-size: 0.8rem;">
-                                                Cantidad en Stock Libre: <?php echo $Row['Stock']; ?> <br>
-                                                Cantidad en Stock Total: <?php echo ($Row['Stock'] + $Row['Cantidad']); ?> <br>
-                                            </span>
-                                        </div>
+                                            <!-- =====  INITIAL STATE ===== -->
+                                            <input 
+                                                type  = "hidden" 
+                                                id    = "<?php echo $Product['ID']."OriginalQuantity"; ?>"
+                                                name  = "<?php echo $Product['ID']."OriginalQuantity"; ?>"
+                                                value = '<?php echo $Product['Cantidad'];?>'
+                                                >
 
-                                    </form>
+                                            <!-- =====  SEND THE NAME OF THINGS ===== -->
+                                            <input 
+                                                type  = "hidden"
+                                                name  = "<?php echo $Product['ID']."ProductName"; ?>"
+                                                id    = "<?php echo $Product['ID']."ProductName"; ?>"
+                                                value = "<?php echo $Product['Nombre']; ?>">
 
-                                </div>
+                                            <!-- =====  BUTTON TO SEND THE INFO ===== -->
+                                            <br>
+                                            <div class="col s2 l4">
 
-                            </li>
+                                                <div class="row">
+                                                    <button 
+                                                        class = "btn-flat waves-effect waves-light green lighten-1 white-text"
+                                                        type  = "submit"
+                                                        id    = '<?php echo $Product['ID']."ButtonChangeShoppingCar"; ?>'
+                                                        name  = '<?php echo $Product['ID']."ButtonChangeShoppingCar"; ?>'>
+                                                        Cambiar
+                                                    </button>
+                                                </div>
 
-                        <?php endwhile;?>
-                    </ul>
+                                                <div class="row">
+                                                    <button 
+                                                        class = "btn-flat waves-effect waves-light red lighten-1 white-text"
+                                                        type  = "submit"
+                                                        id    = '<?php echo $Product['ID']."ButtonDeleteProduct"; ?>'
+                                                        name  = '<?php echo $Product['ID']."ButtonDeleteProduct"; ?>'>
+                                                        Eliminar
+                                                    </button>
+                                                </div>
+
+                                                
+                
+                                            </div>
+                                                
+                                            <!-- =====  HOW MUCH IN STOCK ===== -->
+                                            <div class="col s12 left-align">
+                                                <span class="grey-text text-darken-2" style="font-size: 0.8rem;">
+                                                    Cantidad en Stock Libre: <?php echo $Product['Stock']; ?> <br>
+                                                    Cantidad en Stock Total: <?php echo ($Product['Stock'] + $Product['Cantidad']); ?> <br>
+                                                </span>
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+
+                                </li>
+
+                            <?php endwhile;?>
+                        </ul>
+
+                        <br><br>
+
+                        <!-- ========  CLOSE AN OK SALE ================ -->
+                        <form class="row" action="CandyStore.php" method="post">
+                    
+                            <!-- ========  BUTTON TO SEND ===== -->
+                            <button
+                                type  = 'submit'
+                                id    = 'FinalizeSuccessfulSell'
+                                name  = 'FinalizeSuccessfulSell'
+                                class = 'col s8 offset-s2 l6 offset-l3 btn-large waves-effect green lighten-1'>
+                                Cobrar $<?php echo $_SESSION['TotalSellCandyShop'];?>
+                            </button>
+                        </form>
+
+                        <!-- ========  CLOSE BAD SALE ================ -->
+                        <form class="row" action="CandyStore.php" method="post">
+                    
+                            <!-- ========  BUTTON TO SEND ===== -->
+                            <button
+                                type  = 'submit'
+                                id    = 'CancelSellButton'
+                                name  = 'CancelSellButton'
+                                class = 'col s8 offset-s2 l6 offset-l3 btn-large waves-effect red lighten-1'>
+                                Cancelar Venta
+                            </button>
+
+                        </form>
+
+                    <?php endif; ?>
 
                 </div>
 
-                <br><br>
-
-                <!-- ========  CLOSE AN OK SALE ================ -->
-                <form class="row" action="CandyStore.php" method="post">
-            
-                    <!-- ========  BUTTON TO SEND ===== -->
-                    <button
-                        type  = 'submit'
-                        id    = 'FinalizeSuccessfulSell'
-                        name  = 'FinalizeSuccessfulSell'
-                        class = 'col s8 offset-s2 l4 offset-l4 btn-large waves-effect green lighten-1'>
-                        Cobrar $<?php echo $_SESSION['TotalSell'];?>
-                    </button>
-                </form>
-
-                <!-- ========  CLOSE BAD SALE ================ -->
-                <form class="row" action="CandyStore.php" method="post">
-            
-                    <!-- ========  BUTTON TO SEND ===== -->
-                    <button
-                        type  = 'submit'
-                        id    = 'CancelSellButton'
-                        name  = 'CancelSellButton'
-                        class = 'col s8 offset-s2 l4 offset-l4 btn-large waves-effect red lighten-1'>
-                        Cancelar Venta
-                    </button>
-
-                </form>
 
             </div>
 
@@ -514,7 +532,7 @@
                     <ul class="collapsible" data-collapsible="accordion">
                     
                         <!-- ========  FOR EACH POSSIBLE PRODUCT ================ -->
-                        <?php while ($Row = $QueryPossibleProducts->fetch_assoc()) : ?>
+                        <?php while ($Product = $QueryPossibleProducts->fetch_assoc()) : ?>
                         <li>
                             
                             <!-- ========  NUMBER AN ICON OF PRODUCT ============ -->
@@ -523,7 +541,7 @@
                                 <i class="material-icons">local_dining</i>
                                 
                                 <span class="grey-text text-darken-3 left-align" style="font-size: 1.1rem;">
-                                    <?php echo $Row['Nombre']; ?>
+                                    <?php echo $Product['Nombre']; ?>
                                 </span>
 
                             </div>
@@ -537,7 +555,7 @@
                                     <!-- ========  PRICE  ============ -->
                                     <div class="col s12 left-align">
                                         <span class="grey-text text-darken-3" style="font-size: 1.7rem;">
-                                            <b>$<?php echo $Row['Costo']; ?></b>
+                                            <b>$<?php echo $Product['Costo']; ?></b>
                                         </span>
                                     </div>
 
@@ -547,10 +565,10 @@
                                             <input 
                                                 class = 'validate'
                                                 type  = 'number'
-                                                name  = '<?php echo $Row['ID']."QuantityProduct"; ?>' 
-                                                id    = '<?php echo $Row['ID']."QuantityProduct"; ?>'
+                                                name  = '<?php echo $Product['ID']."QuantityProduct"; ?>' 
+                                                id    = '<?php echo $Product['ID']."QuantityProduct"; ?>'
                                                 min   = '0'
-                                                max   = '<?php echo $Row['Stock'];?>'
+                                                max   = '<?php echo $Product['Stock'];?>'
                                             />
                                             <label>Cantidad</label>
                                         </div>
@@ -559,20 +577,20 @@
                                     <!-- =====  SEND THE NAME OF THINGS ===== -->
                                     <input 
                                         type  = "hidden"
-                                        name  = "<?php echo $Row['ID']."ProductName"; ?>"
-                                        id    = "<?php echo $Row['ID']."ProductName"; ?>"
-                                        value = "<?php echo $Row['Nombre']; ?>">
+                                        name  = "<?php echo $Product['ID']."ProductName"; ?>"
+                                        id    = "<?php echo $Product['ID']."ProductName"; ?>"
+                                        value = "<?php echo $Product['Nombre']; ?>">
 
                                     <!-- =====  BUTTON TO SEND THE INFO ===== -->
-                                    <div class="col s2 m4 l4">
+                                    <div class="col s2 l4">
 
                                         <br>
                                         <button 
-                                            <?php if ($Row['Stock'] == 0) echo "disabled"; ?>
-                                            class = "btn-flat waves-effect waves-light light-green darken-1 white-text"
+                                            <?php if ($Product['Stock'] == 0) echo "disabled"; ?>
+                                            class = "btn-flat waves-effect waves-light light-green white-text"
                                             type  = "submit"
-                                            id    = '<?php echo $Row['ID']."ButtonChangeShoppingCar"; ?>'
-                                            name  = '<?php echo $Row['ID']."ButtonChangeShoppingCar"; ?>'>
+                                            id    = '<?php echo $Product['ID']."ButtonChangeShoppingCar"; ?>'
+                                            name  = '<?php echo $Product['ID']."ButtonChangeShoppingCar"; ?>'>
                                             Agregar
                                         </button>
         
@@ -581,7 +599,7 @@
                                     <!-- =====  HOW MUCH IN STOCK ===== -->
                                     <div class="col s12 left-align">
                                         <span class="grey-text text-darken-2" style="font-size: 0.8rem;">
-                                            Cantidad en Stock: <?php echo $Row['Stock']; ?>
+                                            Cantidad en Stock: <?php echo $Product['Stock']; ?>
                                         </span>
                                     </div>
 

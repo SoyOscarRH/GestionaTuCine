@@ -664,32 +664,15 @@
     </div>
 
 
-    <!-- ================================================================= -->    
-    <!-- =======================    CODE FOR THE PAGE   ================== -->    
-    <!-- ================================================================= -->
-    <script>
-        $(document).ready(function() {
 
-            // Start a Select
-            $('select').material_select();
-            Materialize.updateTextFields();
 
-            // Create all the Toast
-            <?php 
-                $TitleAlert = '<span class = "yellow-text"><b>Alerta: &nbsp; </b></span>';
-                foreach ($AlertMessages as $Alert) echo "Materialize.toast('$TitleAlert $Alert', 9000);"; 
-            ?>
-
-        });
-    </script>
-
-    <br><br><br><br>
+    <br><br>
 
 
     <!-- ================================================================= -->    
     <!-- ===============         FAB FOR THE PAGE       ================== -->    
     <!-- ================================================================= -->
-    <div class="fixed-action-btn <?php if (WeAreAtMobile()) echo "click-to-toggle";?>">
+    <div class="fixed-action-btn <?php (WeAreAtMobile())? echo "click-to-toggle"; ?>">
         
         <a class="btn-floating btn-large cyan darken-3">
             <i class="unselectable large material-icons">view_list</i>
@@ -746,6 +729,27 @@
     </div>
 
 
+    <!-- ================================================================= -->    
+    <!-- =======================    CODE FOR THE PAGE   ================== -->    
+    <!-- ================================================================= -->
+    <script>
+        $(document).ready(function() {
+
+            // Start a Select
+            $('select').material_select();
+            Materialize.updateTextFields();
+
+            // Create all the Toast
+            <?php 
+                $TitleAlert = '<span class = "yellow-text"><b>Alerta: &nbsp; </b></span>';
+                foreach ($AlertMessages as $Alert) echo "Materialize.toast('$TitleAlert $Alert', 9000);"; 
+            ?>
+
+        });
+    </script>
+
+
+
 <?php 
     /*===================================================================
     ============         CLOSE ALL DATABASE     =========================
@@ -754,8 +758,3 @@
 
     if (isset($DataBase)) $DataBase->close();
 ?>
-
-
-
-
-
