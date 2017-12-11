@@ -22,8 +22,6 @@
     if ($_SESSION['RolActual'] != 'Dulceria' AND !$_SESSION['IAmAManager'])                     //Solos los empleados entran
         CallErrorPagePermissions("No estas designado para Dulcería");                           //Sino error :o
 
-
-
     // ======================================================================
     // ======================   FINISH A SELL  ==============================
     // ======================================================================
@@ -41,6 +39,7 @@
         $_SESSION['TotalSellCandyShop'] = 0.0;                                                  //Volvemos todo a la normalidad
     }
 
+
     //=============  END HAPPY SELL  =============
     if (isset($_POST['FinalizeSuccessfulSell'])) {                                              //Si es que vamos a hacer un feliz Salida
 
@@ -54,6 +53,8 @@
 
             unset($_SESSION['CurrentSaleIDCandyShop']);                                         //Adios Sesion    
         }
+
+        array_push($AlertMessages, "Venta Guardada Correcta");                                  //Mensajito
     }
 
 
@@ -99,8 +100,7 @@
     if (isset($_POST['SearchForProduct'])) {                                                    //Si es que quieres actualizar datos
         do {
             $PossibleProductName = ClearSQLInyection($_POST['PossibleProductName']);            //Dame la info
-            $PossibleProductName = str_replace(' ', '%', $PossibleProductName);                 //Esto ayuda con el reconocimiento
-
+            $PossibleProductName = str_replace(' ', '%', $PossibleProductName);                 //Esto ayuda con el reconocimiento            
             $QueryPossibleProducts = $DataBase->query('
                         SELECT ID, Stock, Nombre, Costo 
                             FROM ProductoDulceria
@@ -195,8 +195,11 @@
                                     IDProducto = {$ProductID} AND 
                                     IDVenta = {$_SESSION['CurrentSaleIDCandyShop']}");          //Obtenemos el precio anterior
 
+
+
                     if (!$TemporalQueryResult)                                                  //Si es que hubo un problema
                     {array_push($AlertMessages, "Error con la Base de Datos"); break;}          //Error Misterioso
+
 
                     //============================================
                     //=========  ADD NEW ITEM TO SHOPPING CAR  ===
@@ -297,6 +300,69 @@
     }
 
 
+    // ======================================================================
+    // ===============      ADD NEW DATA TO THE CANDY SHOP   ================
+    // ======================================================================
+    if (isset($_POST['AddNewProduct'])) {                                                       //Vamos a crear algo
+        do {                                                                                    //Solo te quiero por el break :v
+            $NewProductName = ClearSQLInyection($_POST['NewProductName']);                      //Por si las dudas
+            $NewProductCost = ClearSQLInyection($_POST['NewProductCost']);                      //Por si las dudas
+            $NewProductStock = ClearSQLInyection($_POST['NewProductStock']);                    //Por si las dudas
+
+
+            $TemporalQueryResult = $DataBase->query("
+                SELECT Nombre FROM ProductoDulceria
+                        WHERE Nombre = '{$NewProductName}'");                                   //Dime que soy la primera :(
+
+            if ($TemporalQueryResult->num_rows != 0)                                            //Si es que no hay tuplas
+                {array_push($AlertMessages, "Este producto ya existe :("); break;}              //Envia mensajes
+
+            $TemporalQueryResult = $DataBase->query("
+                INSERT INTO ProductoDulceria(Stock, Nombre, Costo, IDProveedor)
+                        VALUES (
+                                {$NewProductStock}, 
+                                '{$NewProductName}', 
+                                {$NewProductCost}, 
+                                {$_SESSION['ID']}
+                            )");                                                                //Actualizo datos
+
+            if (!$TemporalQueryResult) array_push($AlertMessages, "Error al Añadir Producto");  //Error Misterioso
+            else array_push($AlertMessages, "Producto Añadido");                                //Error Misterioso
+        }
+        while (false);                                                                          //Solo te quiero por el break :v
+    }
+
+    
+    // ======================================================================
+    // ===============      DELETE  DATA TO THE CANDY SHOP   ================
+    // ======================================================================
+    //=============  DELETE A PRODUCT  =============
+    if (isset($_POST['DeleteProduct'])) {
+        $ProductID = ClearSQLInyection($_POST['SelectedProduct']);                              //Por si las dudas
+        
+        $TemporalQueryResult = $DataBase->query("
+                DELETE FROM ProductoDulceria 
+                    WHERE ID = {$ProductID}");                                                  //Adios
+
+        if (!$TemporalQueryResult) array_push($AlertMessages, "Error al Eliminar Producto");    //Envia mensajes
+        else array_push($AlertMessages, "Producto Eliminado :D");                               //Envia mensajes
+    }
+
+    //=============  UPDATE THE LIST  =============
+    if ($_SESSION['IAmAManager']) {                                                             //Si eres un gerente
+        $QueryProductsData = $DataBase->query("SELECT Nombre, ID FROM ProductoDulceria");       //Dame la info
+
+        if (!$QueryProductsData) array_push($AlertMessages, "Error al Abrir Base de Datos");    //Envia mensajes
+        else if ($QueryProductsData->num_rows == 0)                                             //Si es que no hay tuplas
+            array_push($AlertMessages, "Error al Buscar Productos");                            //Envia mensajes
+    }
+
+
+
+
+
+
+
 
 
 
@@ -340,6 +406,10 @@
                     </h5>
                         
                     <br><br>
+
+                </div>
+
+                <div class="<?php if (!WeAreAtMobile()) echo "container"; ?>">
 
                     <!-- ========  IF YOU ALREADY SELL SOMETHING   ======= -->
                     <?php if ($_SESSION['TotalSellCandyShop'] != 0.0) :?>
@@ -432,8 +502,6 @@
                                                     </button>
                                                 </div>
 
-                                                
-                
                                             </div>
                                                 
                                             <!-- =====  HOW MUCH IN STOCK ===== -->
@@ -534,7 +602,7 @@
                         type  = 'submit'
                         id    = 'SearchForProduct'
                         name  = 'SearchForProduct'
-                        class = 'col s8 btn-large waves-effect green lighten-1'>
+                        class = 'col s8 btn-large waves-effect blue lighten-1'>
                         Buscar Producto
                     </button>
 
@@ -544,7 +612,7 @@
                 <?php if (isset($_POST['SearchForProduct'])) :?>
                     <br><br>
                     
-                    <div class="container">
+                    <div class="<?php if (!WeAreAtMobile()) echo "container"; ?>">
                     <ul class="collapsible" data-collapsible="accordion">
                     
                         <!-- ========  FOR EACH POSSIBLE PRODUCT ================ -->
@@ -635,9 +703,121 @@
 
         </div>
 
+        <br><br><br>
 
+
+        <!-- ================================================================== -->    
+        <!-- =====================      CREATE  STUFF        ================== -->      
+        <!-- ================================================================== -->
+        <?php if ($_SESSION['IAmAManager']): ?>    
+        <div class="<?php echo $StandardGreyCard;?>">
+
+            <!-- =================   CARD CONTENT  ================ -->      
+            <div id="CardCreateProduct" name="CardCreateProduct" class="card-content">
+
+                <!-- ========  TITLE  ================ -->
+                <h4 class="grey-text text-darken-2"><b>Creación</b> de Productos</h4>
+            
+                <!-- ========  TEXT  ================ -->
+                <span class="grey-text" style="font-size: 1.15rem;">
+                    Crea un nuevo producto para ser desplegado ahora en la dulcería
+                    <br><br>
+                </span>
+
+                <!-- ========  MATERIAL FORM  ================ -->
+                <form class="container" action="CandyStore.php" method="post">
+
+                    <!-- ========  EMPLOYEERS ID ============= -->
+                    <div class='input-field'>
+                        <input required class='validate' type='text' name='NewProductName' id='NewProductName' />
+                        <label>Nombre del Producto</label>
+                    </div>
+
+                    <!-- ========  EMPLOYEERS ID ============= -->
+                    <div class='input-field'>
+                        <input required class='validate' type='number' name='NewProductCost' id='NewProductCost' />
+                        <label>Costo Unitario</label>
+                    </div>
+
+                    <!-- ========  EMPLOYEERS ID ============= -->
+                    <div class='input-field'>
+                        <input required class='validate' type='number' name='NewProductStock' id='NewProductStock' />
+                        <label>Stock Actual</label>
+                    </div>
+
+                    <br>
+
+                    <!-- ========  BUTTON TO SEND ===== -->
+                    <button 
+                        type='submit'
+                        name='AddNewProduct'
+                        class='<?php echo $StandardButton;?> btn-large green lighten-1'>
+                        Añadir Producto
+                    </button>
+
+                </form>
+
+                </form>
+
+
+            </div>
+
+        </div>
+            
+        <br><br><br>
+
+        <div class="<?php echo $StandardGreyCard;?>">
+
+            <!-- =================   CARD CONTENT  ================ -->      
+            <div id="CardDeleteProduct" name="CardDeleteProduct" class="card-content">
+
+                <!-- ========  TITLE  ================ -->
+                <h4 class="grey-text text-darken-2"><b>Elimina</b> un Producto</h4>
+            
+                <!-- ========  TEXT  ================ -->
+                <span class="grey-text" style="font-size: 1.15rem;">
+                    Elimina un producto de la dulcería
+                    <br><br>
+                </span>
+
+                <!-- ========  MATERIAL FORM  ================ -->
+                <form class="container" action="CandyStore.php" method="post">
+
+                    <!-- ========  EMPLOYEERS ID ============= -->
+                    <div class="input-field">                        
+                        <select required name="SelectedProduct" id="SelectedProduct" class="left-align">
+                            <?php while ($Product = $QueryProductsData->fetch_assoc()) :?>
+                                <option value="<?php echo $Product['ID']; ?>"><?php echo $Product['Nombre']; ?></option>
+                            <?php endwhile; ?>
+                        </select>
+                        <label>Nombre del Producto</label>
+                    </div>
+
+                    <br>
+
+                    <!-- ========  BUTTON TO SEND ===== -->
+                    <button 
+                        type='submit'
+                        name='DeleteProduct'
+                        class='<?php echo $StandardButton;?> btn-large red lighten-1'>
+                        Eliminar Producto
+                    </button>
+
+                </form>
+
+                </form>
+
+
+            </div>
+
+        </div>
 
         <br><br><br>
+
+        <?php endif; ?>
+
+
+
 
     </div>
 
@@ -666,10 +846,31 @@
             <li>
                 <a href    = "#CardFindProduct"
                    onclick = "$('.fixed-action-btn').closeFAB();" 
-                   class   = "btn-floating green">
+                   class   = "btn-floating blue">
                     <i class="unselectable material-icons">search</i>
                 </a>
             </li>
+
+
+            <?php if (isset($_SESSION['IAmAManager'])): ?>
+            <!-- =======  TO SEE EMPLOYEES INFO  ========== -->    
+            <li>
+                <a href    = "#CardCreateProduct"
+                   onclick = "$('.fixed-action-btn').closeFAB();" 
+                   class   = "btn-floating green">
+                    <i class="unselectable material-icons">add</i>
+                </a>
+            </li>
+
+            <!-- =======  TO SEE EMPLOYEES INFO  ========== -->    
+            <li>
+                <a href    = "#CardDeleteProduct"
+                   onclick = "$('.fixed-action-btn').closeFAB();" 
+                   class   = "btn-floating red">
+                    <i class="unselectable material-icons">delete</i>
+                </a>
+            </li>
+            <?php endif; ?>
 
         </ul>
     </div>

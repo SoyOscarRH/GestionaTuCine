@@ -672,7 +672,7 @@
     <!-- ================================================================= -->    
     <!-- ===============         FAB FOR THE PAGE       ================== -->    
     <!-- ================================================================= -->
-    <div class="fixed-action-btn <?php (WeAreAtMobile())? echo "click-to-toggle"; ?>">
+    <div class="fixed-action-btn <?php if (WeAreAtMobile()) echo "click-to-toggle"; ?>">
         
         <a class="btn-floating btn-large cyan darken-3">
             <i class="unselectable large material-icons">view_list</i>

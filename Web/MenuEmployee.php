@@ -156,16 +156,14 @@
                 </form>
                 <br><br><br>
                 
-              
-
 
                 <?php if ($_SESSION["IAmAManager"]):?>
-                <form action="MenuEmployee.php" method="post">
+                <form action="CandyStore.php#CardFindProduct" method="post">
                     <button 
                         type='submit'
                         name='MoviesSchedules'
                         class="blue lighten-2 <?php echo $StandardCSSButton;?>">
-                        Cambiar Precios Dulcería
+                        Cambiar Productos Dulcería
                     </button> 
                 </form>
                 <br><br><br>

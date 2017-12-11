@@ -68,16 +68,6 @@ CREATE TABLE EmpleadoSala (
 );
 
 
-CREATE TABLE Proveedor (
-    ID                  INT NOT NULL PRIMARY KEY,
-    Nombre              VARCHAR(15),
-    ApellidoPaterno     VARCHAR(15),
-    ApellidoMaterno     VARCHAR(15),
-    Correo              VARCHAR(30),
-    Contrasena          VARCHAR(100)
-);
-
-
 CREATE TABLE Funcion (
     Hora                TIME,
     Dia                 DATE,
@@ -134,14 +124,14 @@ CREATE TABLE TicketBoleto (
 
 
 CREATE TABLE  ProductoDulceria (
-    ID                  INT NOT NULL PRIMARY KEY,
+    ID                  INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     Stock               INT UNSIGNED,
     Nombre              VARCHAR(50),
     Costo               REAL,
     IDProveedor         INT,
 
     FOREIGN KEY (IDProveedor) 
-        REFERENCES Proveedor (ID)
+        REFERENCES Empleado (ID)
             ON DELETE CASCADE
             ON UPDATE CASCADE
 );
@@ -179,8 +169,8 @@ CREATE TABLE TicketProveedor (
             ON DELETE CASCADE
             ON UPDATE CASCADE,
 
-    FOREIGN KEY (IDProveedor)
-        REFERENCES Proveedor (ID)
+    FOREIGN KEY (IDProveedor) 
+        REFERENCES Empleado (ID)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
 
