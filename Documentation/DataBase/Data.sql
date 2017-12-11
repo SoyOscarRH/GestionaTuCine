@@ -249,7 +249,7 @@ INSERT INTO ProductoDulceria VALUES
     (3, 30, 'Palomitas de Maiz Chicas', 39, 1), 
     (4, 100, 'Refresco Grande', 38, 2), 
     (5, 100, 'Refresco Mediano', 34.5, 2), 
-    (6, 100, 'Refresco chico', 30, 2), 
+    (6, 100, 'Refresco Chico', 30, 2), 
     (7, 50, 'Ice', 50.5, 3), 
     (8, 30, 'Palomitas de Caramelo Grandes', 51, 4), 
     (9, 30, 'Palomitas de Caramelo Medianas', 47, 4), 
