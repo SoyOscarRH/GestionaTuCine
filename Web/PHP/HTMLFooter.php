@@ -16,7 +16,7 @@
 
                 <!--  =========  Text   ======== -->
                 <p class="grey-text text-lighten-4" style="font-size: 0.85rem;">
-                    Somos pro :v y usamos software libre
+                    Proyecto creado para administrar un Cine y las diversas actividades que ocurren en el
                 </p>
             </div>
 

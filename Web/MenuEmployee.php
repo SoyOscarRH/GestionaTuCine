@@ -11,7 +11,10 @@
     $UpdateDate = '28 de Noviembre del 2017';                                                   //Fecha de actualizacion de pagina
 
     // ================ WE HAVE ACCESS AN ACCOUNT ============
-    StandardCheckForStartedSession();                                                           //Dime que iniciaste sesión
+    StandardCheckForStartedSession();                                                           //Asegurate de que pueda estar aqui
+    $DataBase = StandardCheckForCorrectDataBase();                                              //Asegurate de que pueda estar aqui
+    StandardUpdateSessionData($_SESSION['ID'], $DataBase);                                      //Asegurate que tdo este al dia
+
     if (isset($_POST["CloseSession"]) or isset($_GET["CloseSession"])) CallClosePage();         //Entraste e iniciaste sesion pero ya te vas :v
 
 
@@ -31,6 +34,9 @@
 ?>
     <br><br>
     
+    <!-- =============================================== -->    
+    <!-- =============  GREETINGS PANEL  =============== -->    
+    <!-- =============================================== -->    
     <div class="row container center-align">
         <div class="card-panel light-green lighten-5 col s12 m8 l8 offset-m2 offset-l2">
 
@@ -46,9 +52,14 @@
         </div>
     </div>
 
+    <!-- =============================================== -->    
+    <!-- =============   OPTION   PANEL  =============== -->    
+    <!-- =============================================== -->    
     <div class="row container center-align">
         <div class="card-panel grey lighten-4 col s12 m8 l8 offset-m2 offset-l2">
 
+            
+            <!-- =============   TEXT  =============== -->    
             <h4 class="grey-text text-darken-2">
                 <br><b>Menú</b> de Opciones
             </h4>
@@ -58,131 +69,151 @@
                 <br><br>
             </span>
 
+            
+            <!-- =============================================== -->    
+            <!-- =============   OPTION ROW      =============== -->    
+            <!-- =============================================== -->  
             <div class="row">
 
-                <?php if ($_SESSION["IAmAManager"]):?>
-                <form action="AdminAccounts.php" method="post">
-                    <button 
-                        type='submit'
-                        name='MoviesSchedules'
-                        class="green lighten-2 <?php echo $StandardCSSButton;?>">
-                        Administrador
-                    </button> 
-                </form>
-                <br><br><br>
+                <!-- =============================================== -->    
+                <!-- =======       PROFILE AND USERS     =========== -->    
+                <!-- =============================================== --> 
+                <div id="ProfileAndUsers">
+                    
+                    <!-- =============   ADMIN OPTIONS    =============== -->    
+                    <?php if ($_SESSION["IAmAManager"]):?>
+                    <form action="AdminAccounts.php" method="post">
+                        <button 
+                            type='submit'
+                            name='MoviesSchedules'
+                            class="green lighten-2 <?php echo $StandardCSSButton;?>">
+                            Administrador
+                        </button> 
+                    </form>
+                    <br><br><br>
+                    <?php endif;?>
 
-                <?php endif;?>
+                    <!-- =============   PROFILE OPTIONS    =============== -->    
+                    <form action="MyProfile.php" method="post">
+                        <button 
+                            type='submit'
+                            name='MyProfile'
+                            class="green lighten-2 <?php echo $StandardCSSButton;?>">
+                            Mi Perfil
+                        </button> 
+                    </form>
+                    <br><br><br>
 
-                <form action="MyProfile.php" method="post">
-                    <button 
-                        type='submit'
-                        name='MyProfile'
-                        class="green lighten-2 <?php echo $StandardCSSButton;?>">
-                        Mi Perfil
-                    </button> 
-                </form>
-
-                <br><br><br>
-
-                <br>
-
-                <form action="VerHorarios.php" method="post">
-                    <button 
-                        type='submit'
-                        name='MoviesSchedules'
-                        class="indigo lighten-2 <?php echo $StandardCSSButton;?>">
-                        Checa Horarios
-                    </button> 
-                </form>
-                <br><br><br>
-
-
-
-                <?php if ($_SESSION["IAmAManager"]):?>
-                <form action="MenuEmployee.php" method="post">
-                    <button 
-                        type='submit'
-                        name='MoviesSchedules'
-                        class="indigo lighten-2 <?php echo $StandardCSSButton;?>">
-                        Cambiar Horarios
-                    </button> 
-                </form>
-                <br><br><br>
-                <?php endif;?>
-
-                <form action="MenuEmployee.php" method="post">
-                    <button 
-                        type='submit'
-                        name='SellMovieTickets'
-                        class="indigo lighten-2 <?php echo $StandardCSSButton;?>">
-                        Vender Boletos
-                    </button> 
-                </form>
-                <br><br><br>
-                
-                  <?php if ($_SESSION["IAmAManager"]):?>
-                <form action="AltaPelicula.php" method="post">
-                    <button 
-                        type='submit'
-                        name='MoviesSchedules'
-                        class="indigo lighten-2 <?php echo $StandardCSSButton;?>">
-                        Registrar Pelicula
-                    </button> 
-                </form>
-                <br><br><br>
-                <?php endif;?>
-                
-                <?php if ($_SESSION["IAmAManager"]):?>
-                <form action="ConsultaEdicionPelicula.php" method="post">
-                    <button 
-                        type='submit'
-                        name='MoviesSchedules'
-                        class="indigo lighten-2 <?php echo $StandardCSSButton;?>">
-                        Administar Peliculas
-                    </button> 
-                </form>
-                <br><br><br>
-                <?php endif;?>
-
-                <br>
-
-                <form action="CandyStore.php" method="post">
-                    <button 
-                        type='submit'
-                        name='SellMovieTickets'
-                        class="blue lighten-2 <?php echo $StandardCSSButton;?>">
-                        Dulcería
-                    </button> 
-                </form>
-                <br><br><br>
-                
-
-                <?php if ($_SESSION["IAmAManager"]):?>
-                <form action="CandyStore.php#CardFindProduct" method="post">
-                    <button 
-                        type='submit'
-                        name='MoviesSchedules'
-                        class="blue lighten-2 <?php echo $StandardCSSButton;?>">
-                        Cambiar Productos Dulcería
-                    </button> 
-                </form>
-                <br><br><br>
-                <?php endif;?>
-
-                <br>
-                
-                <form action="MenuEmployee.php" method="post">
-                    <button 
-                        type='submit'
-                        name='CloseSession'
-                        class="red lighten-2 <?php echo $StandardCSSButton;?>">
-                        Cerrar Sesión
-                    </button> 
-                </form>
-
-                <br>
-                
                 </div>
+                <br>
+
+                <!-- =============================================== -->    
+                <!-- =======          CINEMA STUFF       =========== -->    
+                <!-- =============================================== --> 
+                <div id="CinemaStuff">
+                    
+                    <!-- =============   CINEMA FUNCTIONS    =============== -->    
+                    <form action="VerHorarios.php" method="post">
+                        <button 
+                            type='submit'
+                            name='MoviesSchedules'
+                            class="indigo lighten-2 <?php echo $StandardCSSButton;?>">
+                            Checa Horarios
+                        </button> 
+                    </form>
+                    <br><br><br>
+
+                    <!-- =============   SELL TICKETS    =============== -->    
+                    <form action="MenuEmployee.php" method="post">
+                        <button 
+                            type='submit'
+                            name='SellMovieTickets'
+                            class="indigo lighten-2 <?php echo $StandardCSSButton;?>">
+                            Vender Boletos
+                        </button> 
+                    </form>
+                    <br><br><br>
+                    
+                    <!-- =============   ADD A MOVIE    =============== -->    
+                    <?php if ($_SESSION["IAmAManager"]):?>
+                    <form action="AltaPelicula.php" method="post">
+                        <button 
+                            type='submit'
+                            name='MoviesSchedules'
+                            class="indigo lighten-2 <?php echo $StandardCSSButton;?>">
+                            Registrar Pelicula
+                        </button> 
+                    </form>
+                    <br><br><br>
+
+                    <!-- =============   ADMIN A MOVIE    =============== -->    
+                    <form action="ConsultaEdicionPelicula.php" method="post">
+                        <button 
+                            type='submit'
+                            name='MoviesSchedules'
+                            class="indigo lighten-2 <?php echo $StandardCSSButton;?>">
+                            Editar Peliculas
+                        </button> 
+                    </form>
+                    <br><br><br>
+                    <?php endif;?>
+                    
+                </div>
+                <br>
+
+                <!-- =============================================== -->    
+                <!-- ==========       CANDY STORE        =========== -->    
+                <!-- =============================================== --> 
+                <div id="CandyStoreStuff">
+                    
+                    <!-- =============   CANDY STORE   =============== -->    
+                    <form action="CandyStore.php" method="post">
+                        <button 
+                            type='submit'
+                            name='SellMovieTickets'
+                            class="blue lighten-2 <?php echo $StandardCSSButton;?>">
+                            Dulcería
+                        </button> 
+                    </form>
+                    <br><br><br>
+                    
+                    <!-- =============   ALTER PRODUCTS   =============== -->    
+                    <?php if ($_SESSION["IAmAManager"]):?>
+                    <form action="CandyStore.php#CardFindProduct" method="post">
+                        <button 
+                            type='submit'
+                            name='MoviesSchedules'
+                            class="blue lighten-2 <?php echo $StandardCSSButton;?>">
+                            Cambiar Productos Dulcería
+                        </button> 
+                    </form>
+                    <br><br><br>
+                    <?php endif;?>
+
+                </div>
+                <br>
+
+
+                <!-- =============================================== -->    
+                <!-- ==========       SPECIAL STUFF      =========== -->    
+                <!-- =============================================== --> 
+                <div id="SpecialSuff">
+                    
+                    <!-- =============   CLOSE SESSION   =============== -->    
+                    <form action="MenuEmployee.php" method="post">
+                        <button 
+                            type='submit'
+                            name='CloseSession'
+                            class="red lighten-2 <?php echo $StandardCSSButton;?>">
+                            Cerrar Sesión
+                        </button> 
+                    </form>
+                    <br>
+
+                </div>
+                <br>
+                
+            </div>
 
         </div>
     </div>
