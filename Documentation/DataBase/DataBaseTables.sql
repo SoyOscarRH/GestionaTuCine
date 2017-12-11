@@ -13,9 +13,10 @@ CREATE TABLE Pelicula (
     Clasificacion       ENUM('AA', 'A', 'B', 'B15', 'C', 'D'),
     Duracion            INT,
     Genero              SET(
-                            'AccionYAventura', 'Familiar', 'Comedia', 'Documental',
-                            'Drama', 'Terror', 'Fantasia', 'Romantica', 'CienciaFiccion',
-                            'Deportes', 'Suspenso'),
+                            'AccionYAventura', 'Familiar', 'Comedia', 
+                            'Documental', 'Drama', 'Terror', 'Fantasia',
+                            'Romantica', 'CienciaFiccion', 'Deportes', 
+                            'Suspenso'),
     Descripcion         VARCHAR(400)
 ); 
 
