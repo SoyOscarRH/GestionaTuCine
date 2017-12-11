@@ -222,8 +222,24 @@
                     //=========  EXISTING ITEM TO SHOPPING CAR  ==
                     //============================================
                     else {                                                                      //Si es que ya tenia este producto
-                        $TemporalQueryResult = $TemporalQueryResult->fetch_row();               //Dame el costo anterior
-                        $_SESSION['TotalSellCandyShop'] -= $TemporalQueryResult[0];             //Lo quito
+                        $TemporalQueryData = $TemporalQueryResult->fetch_row();                 //Dame el costo anterior
+                        $_SESSION['TotalSellCandyShop'] -= $TemporalQueryData[0];               //Lo quito
+
+                        if (!isset($_POST[$ProductID.'OriginalQuantity'])) {                    //Si es que estamos en el menu buscar
+                            $TemporalQueryResult = $DataBase->query("
+                                SELECT 
+                                    Cantidad
+                                    FROM TicketDulceria
+                                    WHERE 
+                                        TicketDulceria.IDProducto = {$ProductID} AND
+                                        IDventa = {$_SESSION['CurrentSaleIDCandyShop']}");      //Busco productos
+
+                            if (!$TemporalQueryResult)                                          //Si es que hubo un problema
+                                array_push($AlertMessages, "Error con los Productos Vendidos");
+
+                            $TemporalQueryData = $TemporalQueryResult->fetch_row();             //Dame el costo anterior
+                            $OriginalQuantity = $TemporalQueryData[0];                          //Lo quito
+                        }
 
                         $TemporalQueryResult = $DataBase->query("
                             UPDATE TicketDulceria
@@ -423,8 +439,8 @@
                                             <!-- =====  HOW MUCH IN STOCK ===== -->
                                             <div class="col s12 left-align">
                                                 <span class="grey-text text-darken-2" style="font-size: 0.8rem;">
-                                                    Cantidad en Stock Libre: <?php echo $Product['Stock']; ?> <br>
-                                                    Cantidad en Stock Total: <?php echo ($Product['Stock'] + $Product['Cantidad']); ?> <br>
+                                                    Disponibles para vender más: <?php echo $Product['Stock']; ?> <br>
+                                                    Disponibles en Total: <?php echo ($Product['Stock'] + $Product['Cantidad']); ?> <br>
                                                 </span>
                                             </div>
 
@@ -599,7 +615,7 @@
                                     <!-- =====  HOW MUCH IN STOCK ===== -->
                                     <div class="col s12 left-align">
                                         <span class="grey-text text-darken-2" style="font-size: 0.8rem;">
-                                            Cantidad en Stock: <?php echo $Product['Stock']; ?>
+                                            Disponibles para vender más: <?php echo $Product['Stock']; ?>
                                         </span>
                                     </div>
 
