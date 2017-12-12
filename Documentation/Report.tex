@@ -942,30 +942,6 @@
             \end{tabular}
             }
 
-        \subsection*{Relación: Proveedor}
-
-            Aquella relación destinada a almacenar la información del proveedor como
-            lo es su nombre y correo (el correo será único, y tendrá su contraseña).
-
-            \vspace{2em}
-
-            \small{
-            \begin{tabular}{| c | c | c |}
-                \hline
-                \textbf{Campo} & \textbf{Tipo de Datos (tamaño)} & \textbf{Constraint} \\[0.5ex] 
-                \hline\hline
-                
-                IDProveedor & INT(11)       & PK                    \\
-                Nombre      & VARCHAR(15)   &                       \\
-                Apellido1   & VARCHAR(15)   &                       \\
-                Apellido2   & VARCHAR(15)   &                       \\
-                Correo      & VARCHAR(30)   &                       \\
-                Contrasena  & VARCHAR(100)  &                       \\
-                \hline
-            \end{tabular}
-            }
-
-
         \subsection*{Relación: EmpleadoSala}
 
             Relación que asocia al empleado y sala. Viene dada de una cardinalidad
@@ -1070,13 +1046,6 @@
             \centering
             \includegraphics[width=0.85\textwidth]{DiagramaSecuencial1}
             \caption{Consultar Actividad}
-        \end{figure}
-
-
-        \begin{figure}[ht]
-            \centering
-            \includegraphics[width=0.65\textwidth]{DiagramaSecuencial2}
-            \caption{Consultar Existencias}
         \end{figure}
 
         \begin{figure}[ht]
