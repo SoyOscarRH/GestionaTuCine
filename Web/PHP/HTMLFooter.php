@@ -15,9 +15,9 @@
                 <h5 class="white-text" style="font-size: 1.1rem;">Sobre Nosotros</h5>
 
                 <!--  =========  Text   ======== -->
-                <p class="grey-text text-lighten-4" style="font-size: 0.85rem;">
+                <span class="grey-text text-lighten-4" style="font-size: 0.85rem;">
                     Proyecto creado para administrar un Cine y las diversas actividades que ocurren en el
-                </p>
+                </span>
             </div>
 
 

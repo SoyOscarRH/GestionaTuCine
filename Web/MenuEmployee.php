@@ -17,6 +17,8 @@
 
     if (isset($_POST["CloseSession"]) or isset($_GET["CloseSession"])) CallClosePage();         //Entraste e iniciaste sesion pero ya te vas :v
 
+    if ($_SESSION['RolActual'] == 'Gerente') $RolText = "Estas asignado como <b>Gerente</b>";   //Dame su rol
+    else $RolText = "Estas asignado en <b>{$_SESSION['RolActual']}</b>";                        //Ponlo como debe
 
     // ================ VARIABLES =============================
     $StandardCSSButton  = "waves-effect btn-large ";                                            //Porque soy flojo
@@ -46,7 +48,9 @@
 
             <span class="grey-text flow-text">
                 <?php echo $Greetings;?> al Sistema <?php echo $_SESSION["CompleteUserName"]; ?>
-                <br><br><br>
+                <br><br>
+                <?php echo $RolText; ?>
+                <br><br>
             </span>
 
         </div>
@@ -87,7 +91,7 @@
                             type='submit'
                             name='MoviesSchedules'
                             class="green lighten-2 <?php echo $StandardCSSButton;?>">
-                            Administrador
+                            Administrar Empleados
                         </button> 
                     </form>
                     <br><br><br>
@@ -111,20 +115,9 @@
                 <!-- =======          CINEMA STUFF       =========== -->    
                 <!-- =============================================== --> 
                 <div id="CinemaStuff">
-                    
-                    <!-- =============   CINEMA FUNCTIONS    =============== -->    
-                    <form action="VerHorarios.php" method="post">
-                        <button 
-                            type='submit'
-                            name='MoviesSchedules'
-                            class="indigo lighten-2 <?php echo $StandardCSSButton;?>">
-                            Checa Horarios
-                        </button> 
-                    </form>
-                    <br><br><br>
 
                     <!-- =============   SELL TICKETS    =============== -->    
-                    <form action="MenuEmployee.php" method="post">
+                    <form action="SellMovieTickets.php" method="post">
                         <button 
                             type='submit'
                             name='SellMovieTickets'
@@ -136,23 +129,12 @@
                     
                     <!-- =============   ADD A MOVIE    =============== -->    
                     <?php if ($_SESSION["IAmAManager"]):?>
-                    <form action="AltaPelicula.php" method="post">
+                    <form action="AdminMovies.php" method="post">
                         <button 
                             type='submit'
                             name='MoviesSchedules'
                             class="indigo lighten-2 <?php echo $StandardCSSButton;?>">
-                            Registrar Pelicula
-                        </button> 
-                    </form>
-                    <br><br><br>
-
-                    <!-- =============   ADMIN A MOVIE    =============== -->    
-                    <form action="ConsultaEdicionPelicula.php" method="post">
-                        <button 
-                            type='submit'
-                            name='MoviesSchedules'
-                            class="indigo lighten-2 <?php echo $StandardCSSButton;?>">
-                            Editar Peliculas
+                            Buscar Pelicula
                         </button> 
                     </form>
                     <br><br><br>

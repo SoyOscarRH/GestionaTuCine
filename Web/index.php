@@ -155,11 +155,13 @@
 
             <!-- ===== BUTTON ===== -->
             <center>
-            <a  href  = "Login.php"
+            <?php if (!(empty($_SESSION))): ?>    
+            <a  href  = "AdminMovies.php"
                 id    = "download-button"
                 class = "btn-large waves-effect waves-light blue lighten-1">
-                Checa la Cartelera
+                Buscar Película
             </a>
+            <?php endif; ?>
             </center>
 
         </div>

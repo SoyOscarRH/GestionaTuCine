@@ -140,7 +140,9 @@
                     $OriginalQuantity=ClearSQLInyection($_POST[$ProductID.'OriginalQuantity']); //Por si las dudas
                 else $OriginalQuantity = 0;                                                     //Sino era cero :v
 
-                
+                if (!$QuantityProduct OR !$ProductName OR !$ProductID)                         //Si estas estupido
+                    {array_push($AlertMessages, "No colocaste datos"); break;}                 //Error Misterioso 
+
                 //=============  FIND PRODUCT DETAILS ======
                 $TemporalQueryResult = $DataBase->query("
                         SELECT Costo FROM ProductoDulceria 
@@ -199,6 +201,12 @@
 
                     if (!$TemporalQueryResult)                                                  //Si es que hubo un problema
                     {array_push($AlertMessages, "Error con la Base de Datos"); break;}          //Error Misterioso
+
+
+                    //=============  TRANSACCION ======
+                    $MiniTemporalQueryResult = $DataBase->query("START TRANSACTION");           //Todo o nada
+                    if (!$MiniTemporalQueryResult)                                              //Si es que hubo un problema
+                        {array_push($AlertMessages, "Error con la Base de Datos"); break;}      //Error Misterioso
 
 
                     //============================================
@@ -268,8 +276,22 @@
                                 SET Stock = Stock - {$NewStock}
                                 WHERE ID = {$ProductID}");                                      //Actualizo datos
 
-                    if (!$TemporalQueryResult) array_push($AlertMessages, "Error con Stock");   //Error Misterioso
-                    else array_push($AlertMessages, "Stock Actualizado");                       //Error Misterioso
+                    if (!$TemporalQueryResult) {
+                        array_push($AlertMessages, "Error con Stock");                          //Error Misterioso
+
+                        //=============  END TRANSACCION  ======
+                        $MiniTemporalQueryResult = $DataBase->query("ROLLBACK");                //Todo o nada
+                        if (!$MiniTemporalQueryResult)                                          //Si es que hubo un problema
+                            {array_push($AlertMessages, "Error con la Base de Datos"); break;}  //Error Misterioso
+                    } 
+                    else {
+                        array_push($AlertMessages, "Stock Actualizado");                        //Cosa Magica
+                        
+                        //=============  END TRANSACCION  ======
+                        $MiniTemporalQueryResult = $DataBase->query("COMMIT");                  //Todo o nada
+                        if (!$MiniTemporalQueryResult)                                          //Si es que hubo un problema
+                            {array_push($AlertMessages, "Error con la Base de Datos"); break;}  //Error Misterioso
+                    }
                 }
             }
             while (false);                                                                      //Solo lo queria por el break :v
@@ -318,12 +340,11 @@
                 {array_push($AlertMessages, "Este producto ya existe :("); break;}              //Envia mensajes
 
             $TemporalQueryResult = $DataBase->query("
-                INSERT INTO ProductoDulceria(Stock, Nombre, Costo, IDProveedor)
+                INSERT INTO ProductoDulceria(Stock, Nombre, Costo)
                         VALUES (
                                 {$NewProductStock}, 
                                 '{$NewProductName}', 
-                                {$NewProductCost}, 
-                                {$_SESSION['ID']}
+                                {$NewProductCost} 
                             )");                                                                //Actualizo datos
 
             if (!$TemporalQueryResult) array_push($AlertMessages, "Error al Añadir Producto");  //Error Misterioso
@@ -370,8 +391,6 @@
     // *************************     PROCESS TO START THE SYSTEM   *****************************
     // *****************************************************************************************
     $StandardGreyCard = "card grey lighten-4 col s12 m8 l8 offset-m2 offset-l2";                //Es una forma de que sea mas sencilla 
-    $StandardButton = "col s10 m6 l6 offset-s1 offset-m3 offset-l3 btn btn-large waves-effect"; //Es una forma de que sea mas sencilla 
-    
     include("PHP/HTMLHeader.php");                                                              //Incluimos un Asombroso Encabezado
 ?>
 
@@ -589,6 +608,7 @@
                         <i class="material-icons grey-text text-darken-2 prefix">search</i>
                         <input
                             <?php if (isset($_POST['SearchForProduct'])) echo "autofocus"; ?>
+                            required
                             class = 'validate'
                             type  = 'text'
                             id    = 'PossibleProductName'
@@ -654,6 +674,7 @@
                                                 name  = '<?php echo $Product['ID']."QuantityProduct"; ?>' 
                                                 id    = '<?php echo $Product['ID']."QuantityProduct"; ?>'
                                                 min   = '0'
+                                                value = 1
                                                 max   = '<?php echo $Product['Stock'];?>'
                                             />
                                             <label>Cantidad</label>

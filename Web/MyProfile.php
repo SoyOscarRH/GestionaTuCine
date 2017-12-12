@@ -8,7 +8,7 @@
 
     // ================ VARIABLES =============================
     $HTMLTitle  = 'Mi Perfil';                                                                  //Titulo de cada Pagina
-    $UpdateDate = '10 de Noviembre del 2017';                                                   //Fecha de actualizacion de pagina
+    $UpdateDate = '10 de Diciembre del 2017';                                                   //Fecha de actualizacion de pagina
 
 
     // ========== SPECIFIC FOR THIS SCRIPT ==========
@@ -124,6 +124,7 @@
                         <!-- ========  NAME ============= -->
                         <div class='input-field'>
                             <input
+                                required
                                 disabled
                                 class = 'validate'
                                 type  = 'text'
@@ -136,6 +137,7 @@
                         <!-- ========  SURNAME 1 ============= -->
                         <div class='input-field'>
                             <input
+                                required
                                 disabled
                                 class = 'validate'
                                 type  = 'text'
@@ -148,6 +150,7 @@
                         <!-- ========  SURNAME 2 ============= -->
                         <div class='input-field'>
                             <input
+                                required
                                 disabled
                                 class = 'validate'
                                 type  = 'text'
@@ -160,6 +163,7 @@
                         <!-- ========  EMAIL ============= -->
                         <div class='input-field'>
                             <input
+                                required
                                 disabled
                                 class = 'validate'
                                 type  = 'email'
@@ -171,7 +175,7 @@
 
                         <!-- ========  SEX ========== -->
                         <div class="input-field">                        
-                            <select disabled id="Sex" name="Sex">
+                            <select required disabled id="Sex" name="Sex">
                                 <option value="Masculino">Masculino</option>
                                 <option value="Femenino">Femenino</option>
                             </select>
@@ -275,9 +279,21 @@
                         $('select').material_select();                                              //Actualiza el select
                     });
 
+                    let ForceNewPassword = false;                                                   //Gran ayuda
                     $('#ChangePassword').change (function() {                                       //Cada vez que le piques
                         $('#SectionNewPassword').toggle();                                          //Alterna la parte de la contraseña
+
+                        ForceNewPassword = !ForceNewPassword;                                       //Pequeña ayuda
+                        if (ForceNewPassword) {                                                     //Si necesitas
+                            $('#NewPassword1').prop('required', true);                              //Hazlo
+                            $('#NewPassword2').prop('required', true);                              //Hazlo
+                        }
+                        else {                                                                      //Sino
+                            $('#NewPassword1').prop('required', false);                             //No lo haga compa :v
+                            $('#NewPassword2').prop('required', false);                             //No lo haga compa :v
+                        }
                     });
+
                 });
             </script>
             

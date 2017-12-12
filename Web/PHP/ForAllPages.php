@@ -71,10 +71,11 @@
                     $LinksForPagesMobile["Administra Empleados"]  = "AdminAccounts.php";            //Añadimos el Sesion
                 }
                 $LinksForPagesMobile["Mi Perfil"]  = "MyProfile.php";                               //Añadimos el Sesion
+                $LinksForPagesMobile["Buscar Películas"]  = "AdminMovies.php";                      //Peliculas
             }
 
-            $LinksForPagesDesktop["Ver Cartelera"] = "Movies.php";                                  //Iniciar Sesion
-            $LinksForPagesMobile["Ver Cartelera"]  = "Movies.php";                                  //Iniciar Sesion
+            $LinksForPagesDesktop["Taquilla"] = "SellMovieTickets.php";                             //Vender Boletos
+            $LinksForPagesMobile["Venta Boletos"]  = "SellMovieTickets.php";                        //Vender Boletos
 
             $LinksForPagesDesktop["Dulcería"] = "CandyStore.php";                                   //Iniciar Sesion
             $LinksForPagesMobile["Dulcería"]  = "CandyStore.php";                                   //Iniciar Sesion

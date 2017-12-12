@@ -21,7 +21,6 @@
     if (StandardCheckForAdminStatus($_SESSION['ID'], $DataBase) == false)                       //Dime en este instante si tiene permisos
         CallErrorPageOnlyForAdmins();                                                           //Si no tienes permiso de estar aqui
 
-
     /*===================================================================
     ============         GET THE DATABASE      ==========================
     ===================================================================*/
@@ -197,7 +196,7 @@
             $NewEmployeesID .= ", {$NewAdminID}";                                               //Tu eres tu nuevo jefe
             $ValidQuery = $DataBase->query("
                 UPDATE Empleado
-                    SET IDGerente = {$NewAdminID} 
+                    SET IDGerente = {$NewAdminID}, RolActual = 'Gerente' 
                     WHERE ID IN ({$NewEmployeesID})");                                          //AHORA SI PUEDES HACER ESTO
 
             if (!$ValidQuery){array_push($AlertMessages, "Error al poner nuevo jefe"); break;}  //Envia mensaje si todo mal
@@ -256,7 +255,7 @@
                 <!-- ========  MATERIAL TABLE CARD  ================ -->
                 <table
                     id    = "EmployeesTable" 
-                    style = "<?php if (!isset($_POST['ChangeEmployeeData'])) echo "display: none; "?>font-size: 0.9rem"
+                    style = "font-size: 0.9rem ; display: none;"
                     class = "centered hoverable striped responsive-table bordered">
 
                     <!-- ========  TITLES ================ -->
@@ -271,11 +270,11 @@
 
                     <!-- ========  CELLS ================ -->
                     <tbody>
-                    <?php while ($Row = $QueryInfoEmployees->fetch_assoc()) : 
-                        array_push($InfoEmployees, $Row);?>
+                    <?php while ($Employee = $QueryInfoEmployees->fetch_assoc()) : 
+                        array_push($InfoEmployees, $Employee);?>
                         <tr>
                         
-                        <?php foreach ($Row as $Name => $Value): 
+                        <?php foreach ($Employee as $Name => $Value): 
                             if (in_array($Name, array('ID', 'IDGerente', 'Contrasena'))) continue; ?>
                             <td><?php echo $Value; ?></td>
                         <?php endforeach; ?>
@@ -301,7 +300,7 @@
             <!-- ========  CARD SCRIPT  ===== -->
             <script>
                 $("#EmployeesTablesButton").click( function() {
-                    $("#EmployeesTable").toggle();
+                    $("#EmployeesTable").toggle("450");
 
                     if ($.trim($(this).text()) === 'Ve los Empleados')
                         $(this).text('Oculta los Empleados');
@@ -312,6 +311,17 @@
                     $("#EmployeesTablesButton").click(); 
                     return false;
                 });
+
+
+                <?php if (
+                        isset($_POST['ChangeEmployeeData']) OR 
+                        isset($_POST['DeleteEmployee']) OR 
+                        isset($_POST['AddEmployee'])) : ?>
+
+                    $("#EmployeesTable").toggle(true);
+                    $("#EmployeesTablesButton").text('Oculta los Empleados');
+                    
+                <?php endif; ?>
             </script>
 
         </div>
@@ -344,10 +354,14 @@
                     <!-- ========  EMPLOYEERS ID ============= -->
                     <div class="input-field">                        
                         <select required name="SelectedEmployee" id="SelectedEmployee" class="left-align">
-                            <?php foreach ($InfoEmployees as $Row): 
-                                $TemporalCompleteName = $Row['ApellidoPaterno']." ".$Row['ApellidoMaterno']." ".$Row['Nombre'];?>
-                            <option value="<?php echo $Row["ID"];?>"><?php echo $TemporalCompleteName;?></option>
+                            
+                            <?php foreach ($InfoEmployees as $Employee): 
+                                $TemporalCompleteName = $Employee['ApellidoPaterno']." ".$Employee['ApellidoMaterno']." ".$Employee['Nombre'];?>
+                                
+                                <option value="<?php echo $Employee["ID"];?>"><?php echo $TemporalCompleteName;?></option>
+                            
                             <?php endforeach; ?>
+
                         </select>
                         <label>Nombre del Empleado</label>
                     </div>
@@ -363,7 +377,7 @@
 
                     <!-- ========  WORK TIME ========== -->
                     <div class="input-field">                        
-                        <select required requiredname="Turn" id="Turn">
+                        <select required name="Turn" id="Turn">
                             <option value="Matutino">Matutino</option>
                             <option value="Vespetirno">Vespetirno</option>
                         </select>
@@ -393,12 +407,12 @@
                 $("#SelectedEmployee").change(function() {
                     let SelectedID = $('#SelectedEmployee').val();
 
-                    <?php foreach ($InfoEmployees as $Row): ?>
+                    <?php foreach ($InfoEmployees as $Employee): ?>
                     
-                        if (SelectedID == <?php echo $Row['ID'];?> ) {
-                            $('#Rol').val("<?php echo $Row['RolActual'] ?>");       
-                            $('#Salary').val("<?php echo $Row['Sueldo'] ?>");
-                            $('#Turn').val("<?php echo $Row['Turno'] ?>");
+                        if (SelectedID == <?php echo $Employee['ID'];?> ) {
+                            $('#Rol').val("<?php echo $Employee['RolActual'] ?>");       
+                            $('#Salary').val("<?php echo $Employee['Sueldo'] ?>");
+                            $('#Turn').val("<?php echo $Employee['Turno'] ?>");
                         }
 
                     <?php endforeach;?>
@@ -550,9 +564,11 @@
                     <!-- ========  EMPLOYEERS ID ============= -->
                     <div class="input-field">                        
                         <select required name="SelectedEmployee" id="SelectedEmployee" class="left-align">
-                            <?php foreach ($InfoEmployees as $Row): 
-                                $TemporalCompleteName = $Row['ApellidoPaterno']." ".$Row['ApellidoMaterno']." ".$Row['Nombre'];?>
-                            <option value="<?php echo $Row["ID"];?>"><?php echo $TemporalCompleteName;?></option>
+                            <?php foreach ($InfoEmployees as $Employee): 
+                                $TemporalCompleteName = $Employee['ApellidoPaterno']." ".$Employee['ApellidoMaterno']." ".$Employee['Nombre'];?>
+                                
+                                <option value="<?php echo $Employee["ID"];?>"><?php echo $TemporalCompleteName;?></option>
+                            
                             <?php endforeach; ?>
                         </select>
                         <label>Nombre del Empleado</label>
@@ -601,9 +617,11 @@
                     <!-- ========  EMPLOYEERS ID ============= -->
                     <div class="input-field">                        
                         <select required name="NewAdminID" id="NewAdminID" class="left-align">
-                            <?php foreach ($InfoEmployees as $Row): 
-                                $TemporalCompleteName = $Row['ApellidoPaterno']." ".$Row['ApellidoMaterno']." ".$Row['Nombre'];?>
-                            <option value="<?php echo $Row["ID"];?>"><?php echo $TemporalCompleteName;?></option>
+                            <?php foreach ($InfoEmployees as $Employee): 
+                                $TemporalCompleteName = $Employee['ApellidoPaterno']." ".$Employee['ApellidoMaterno']." ".$Employee['Nombre'];?>
+                                
+                                <option value="<?php echo $Employee["ID"];?>"><?php echo $TemporalCompleteName;?></option>
+                            
                             <?php endforeach; ?>
                         </select>
                         <label>Nombre del Nuevo Administrador</label>
@@ -612,10 +630,14 @@
                     <!-- ========  EMPLOYEERS ID ============= -->
                     <div class="input-field">                        
                         <select required name="NewEmployees[]" id="NewEmployees" class="left-align" multiple>
-                            <?php foreach ($InfoEmployees as $Row): 
-                                $TemporalCompleteName = $Row['ApellidoPaterno']." ".$Row['ApellidoMaterno']." ".$Row['Nombre'];?>
-                            <option value="<?php echo $Row["ID"];?>"><?php echo $TemporalCompleteName;?></option>
+                            
+                            <?php foreach ($InfoEmployees as $Employee): 
+                                $TemporalCompleteName = $Employee['ApellidoPaterno']." ".$Employee['ApellidoMaterno']." ".$Employee['Nombre'];?>
+                                
+                                <option value="<?php echo $Employee["ID"];?>"><?php echo $TemporalCompleteName;?></option>
+                            
                             <?php endforeach; ?>
+
                         </select>
                         <label>Nuevos Empleados a su Cargo</label>
                     </div>

@@ -6,28 +6,9 @@ DROP DATABASE IF EXISTS Proyect;
 CREATE DATABASE Proyect;
 USE Proyect;
 
-
-CREATE TABLE Pelicula (
-    ID                  INT NOT NULL PRIMARY KEY,
-    Nombre              VARCHAR(50),
-    Clasificacion       ENUM('AA', 'A', 'B', 'B15', 'C', 'D'),
-    Duracion            INT,
-    Genero              SET(
-                            'AccionYAventura', 'Familiar', 'Comedia', 
-                            'Documental', 'Drama', 'Terror', 'Fantasia',
-                            'Romantica', 'CienciaFiccion', 'Deportes', 
-                            'Suspenso'),
-    Descripcion         VARCHAR(400)
-); 
-
-
-CREATE TABLE Sala (
-    NumeroSala          INT NOT NULL PRIMARY KEY,
-    NumeroAsientos      INT
-);
-
-
-
+# ======================================================
+# =================  EMPLOYEES   =======================
+# ======================================================
 CREATE TABLE Empleado (
     ID                  INT NOT NULL AUTO_INCREMENT,
     Sueldo              REAL,
@@ -51,47 +32,13 @@ CREATE TABLE Empleado (
 );
 
 
-CREATE TABLE EmpleadoSala (
-    IDEmpleado          INT,
-    NumeroSala          INT,
 
-    FOREIGN KEY (IDEmpleado)
-        REFERENCES Empleado(ID)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE,
-
-    FOREIGN KEY (NumeroSala)
-        REFERENCES Sala(NumeroSala)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE,
-
-    PRIMARY KEY (IDEmpleado, NumeroSala)
-);
-
-
-CREATE TABLE Funcion (
-    Hora                TIME,
-    Dia                 DATE,
-    NumeroSala          INT,
-    Precio              REAL,
-    Tipo                ENUM('Normal', '3D', '4D'),
-    IDPelicula          INT, 
-
-    FOREIGN KEY (NumeroSala)
-        REFERENCES Sala(NumeroSala),
-
-    FOREIGN KEY (IDPelicula)
-        REFERENCES Pelicula (ID)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE,
-
-    PRIMARY KEY (Hora, Dia, NumeroSala)
-);
-
-
+# ======================================================
+# =================   GENERAL SELL    ==================
+# ======================================================
 CREATE TABLE Venta (
     ID                  INT NOT NULL PRIMARY KEY,
-    Fecha               DATE, 
+    Fecha               DATETIME, 
     Total               REAL,
     IDEmpleado          INT,
 
@@ -102,41 +49,82 @@ CREATE TABLE Venta (
 );
 
 
-CREATE TABLE TicketBoleto (
-    NumeroBoleto        INT,
-    Costo               REAL,
+
+# ======================================================
+# =================   MOVIES     =======================
+# ======================================================
+CREATE TABLE Pelicula (
+    ID                  INT NOT NULL PRIMARY KEY,
+    Nombre              VARCHAR(50),
+    Clasificacion       ENUM('AA', 'A', 'B', 'B15', 'C', 'D'),
+    Duracion            INT,
+    Genero              SET(
+                            'Accion y Aventura', 'Familiar', 'Comedia', 
+                            'Documental', 'Drama', 'Terror', 'Fantasia',
+                            'Romantica', 'CienciaFiccion', 'Deportes', 
+                            'Suspenso'),
+    Descripcion         VARCHAR(400),
+    Exhibicion          ENUM('En Exhibición', 'No En Exhibición')
+); 
+
+CREATE TABLE Sala (
+    NumeroSala          INT NOT NULL PRIMARY KEY,
+    Tipo                ENUM('Normal', '3D', '4D'),
+    NumeroAsientos      INT
+);
+
+
+CREATE TABLE Funcion (
+    ID                  INT NOT NULL PRIMARY KEY,
     Hora                TIME,
-    Dia                 DATE,
     NumeroSala          INT,
+    Precio              REAL,
+    IDPelicula          INT, 
+    TipoFuncion         ENUM('Funcion Activa', 'Funcion Antigua'),
+
+    FOREIGN KEY (NumeroSala)
+        REFERENCES Sala(NumeroSala),
+
+    FOREIGN KEY (IDPelicula)
+        REFERENCES Pelicula (ID)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+
+);
+
+
+
+CREATE TABLE TicketBoleto (
+    Costo               REAL,
+    Cantidad            INT,
     IDVenta             INT,
+    IDFuncion           INT,
+    DiaFuncion          DATE,
 
     FOREIGN KEY (IDVenta)
         REFERENCES Venta (ID)
             ON DELETE CASCADE
-            ON UPDATE CASCADE,  
-    
-    FOREIGN KEY (Hora, Dia, NumeroSala)
-        REFERENCES Funcion (Hora, Dia, NumeroSala)
-            ON DELETE CASCADE
             ON UPDATE CASCADE,
 
-    PRIMARY KEY (IDVenta, Hora, Dia, NumeroSala)
+    FOREIGN KEY (IDFuncion)
+        REFERENCES Funcion (ID)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,  
+
+    PRIMARY KEY (IDVenta, IDFuncion)
 );
 
 
+
+# ======================================================
+# =================   CANDY SHOP     ===================
+# ======================================================
 CREATE TABLE  ProductoDulceria (
     ID                  INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     Stock               INT UNSIGNED,
     Nombre              VARCHAR(50),
-    Costo               REAL,
-    IDProveedor         INT,
-
-    FOREIGN KEY (IDProveedor) 
-        REFERENCES Empleado (ID)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE
+    Costo               REAL
 );
-
 
 CREATE TABLE TicketDulceria (
     Costo               REAL,
@@ -155,25 +143,4 @@ CREATE TABLE TicketDulceria (
             ON UPDATE CASCADE,
 
     PRIMARY KEY (IDVenta, IdProducto)
-);
-
-
-CREATE TABLE TicketProveedor (
-    Cantidad            INT,
-    Costo               REAL,
-    Total               REAL,
-    IDProducto          INT,
-    IDProveedor         INT,
-
-    FOREIGN KEY (IDProducto)
-        REFERENCES ProductoDulceria (ID)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE,
-
-    FOREIGN KEY (IDProveedor) 
-        REFERENCES Empleado (ID)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE,
-
-    PRIMARY KEY (IDProducto, IDProveedor)
 );
