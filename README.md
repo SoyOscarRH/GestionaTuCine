@@ -1,6 +1,6 @@
 # ![alt text](Web/Media/favicon.ico) Manage Your Cinema
 
-This is a UNFINISHED mini proyect for a webapp that can control a cinema: Creating
+This is a UNFINISHED mini project for a webapp that can control a cinema: Creating
 users and managing them, selling candy and popcorn, an the movie tickets.
 
 All the code and documentation is in english, but all the text inside the app
