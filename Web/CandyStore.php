@@ -134,13 +134,12 @@
                 else $ProductID = str_replace("ButtonDeleteProduct", "", $Name);                //Puede que seas tu
 
                 $QuantityProduct = ClearSQLInyection($_POST[$ProductID.'QuantityProduct']);     //Por si las dudas
-                $ProductName = ClearSQLInyection($_POST[$ProductID.'ProductName']);             //Por si las dudas
 
                 if (isset($_POST[$ProductID.'OriginalQuantity']))                               //Dame la anterior
                     $OriginalQuantity=ClearSQLInyection($_POST[$ProductID.'OriginalQuantity']); //Por si las dudas
                 else $OriginalQuantity = 0;                                                     //Sino era cero :v
 
-                if (!$QuantityProduct OR !$ProductName OR !$ProductID)                         //Si estas estupido
+                if (!$QuantityProduct OR !$ProductID)                                           //Si estas estupido
                     {array_push($AlertMessages, "No colocaste datos"); break;}                 //Error Misterioso 
 
                 //=============  FIND PRODUCT DETAILS ======
@@ -382,7 +381,7 @@
 
 
 
-
+    if ($_SESSION['TotalSellCandyShop'] < 0) $_SESSION['TotalSellCandyShop'] = 0;
 
 
 
@@ -492,13 +491,6 @@
                                                 value = '<?php echo $Product['Cantidad'];?>'
                                                 >
 
-                                            <!-- =====  SEND THE NAME OF THINGS ===== -->
-                                            <input 
-                                                type  = "hidden"
-                                                name  = "<?php echo $Product['ID']."ProductName"; ?>"
-                                                id    = "<?php echo $Product['ID']."ProductName"; ?>"
-                                                value = "<?php echo $Product['Nombre']; ?>">
-
                                             <!-- =====  BUTTON TO SEND THE INFO ===== -->
                                             <br>
                                             <div class="col s2 l4">
@@ -560,14 +552,7 @@
                         <!-- ========  CLOSE BAD SALE ================ -->
                         <form class="row" action="CandyStore.php" method="post">
                     
-                            <!-- ========  BUTTON TO SEND ===== -->
-                            <button
-                                type  = 'submit'
-                                id    = 'CancelSellButton'
-                                name  = 'CancelSellButton'
-                                class = 'col s8 offset-s2 l6 offset-l3 btn-large waves-effect red lighten-1'>
-                                Cancelar Venta
-                            </button>
+                            
 
                         </form>
 
@@ -608,7 +593,6 @@
                         <i class="material-icons grey-text text-darken-2 prefix">search</i>
                         <input
                             <?php if (isset($_POST['SearchForProduct'])) echo "autofocus"; ?>
-                            required
                             class = 'validate'
                             type  = 'text'
                             id    = 'PossibleProductName'
@@ -680,13 +664,6 @@
                                             <label>Cantidad</label>
                                         </div>
                                     </div>
-
-                                    <!-- =====  SEND THE NAME OF THINGS ===== -->
-                                    <input 
-                                        type  = "hidden"
-                                        name  = "<?php echo $Product['ID']."ProductName"; ?>"
-                                        id    = "<?php echo $Product['ID']."ProductName"; ?>"
-                                        value = "<?php echo $Product['Nombre']; ?>">
 
                                     <!-- =====  BUTTON TO SEND THE INFO ===== -->
                                     <div class="col s2 l4">

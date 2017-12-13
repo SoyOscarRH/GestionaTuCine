@@ -36,6 +36,7 @@
 
     % *********   LISTS AND TABLES ***********
     \usepackage{listings}                                           %We will be using code here
+    \usepackage{listingsutf8}
     \usepackage[inline]{enumitem}                                   %We will need to enumarate
     \usepackage{tasks}                                              %Horizontal lists
     \usepackage{longtable}                                          %Lets make tables awesome
@@ -208,7 +209,8 @@
         numbers=left,                                               %Style                   
         numbersep=10pt,                                             %Style 
         xleftmargin=\parindent,                                     %Style 
-        tabsize=4                                                   %Style 
+        tabsize=4,                                                  %Style 
+        inputencoding=utf8/latin1
     }
  
     \lstset{style=CompilandoStyle}                                  %Use this style
@@ -762,7 +764,7 @@
 
             \begin{figure}[h]
                 \centering
-                \includegraphics[width=0.95\textwidth]{25316968_2082775621968636_1083983642_o (1).png}
+                \includegraphics[width=0.95\textwidth]{DataBase/Relations2.png}
             \end{figure}
 
         % =============================================

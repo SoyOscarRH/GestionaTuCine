@@ -166,7 +166,7 @@
                             type='submit'
                             name='MoviesSchedules'
                             class="blue lighten-2 <?php echo $StandardCSSButton;?>">
-                            Cambiar Productos Dulcería
+                            Administracion Productos
                         </button> 
                     </form>
                     <br><br><br>

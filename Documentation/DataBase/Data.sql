@@ -12,7 +12,7 @@ INSERT INTO Empleado VALUES
     (3, 5000, 'Matutino', 'Masculino', 'Rafael', 'Hernandez', 'Ruiz', 'rafassassinscreed@gmail.com', 'bb33de03b34c77999d65acf4e8ea6ab177c3be3a', 'Gerente', 3), 
     (4, 3500, 'Matutino', 'Femenino', 'Lizeth', 'Noyola', 'Bustos', 'liz_10_11_2014@gmail.com', '6b91e318c7415beaafd28de643e74bc352a0ac1f', 'Dulceria', 3), 
     (5, 4500, 'Matutino', 'Masculino', 'Sergio', 'Huerta', 'Gil', 'Serch_10_11_2015@gmail.com', '46a57e99cce94c6e3c790ebc1e5e8691fb3b8cc8', 'Taquilla', 3), 
-    (6, 4000, 'Vespetirno', 'Masculino', 'Abigaile', 'Hurtado', 'de la O', 'Abi_10_11_2015@gmail.com', 'ad9b7720835cfe5f1d3ce14a370a6c53e3f0be87', 'Dulceria', 3), 
+    (6, 4000, 'Vespetirno', 'Femenino', 'Abigaile', 'Hurtado', 'de la O', 'Abi_10_11_2015@gmail.com', 'ad9b7720835cfe5f1d3ce14a370a6c53e3f0be87', 'Dulceria', 3), 
     (7, 3500, 'Vespetirno', 'Masculino', 'Fernando', 'Gracia', 'Neyra', 'Fer_10_11_2016@gmail.com', '072e26c5a73aea73156e1751b1ebab9d4b581931', 'Dulceria', 3), 
     (8, 2500, 'Matutino', 'Femenino', 'Jennifer', 'Hernandez', 'Garcia', 'jenn_10_11_2017@gmail.com', 'bedc1f3f6fcde7a85d32116709a1dc1f03fe5934', 'Dulceria', 3), 
     (9, 2500, 'Matutino', 'Masculino', 'Osvaldo', 'Gracia', 'Matinez', 'Osvo_10_11_2018@gmail.com', 'ccdc34bf2f9f06a507671698cc4975b4a24484f1', 'Taquilla', 3), 
@@ -23,7 +23,7 @@ INSERT INTO Empleado VALUES
     (14, 1500, 'Matutino', 'Masculino', 'Luigi', 'Baez', 'Huerta', 'luigiBHuerta@gmail.com', '0557ce3b94b8409a8a58f583ee361d0b1ad189da', 'Dulceria', 3),
     (15, 2500, 'Vespetirno', 'Femenino', 'Miriam', 'Osorno', 'Trejo', 'miriamostrejo@gmail.com', 'a119461f5cf12c5742e93decc4f574e490c2ba92', 'Dulceria', 3),
     (16, 2500, 'Vespetirno', 'Masculino', 'Jose', 'Dominguez', 'Trujillo', 'pepe_dom_truj@hotmail.com', 'dddeddae0a4b18ca12942b180b1031786f59c88c', 'Taquilla', 3),
-    (17, 6000, 'Vespetirno', 'Masculino', 'Emmanuel', 'Maya', 'Rocha', 'emm.maya.rocha@gmail.com', '59e4acd1eccfe246d5362af3fa891c6db1938a3a', 'Gerente', 17),
+    (17, 6000, 'Vespetirno', 'Masculino', 'Emmanuel', 'Maya', 'Rocha', 'emm.maya.rocha@gmail.com', '7deb4542371cf407dc3cd4e09e47c509c1567492', 'Gerente', 17),
     (18, 2500, 'Vespetirno', 'Femenino', 'Karla', 'Rojas', 'Mendoza', 'Rojas.men@yahoo.com', '85dadbfc130d6c84211ff60c0570608193b1491c', 'Taquilla', 1),
     (19, 3000, 'Matutino', 'Femenino', 'Diana', 'Huerta', 'Arellano', 'Arellano.Diana@yahoo.com', '74859f5c7fdfa1877298e459fd3e83e8d4f53cca', 'Dulceria', 3),
     (20, 3500, 'Matutino', 'Masculino', 'Alvaro', 'Silva', 'Ramirez', 'mendozaaRam@gmail.com', '0870e3b93dee3df23852b61eae4031bd6f2491f2', 'Taquilla', 3),
@@ -47,7 +47,7 @@ INSERT INTO Empleado VALUES
     (38, 3500, 'Vespetirno', 'Femenino', 'Norma', 'Pacheco', 'Ponce', 'norma-pach7895@gmail.com', '3c9060889af28333726db5c892c149e4883adab5', 'Taquilla', 28), 
     (39, 2500, 'Vespetirno', 'Masculino', 'Miguel', 'Rodriguez', 'Hernandez', 'Ro_hernan5685@gmail.com', '136f303971bcc3250650e709edc5ed128ea47299', 'Dulceria', 3), 
     (40, 1800, 'Matutino', 'Masculino', 'Rodrigo', 'Rivas', 'Ruiz', 'Rodro_1256@gmail.com', 'dd5e4b14b3c590916c7cce23228f379b35c6053c', 'Dulceria', 28);
-
+    
 
 # ======================================================
 # =================   GENERAL SELL    ==================

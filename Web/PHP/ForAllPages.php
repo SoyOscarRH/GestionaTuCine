@@ -56,10 +56,6 @@
         if (empty($_SESSION)) {                                                                     //Si es que no has iniciado sesión 
             $LinksForPagesDesktop["Personal"] = "Login.php";                                        //Iniciar Sesion
             $LinksForPagesMobile["Personal"] = "Login.php";                                         //Iniciar Sesion
-
-            $LinksForPagesDesktop["Ver Cartelera"] = "Movies.php";                                  //Iniciar Sesion
-            $LinksForPagesMobile["Ver Cartelera"]  = "Movies.php";                                  //Iniciar Sesion
-
         }
         else {
             $LinksForPagesDesktop = array("Menú de Opciones"=>"Login.php") + $LinksForPagesDesktop; //Menu de Sesion

@@ -89,7 +89,7 @@
             if (!is_numeric($Salary)) {array_push($AlertMessages, "Salario Invalido"); break;}  //Envia mensajes
 
             $Sex = ClearSQLInyection($_POST['Sex']);                                            //Dame el turno
-            if ($Sex != "Masculino" and $Turn != "Femenino")                                    //Eres valido
+            if ($Sex != "Masculino" and $Sex != "Femenino")                                     //Eres valido
                 {array_push($AlertMessages, "Sexo Invalido"); break;}                           //O no?
 
             $Turn = ClearSQLInyection($_POST['Turn']);                                          //Dame el turno
