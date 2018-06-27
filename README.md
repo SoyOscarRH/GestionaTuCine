@@ -21,7 +21,7 @@ a DataBase un MySQL (inside documentation folder are the scripts).
 ### Built With
 
 * [MaterializeCSS](http://materializecss.com/) - The web framework n.n (is amazing)
-* [jQuery](https://jquery.com/) - Come on, I will not use raw Javascript
+* [jQuery](https://jquery.com/) - Come on, I was just learning Javascript
 
 ### Authors
 
